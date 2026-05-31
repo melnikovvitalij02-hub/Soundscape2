@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoundScape - Team Project</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        body {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+            padding-bottom: 150px;
+        }
+
+        header {
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        header span { color: #00d4ff; }
+
+        .team-badge {
+            background: rgba(0,212,255,0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-left: 10px;
+            border: 1px solid rgba(0,212,255,0.5);
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .tab-btn {
+            background: rgba(255,255,255,0.15);
+            border: none;
+            color: #fff;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+        .tab-btn:hover { background: rgba(255,255,255,0.25); transform: translateY(-2px); }
+        .tab-btn.active {
+            background: linear-gradient(135deg, #00d4ff, #7b2cbf);
+            box-shadow: 0 4px 15px rgba(0,212,255,0.4);
+        }
+
+        .section { display: none; animation: fadeIn 0.4s; }
+        .section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .player-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .player-card {
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.2);
+            margin-bottom: 20px;
+        }
+
+        .album-art {
+            width: 250px;
+            height: 250px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            margin: 0 auto 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 100px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .album-art::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            animation: shimmer 3s infinite;
+        }
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .track-info h2 { font-size: 24px; margin-bottom: 10px; }
+        .track-info p { color: rgba(255,255,255,0.8); font-size: 16px; }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .ctrl-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: #fff;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.2s;
+        }
+        .ctrl-btn:hover { background: rgba(255,255,255,0.3); transform: scale(1.1); }
+        .play-btn {
+            background: linear-gradient(135deg, #00d4ff, #7b2cbf);
+            width: 70px;
+            height: 70px;
+            font-size: 30px;
+            box-shadow: 0 6px 20px rgba(0,212,255,0.4);
+        }
+        .play-btn:hover { transform: scale(1.05); box-shadow: 0 8px 25px rgba(0,212,255,0.5); }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 3px;
+            margin: 20px 0;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+            border-radius: 3px;
+            transition: width 0.1s;
+        }
+
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: rgba(255,255,255,0.7);
+            margin-top: 5px;
+        }
+
+        /* TREE/VISUALIZATION SECTION - Like Yandex Music */
+        .tree-container {
+            background: rgba(0,0,0,0.3);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 30px;
+            min-height: 120px;
+        }
+        .tree-title {
+            font-size: 14px;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .tree-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 10px;
+        }
+        .tree-cell {
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 12px 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+        .tree-cell::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        .tree-cell:hover::before { left: 100%; }
+        .tree-cell:hover {
+            background: rgba(0,212,255,0.3);
+            border-color: #00d4ff;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,212,255,0.3);
+        }
+        .tree-cell.active {
+            background: linear-gradient(135deg, #00d4ff, #7b2cbf);
+            border-color: #00d4ff;
+            animation: pulse 1.5s infinite;
+        }
+        .tree-cell.locked {
+            opacity: 0.4;
+            cursor: not-allowed;
+            filter: grayscale(0.8);
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .tree-icon { font-size: 24px; margin-bottom: 5px; display: block; }
+        .tree-label { font-size: 11px; font-weight: 600; }
+
+        .playlist {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .track-item {
+            background: rgba(255,255,255,0.08);
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s;
+        }
+        .track-item:hover { background: rgba(255,255,255,0.15); transform: translateX(5px); }
+        .track-item.playing {
+            background: rgba(0,212,255,0.2);
+            border-left: 4px solid #00d4ff;
+        }
+        .track-num { color: rgba(255,255,255,0.6); width: 25px; font-weight: 600; }
+        .track-details { flex: 1; text-align: left; }
+        .track-title { font-weight: 600; margin-bottom: 3px; }
+        .track-artist { font-size: 12px; color: rgba(255,255,255,0.7); }
+
+        .map-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        .zone-card {
+            background: rgba(255,255,255,0.1);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+        .zone-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+        .zone-card.unlocked { border-color: #00d4ff; background: rgba(0,212,255,0.1); }
+        .zone-card.locked { opacity: 0.5; cursor: not-allowed; }
+        .zone-icon { font-size: 40px; margin-bottom: 10px; }
+        .zone-name { font-weight: 700; margin-bottom: 5px; }
+        .zone-status { font-size: 12px; color: rgba(255,255,255,0.7); }
+
+        .collaborator-info {
+            background: rgba(0,212,255,0.1);
+            border: 1px solid rgba(0,212,255,0.3);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        .collaborator-info strong { color: #00d4ff; }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: rgba(0,212,255,0.5); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(0,212,255,0.7); }
+
+        @media (max-width: 600px) {
+            body { padding: 15px; padding-bottom: 140px; }
+            header { font-size: 26px; }
+            .album-art { width: 200px; height: 200px; font-size: 70px; }
+            .play-btn { width: 60px; height: 60px; font-size: 26px; }
+            .tree-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    Sound<span>Scape</span>
+    <span class="team-badge">👥 Team: You & Stepa</span>
+</header>
+
+<div class="collaborator-info">
+    <strong> Совместная работа:</strong>
+    <span id="collaborator-display">Stepa имеет доступ к редактированию. Версия: v2.0 (Tree Feature)</span>
+</div>
+
+<div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('player')">🎵 Плеер</button>
+    <button class="tab-btn" onclick="switchTab('map')">🗺️ Карта</button>
+</div>
+
+<div id="player" class="section active">
+    <div class="player-container">
+        <div class="player-card">
+            <div class="album-art" id="album-emoji">🎧</div>
+            <div class="track-info">
+                <h2 id="track-title">Название трека</h2>
+                <p id="track-artist">Исполнитель</p>
+            </div>
+            <div class="controls">
+                <button class="ctrl-btn" onclick="prevTrack()">⏮</button>
+                <button class="ctrl-btn play-btn" onclick="togglePlay()" id="play-btn">▶</button>
+                <button class="ctrl-btn" onclick="nextTrack()">⏭</button>
+            </div>
+            <div class="progress-bar" onclick="seekTrack(event)">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <div class="time-display">
+                <span id="current-time">0:00</span>
+                <span id="total-time">0:00</span>
+            </div>
+        </div>
+
+        <!-- TREE VISUALIZATION (Like Yandex Music) -->
+        <div class="tree-container">
+            <div class="tree-title">🎯 Музыкальное дерево (подсказки и достижения)</div>
+            <div class="tree-grid" id="tree-grid"></div>
+        </div>
+
+        <div class="playlist" id="playlist"></div>
+    </div>
+</div>
+
+<div id="map" class="section">
+    <div class="map-grid" id="map-grid"></div>
+</div>
+
+<audio id="audio" preload="metadata"></audio>
+
+<script>
+// ==================== CONFIGURATION ====================
+const CONFIG = {
+    TEAM_MEMBERS: ['You', 'Stepa'],
+    CURRENT_USER: 'You', // Stepa can change this
+    VERSION: '2.0 - Tree Feature'
+};
+
+// ==================== DATA ====================
+const tracks = [
+    { id: 1, title: "Neon Drive", artist: "Cyber Pulse", genre: "Synthwave", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", emoji: "🌃" },
+    { id: 2, title: "Midnight Flow", artist: "LoFi Kid", genre: "Lo-Fi", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3", emoji: "📻" },
+    { id: 3, title: "Bass Drop", artist: "Trap Master", genre: "Trap", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3", emoji: "🔥" },
+    { id: 4, title: "Acoustic Soul", artist: "Indie Folk", genre: "Indie", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3", emoji: "🍂" },
+    { id: 5, title: "Electric Dreams", artist: "Synthwave Hero", genre: "Synthwave", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3", emoji: "⚡" }
+];
+
+const zones = [
+    { id: 'synthwave', name: "Синтвейв", emoji: "🌃", genre: "Synthwave", unlocked: true },
+    { id: 'lofi', name: "Lo-Fi", emoji: "📻", genre: "Lo-Fi", unlocked: true },
+    { id: 'trap', name: "Трэп", emoji: "🔥", genre: "Trap", unlocked: false },
+    { id: 'indie', name: "Инди", emoji: "🍂", genre: "Indie", unlocked: false }
+];
+
+// Tree cells - like Yandex Music hints/achievements
+const treeCells = [
+    { id: 'first_play', icon: '🎵', label: 'Первый трек', unlocked: false, condition: 'plays >= 1' },
+    { id: 'five_plays', icon: '🔥', label: '5 треков', unlocked: false, condition: 'plays >= 5' },
+    { id: 'synthwave_fan', icon: '🌃', label: 'Синтвейв', unlocked: false, condition: 'genre:synthwave' },
+    { id: 'lofi_lover', icon: '📻', label: 'Lo-Fi', unlocked: false, condition: 'genre:lofi' },
+    { id: 'trap_master', icon: '🎤', label: 'Трэп', unlocked: false, condition: 'genre:trap' },
+    { id: 'indie_soul', icon: '🍂', label: 'Инди', unlocked: false, condition: 'genre:indie' },
+    { id: 'explorer', icon: '🗺️', label: 'Исследователь', unlocked: false, condition: 'zones >= 2' },
+    { id: 'master', icon: '👑', label: 'Мастер', unlocked: false, condition: 'zones >= 4' }
+];
+
+// ==================== STATE ====================
+let currentTrack = 0;
+let isPlaying = false;
+let stats = {
+    plays: 0,
+    genres: {},
+    zonesUnlocked: 0
+};
+
+// ==================== INIT ====================
+window.onload = function() {
+    loadProgress();
+    renderPlaylist();
+    renderMap();
+    renderTree();
+    loadTrack(0);
+    updateCollaboratorDisplay();
+};
+
+function updateCollaboratorDisplay() {
+    document.getElementById('collaborator-display').textContent =
+        `${CONFIG.CURRENT_USER} работает с ${CONFIG.TEAM_MEMBERS.filter(m => m !== CONFIG.CURRENT_USER).join(', ')}. Версия: ${CONFIG.VERSION}`;
+}
+
+function loadProgress() {
+    const saved = localStorage.getItem('soundscape_progress');
+    if (saved) {
+        const data = JSON.parse(saved);
+        stats = data.stats || stats;
+        // Update zones from saved data
+        data.zones?.forEach((unlocked, idx) => {
+            if (zones[idx]) zones[idx].unlocked = unlocked;
+        });
+        // Update tree cells
+        data.tree?.forEach((unlocked, idx) => {
+            if (treeCells[idx]) treeCells[idx].unlocked = unlocked;
+        });
+    }
+}
+
+function saveProgress() {
+    localStorage.setItem('soundscape_progress', JSON.stringify({
+        stats,
+        zones: zones.map(z => z.unlocked),
+        tree: treeCells(tc => tc.unlocked)
+    }));
+}
+
+// ==================== TABS ====================
+function switchTab(tab) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(tab).classList.add('active');
+    event.target.classList.add('active');
+}
+
+// ==================== PLAYER ====================
+function loadTrack(index) {
+    const track = tracks[index];
+    document.getElementById('track-title').textContent = track.title;
+    document.getElementById('track-artist').textContent = track.artist;
+    document.getElementById('album-emoji').textContent = track.emoji;
+    document.getElementById('audio').src = track.url;
+    document.getElementById('progress-fill').style.width = '0%';
+    renderPlaylist();
+}
+
+function togglePlay() {
+    const audio = document.getElementById('audio');
+    const btn = document.getElementById('play-btn');
+
+    if (isPlaying) {
+        audio.pause();
+        btn.textContent = '▶';
+        isPlaying = false;
+    } else {
+        audio.play();
+        btn.textContent = '⏸';
+        isPlaying = true;
+        stats.plays++;
+        updateTree();
+        unlockZoneForGenre(tracks[currentTrack].genre);
+    }
+}
+
+function nextTrack() {
+    currentTrack = (currentTrack + 1) % tracks.length;
+    loadTrack(currentTrack);
+    if (isPlaying) document.getElementById('audio').play();
+}
+
+function prevTrack() {
+    currentTrack = (currentTrack - 1 + tracks.length) % tracks.length;
+    loadTrack(currentTrack);
+    if (isPlaying) document.getElementById('audio').play();
+}
+
+function seekTrack(e) {
+    const audio = document.getElementById('audio');
+    const bar = e.currentTarget;
+    const pos = e.offsetX / bar.offsetWidth;
+    audio.currentTime = pos * audio.duration;
+}
+
+document.getElementById('audio').addEventListener('timeupdate', function() {
+    if (this.duration) {
+        const pct = (this.currentTime / this.duration) * 100;
+        document.getElementById('progress-fill').style.width = pct + '%';
+        document.getElementById('current-time').textContent = formatTime(this.currentTime);
+        document.getElementById('total-time').textContent = formatTime(this.duration);
+    }
+});
+
+document.getElementById('audio').addEventListener('ended', function() {
+    nextTrack();
+    if (isPlaying) this.play();
+});
+
+function formatTime(sec) {
+    if (!sec || isNaN(sec)) return '0:00';
+    const m = Math.floor(sec / 60);
+    const s = Math.floor(sec % 60);
+    return `${m}:${s.toString().padStart(2, '0')}`;
+}
+
+// ==================== PLAYLIST ====================
+function renderPlaylist() {
+    const container = document.getElementById('playlist');
+    container.innerHTML = '';
+    tracks.forEach((track, i) => {
+        const el = document.createElement('div');
+        el.className = 'track-item' + (i === currentTrack ? ' playing' : '');
+        el.innerHTML = `
+            <div class="track-num">${i+1}</div>
+            <div class="track-details">
+                <div class="track-title">${track.title}</div>
+                <div class="track-artist">${track.artist}</div>
+            </div>
+        `;
+        el.onclick = () => { currentTrack = i; loadTrack(i); if(isPlaying) document.getElementById('audio').play(); };
+        container.appendChild(el);
+    });
+}
+
+// ==================== MAP ====================
+function renderMap() {
+    const container = document.getElementById('map-grid');
+    container.innerHTML = '';
+    zones.forEach(zone => {
+        const el = document.createElement('div');
+        el.className = 'zone-card ' + (zone.unlocked ? 'unlocked' : 'locked');
+        el.innerHTML = `
+            <div class="zone-icon">${zone.emoji}</div>
+            <div class="zone-name">${zone.name}</div>
+            <div class="zone-status">${zone.unlocked ? '✓ Открыто' : '🔒 Закрыто'}</div>
+        `;
+        if (zone.unlocked) {
+            el.onclick = () => {
+                const idx = tracks.findIndex(t => t.genre === zone.genre);
+                if (idx >= 0) { currentTrack = idx; loadTrack(idx); switchTab('player'); if(!isPlaying) togglePlay(); }
+            };
+        }
+        container.appendChild(el);
+    });
+}
+
+function unlockZoneForGenre(genre) {
+    const idx = zones.findIndex(z => z.genre === genre && !z.unlocked);
+    if (idx >= 0) {
+        zones[idx].unlocked = true;
+        stats.zonesUnlocked++;
+        saveProgress();
+        renderMap();
+        updateTree();
+    }
+}
+
+// ==================== TREE (Like Yandex Music) ====================
+function renderTree() {
+    const container = document.getElementById('tree-grid');
+    container.innerHTML = '';
+    treeCells.forEach(cell => {
+        const el = document.createElement('div');
+        el.className = 'tree-cell ' + (cell.unlocked ? 'active' : 'locked');
+        el.innerHTML = `
+            <span class="tree-icon">${cell.icon}</span>
+            <span class="tree-label">${cell.label}</span>
+        `;
+        el.title = cell.unlocked ? 'Открыто!' : 'Заблокировано';
+        container.appendChild(el);
+    });
+}
+
+function updateTree() {
+    // Check conditions
+    treeCells.forEach(cell => {
+        if (cell.unlocked) return;
+
+        let shouldUnlock = false;
+
+        if (cell.condition === 'plays >= 1' && stats.plays >= 1) shouldUnlock = true;
+        else if (cell.condition === 'plays >= 5' && stats.plays >= 5) shouldUnlock = true;
+        else if (cell.condition === 'zones >= 2' && stats.zonesUnlocked >= 2) shouldUnlock = true;
+        else if (cell.condition === 'zones >= 4' && stats.zonesUnlocked >= 4) shouldUnlock = true;
+        else if (cell.condition.startsWith('genre:')) {
+            const genre = cell.condition.split(':')[1];
+            if (stats.genres[genre]) shouldUnlock = true;
+        }
+
+        if (shouldUnlock) {
+            cell.unlocked = true;
+            showNotification(`🎉 Открыто: ${cell.label}!`);
+        }
+    });
+
+    // Track genre stats
+    const currentGenre = tracks[currentTrack].genre.toLowerCase();
+    stats.genres[currentGenre] = (stats.genres[currentGenre] || 0) + 1;
+
+    saveProgress();
+    renderTree();
+}
+
+function showNotification(text) {
+    // Simple notification (could be enhanced)
+    console.log('Notification:', text);
+}
+
+// ==================== KEYBOARD ====================
+document.addEventListener('keydown', e => {
+    if (e.code === 'Space' && e.target.tagName !== 'INPUT') { e.preventDefault(); togglePlay(); }
+    if (e.code === 'ArrowRight' && e.ctrlKey) nextTrack();
+    if (e.code === 'ArrowLeft' && e.ctrlKey) prevTrack();
+});
+</script>
+
+</body>
+</html>
