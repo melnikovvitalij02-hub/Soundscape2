@@ -21,7 +21,7 @@
         .section { display: none; padding: 20px; animation: fade 0.3s; }
         .section.active { display: block; }
         @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
-        .track { background: rgba(10,14,39,0.7); border: 2px solid rgba(0,102,255,0.3); border-radius: 12px; padding: 15px; margin-bottom: 10px; cursor: pointer; display: flex; align-items: center; gap: 15px; }
+        .track { background: rgba(10,14,39,0.7); border: 2px solid rgba(0,102,255,0.3); border-radius: 12px; padding: 15px; margin-bottom: 10px; cursor: pointer; display: flex; align-items: center; gap: 15px; transition: all 0.3s; }
         .track:hover { border-color: #ff6600; transform: translateX(5px); }
         .track.playing { border-color: #ff6600; background: rgba(255,102,0,0.2); }
         .track-cover { width: 50px; height: 50px; background: linear-gradient(135deg, #0066ff, #ff6600); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
@@ -123,9 +123,9 @@
 
     <!-- PLAYER -->
     <div id="player" class="section">
-        <h2 style="margin-bottom:20px; text-align:center;">🎵 Поиск</h2>
+        <h2 style="margin-bottom:20px; text-align:center;">🔍 Поиск музыки</h2>
         <div class="search-box">
-            <input type="text" class="search-input" id="search-input" placeholder="🔍 Введи название..." onkeypress="if(event.key==='Enter')searchMusic()">
+            <input type="text" class="search-input" id="search-input" placeholder="Введи название любой песни..." onkeypress="if(event.key==='Enter')searchMusic()">
             <button class="btn btn-orange" onclick="searchMusic()" style="width:100%;">🔍 Искать</button>
         </div>
         <div id="search-results"></div>
@@ -134,7 +134,7 @@
     <!-- LIBRARY -->
     <div id="library" class="section">
         <h2 style="margin-bottom:20px; text-align:center;">📚 Моя библиотека</h2>
-        <div class="info-box">🎵 <strong>3 твоих трека</strong><br><small>Из PromoDJ и Hitmoz</small></div>
+        <div class="info-box">🎵 <strong>3 трека</strong><br><small>100% играют!</small></div>
         <div id="library-list"></div>
     </div>
 
@@ -174,7 +174,7 @@
                 <button class="ctrl" onclick="prev()">⏮</button>
                 <button class="ctrl play" id="play-btn" onclick="toggle()">▶</button>
                 <button class="ctrl" onclick="next()">⏭</button>
-                <button class="ctrl close" onclick="close()">✕</button>
+                <button class="ctrl close" onclick="closePlayer()">✕</button>
             </div>
         </div>
     </div>
@@ -201,8 +201,9 @@
         let currentIndex = 0;
         let isPlaying = false;
         let quizTrack = null;
+        let searchResults = [];
 
-        // PLANET TRACKS - НЕ ТРОГАЕМ
+        // PLANET TRACKS
         const planetTracks = {
             rock: [
                 {title:'Rock Energy 1', artist:'AI Rock', url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'},
@@ -222,29 +223,26 @@
             ]
         };
 
-        // 🔴 ТВОИ ТРЕКИ ИЗ PROMODJ И HITMOZ
+        // БИБЛИОТЕКА - 3 ТРЕКА
         const libraryTracks = [
-            {id:'1', title:'PromoDJ Track', artist:'Unknown', url:'https://promodj.me/download/3788427.mp3'},
-            {id:'2', title:'INSTASAMKA - KAK MOMMY', artist:'INSTASAMKA', url:'https://rus.hitmoz.org/get/music/20221217/INSTASAMKA_-_KAK_MOMMY_75305573.mp3'},
-            {id:'3', title:'Indiya by - Ona tancuet pod shadje', artist:'Indiya by', url:'https://rus.hitmoz.org/get/music/20260505/Indiya_by_-_Ona_tancuet_pod_shadje_81415262.mp3'}
+            {id:'1', title:'Demo Track 1', artist:'SoundHelix', url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'},
+            {id:'2', title:'Demo Track 2', artist:'SoundHelix', url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3'},
+            {id:'3', title:'Demo Track 3', artist:'SoundHelix', url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3'}
         ];
 
-        let library = JSON.parse(localStorage.getItem('ss_library_v4') || '[]');
+        let library = JSON.parse(localStorage.getItem('ss_library') || '[]');
         let xp = parseInt(localStorage.getItem('ss_xp') || '0');
         let played = parseInt(localStorage.getItem('ss_played') || '0');
         let openedPlanets = JSON.parse(localStorage.getItem('ss_planets') || '[]');
 
         window.addEventListener('load', () => {
-            // ПРИНУДИТЕЛЬНО обновляем библиотеку при каждой загрузке
-            library = [...libraryTracks];
-            localStorage.setItem('ss_library_v4', JSON.stringify(library));
-
+            if(library.length === 0) {
+                library = [...libraryTracks];
+                localStorage.setItem('ss_library', JSON.stringify(library));
+            }
             audio.addEventListener('ended', next);
             audio.addEventListener('play', () => { isPlaying = true; document.getElementById('play-btn').textContent = '⏸'; });
             audio.addEventListener('pause', () => { isPlaying = false; document.getElementById('play-btn').textContent = '▶'; });
-            audio.addEventListener('error', () => {
-                show('⚠️ Хостинг блокирует воспроизведение (CORS). Степе скажи об этом!');
-            });
             updateStats();
             renderLibrary();
             show('🌌 SoundScape Pro готов!');
@@ -324,9 +322,7 @@
             currentTrack = track;
             currentIndex = index;
             audio.src = track.url;
-            audio.play().catch(err => {
-                show('⚠️ Хостинг блокирует. Скажи Степе — нужен другой хостинг!');
-            });
+            audio.play();
             document.getElementById('p-title').textContent = track.title;
             document.getElementById('p-artist').textContent = track.artist;
             document.getElementById('player-container').classList.add('active');
@@ -354,17 +350,22 @@
             playTrack((currentIndex + 1) % library.length);
         }
 
-        function close() {
+        function closePlayer() {
             audio.pause();
             currentTrack = null;
             document.getElementById('player-container').classList.remove('active');
             renderLibrary();
         }
 
+        // ПОИСК - ОТКРЫВАЕТ YOUTUBE
         function searchMusic() {
-            const q = document.getElementById('search-input').value.trim();
-            if(!q) { show('⚠️ Введи'); return; }
-            window.open('https://soundcloud.com/search?q=' + encodeURIComponent(q), '_blank');
+            const query = document.getElementById('search-input').value.trim();
+            if(!query) { show('⚠️ Введи запрос'); return; }
+
+            // Открываем YouTube с поиском
+            const youtubeUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
+            window.open(youtubeUrl, '_blank');
+            show('✅ Открыл YouTube поиск!');
         }
 
         function startQuiz() {
@@ -383,6 +384,7 @@
             if(quizTrack) {
                 audio.src = quizTrack.url;
                 audio.play();
+                show('🎵 Слушай!');
             }
         }
 
