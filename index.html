@@ -177,9 +177,28 @@ canvas.game-canvas { width: 100% !important; max-width: 800px !important; height
 .notification { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: var(--gradient-1); color: #fff; padding: 12px 24px; border-radius: 25px; font-weight: 700; font-size: 14px; z-index: 10000; transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 10px 30px rgba(184, 44, 255, 0.4); }
 .notification.show { transform: translateX(-50%) translateY(0); }
 
+/* Стили для тарифов и проектов */
+.tiers-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; max-width: 1200px; margin: 0 auto; }
+.tier-card { background: linear-gradient(135deg, rgba(17,21,48,0.9), rgba(26,31,58,0.7)); border: 2px solid rgba(184, 44, 255, 0.3); border-radius: 20px; padding: 30px; text-align: center; transition: all 0.3s; }
+.tier-card.featured { border-color: #ffd700; transform: scale(1.05); box-shadow: 0 0 30px rgba(255, 215, 0, 0.2); }
+.tier-badge { background: linear-gradient(90deg, #ffd700, #ff8c00); color: #000; padding: 5px 12px; border-radius: 15px; font-size: 11px; font-weight: bold; display: inline-block; margin-bottom: 15px; }
+.tier-features { list-style: none; text-align: left; margin: 20px 0; }
+.tier-features li { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; gap: 8px; }
+.tier-features li::before { content: '✓'; color: var(--success); font-weight: bold; }
+.tier-btn { width: 100%; padding: 14px; margin-top: 20px; background: var(--gradient-1); border: none; border-radius: 12px; color: #fff; font-size: 16px; font-weight: 700; cursor: pointer; }
+.tier-btn.gold { background: linear-gradient(90deg, #ffd700, #ff8c00); color: #000; }
+.tier-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.project-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 15px; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s; }
+.project-item:hover { border-color: var(--accent); background: rgba(184, 44, 255, 0.05); }
+.project-info h4 { color: var(--accent); margin-bottom: 5px; }
+.project-info p { font-size: 12px; color: var(--text-muted); }
+.project-actions { display: flex; gap: 10px; }
+
 @media (max-width: 768px) {
   .hero-title { font-size: 32px; }
   .mobile-controls { display: flex !important; }
+  .tier-card.featured { transform: none; }
 }
 
 body {
@@ -330,6 +349,8 @@ body {
 <button class="nav-btn active" onclick="showSection('home', event)">🏠 Главная</button>
 <button class="nav-btn" onclick="showSection('studio', event)">🎙️ AI Студия</button>
 <button class="nav-btn" onclick="showSection('beatmaker', event)">🎹 Beat Pro</button>
+<button class="nav-btn" onclick="showSection('projects', event)">📁 Проекты</button>
+<button class="nav-btn" onclick="showSection('tariffs', event)">💎 Тарифы</button>
 <button class="nav-btn" onclick="showSection('games', event)">🎮 Игры</button>
 <button class="nav-btn" onclick="showSection('quests', event)">📜 Квесты</button>
 <button class="nav-btn" onclick="showSection('music', event)">🎵 Музыка</button>
@@ -537,6 +558,54 @@ body {
 </div>
 </div>
 
+<!-- НОВЫЙ РАЗДЕЛ: ПРОЕКТЫ -->
+<div id="projects" class="section">
+  <h2 class="section-title">📁 Мои проекты</h2>
+  <div class="profile-card">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap: wrap; gap: 10px;">
+      <div style="font-size: 16px;">
+        Создано проектов: <b id="projCountDisplay" style="color:var(--accent)">0</b> / <b id="projLimitDisplay" style="color:var(--success)">3</b>
+      </div>
+      <div id="vipBadgeProjects" style="display:none; background:linear-gradient(90deg, #ffd700, #ff8c00); color:#000; padding:6px 16px; border-radius:20px; font-weight:bold; font-size: 14px;">👑 VIP PRODUCER</div>
+    </div>
+    <div id="projectsListContainer" style="display:flex; flex-direction:column; gap:10px;">
+      <!-- Сюда JS добавит список проектов -->
+    </div>
+  </div>
+</div>
+
+<!-- НОВЫЙ РАЗДЕЛ: ТАРИФЫ -->
+<div id="tariffs" class="section">
+  <h2 class="section-title">💎 Тарифные планы</h2>
+  <div class="tiers-grid">
+    <div class="tier-card">
+      <h3>Free</h3>
+      <div class="p-stat-val" style="color: var(--text-muted);">Бесплатно</div>
+      <ul class="tier-features">
+        <li>Лимит проектов: 3</li>
+        <li>Базовые функции Beat Maker</li>
+        <li>Стандартная поддержка</li>
+      </ul>
+      <button class="tier-btn" disabled>Текущий тариф</button>
+    </div>
+    <div class="tier-card featured">
+      <div class="tier-badge">РЕКОМЕНДУЕМ</div>
+      <h3>VIP Producer</h3>
+      <div class="p-stat-val" style="color: #ffd700;">1000 🪙</div>
+      <ul class="tier-features">
+        <li>Лимит проектов: 50</li>
+        <li>Золотой бейдж в профиле</li>
+        <li>Приоритетная поддержка</li>
+        <li>Ранний доступ к новым фичам</li>
+      </ul>
+      <button class="tier-btn gold" onclick="buyVip()">Купить VIP</button>
+    </div>
+  </div>
+  <p style="text-align: center; color: var(--text-muted); margin-top: 30px; font-size: 14px;">
+    💡 <i>Не хватает монет? Играй в "Звёздный Кликер" в разделе Игры, чтобы заработать!</i>
+  </p>
+</div>
+
 <div id="games" class="section">
 <h2 class="section-title">🎮 Выбери миссию</h2>
 <div class="games-grid">
@@ -544,6 +613,7 @@ body {
 <div class="game-card" onclick="startGame('pacman')"><div class="game-icon">🟡</div><div class="game-title">Звёздный Pac-Man</div><div class="game-desc">6 приведений, собирай точки!</div><button class="xp-btn">+200 XP</button></div>
 <div class="game-card" onclick="startGame('invaders')"><div class="game-icon">👾</div><div class="game-title">Space Invaders</div><div class="game-desc">Классика! Уничтожь пришельцев</div><button class="xp-btn">+50 XP</button></div>
 <div class="game-card" onclick="startGame('snake')"><div class="game-icon">🐍</div><div class="game-title">Звёздная змейка</div><div class="game-desc">Собирай звёзды</div><button class="xp-btn">+15 XP</button></div>
+<div class="game-card" onclick="startGame('clicker')"><div class="game-icon">🖱️</div><div class="game-title">Звёздный Кликер</div><div class="game-desc">Кликай, копи монеты и покупай улучшения!</div><button class="xp-btn">Бесконечный XP</button></div>
 </div>
 <div id="activeGame" class="game-container">
 <h3 id="gameTitle" style="text-align:center;margin-bottom:10px;color:var(--accent);"></h3>
@@ -629,7 +699,13 @@ body {
    ========================================================================== */
 let currentUser = null;
 let isGuest = false;
-let userData = { xp: 0, coins: 100, tracksCreated: 0, gamesPlayed: 0, clicker: { clickPower: 1, clickCost: 10, autoClick: 0, autoCost: 50 } };
+let userData = { 
+    xp: 0, coins: 100, tracksCreated: 0, gamesPlayed: 0, 
+    clicker: { clickPower: 1, clickCost: 10, autoClick: 0, autoCost: 50 },
+    projectsCreated: 0,
+    projectLimit: 3,
+    isVip: false
+};
 
 let mediaRecorder = null;
 let audioChunks = [];
@@ -659,7 +735,7 @@ window.onload = function() {
         const data = JSON.parse(saved);
         currentUser = data.username;
         isGuest = data.isGuest || false;
-        userData = data.userData || userData;
+        userData = { ...userData, ...(data.userData || {}) }; // Merge to keep new fields
         document.getElementById('authOverlay').classList.remove('active');
         updateStats();
     }
@@ -678,6 +754,18 @@ function updateStats() {
     document.getElementById('profileTracks').textContent = userData.tracksCreated;
     document.getElementById('userName').textContent = currentUser;
     document.getElementById('profileName').textContent = currentUser;
+    
+    // Обновляем статистику проектов
+    const projects = getProjects();
+    document.getElementById('projCountDisplay').textContent = projects.length;
+    document.getElementById('projLimitDisplay').textContent = userData.projectLimit;
+    
+    if (userData.isVip) {
+        document.getElementById('vipBadgeProjects').style.display = 'block';
+        document.getElementById('userBadge').textContent = 'VIP';
+        document.getElementById('userBadge').style.background = 'linear-gradient(90deg, #ffd700, #ff8c00)';
+        document.getElementById('userBadge').style.color = '#000';
+    }
 }
 
 function showNotification(text) {
@@ -693,6 +781,10 @@ function showSection(id, event) {
     document.getElementById(id).classList.add('active');
     if (event && event.target) event.target.classList.add('active');
     window.scrollTo(0, 0);
+    
+    if (id === 'projects') {
+        renderProjectsList();
+    }
 }
 
 function registerUser() {
@@ -721,6 +813,70 @@ function logout() {
 
 function saveUserData() {
     localStorage.setItem('soundscape_user', JSON.stringify({ username: currentUser, isGuest: isGuest, userData: userData }));
+}
+
+// --- НОВЫЕ ФУНКЦИИ ДЛЯ ПРОЕКТОВ И VIP ---
+function renderProjectsList() {
+    const projects = getProjects();
+    const container = document.getElementById('projectsListContainer');
+    
+    if (projects.length === 0) {
+        container.innerHTML = '<div style="text-align:center; color:var(--text-muted); padding:40px;">Пока нет сохраненных проектов. Создай свой первый бит в Beat Pro!</div>';
+        return;
+    }
+    
+    container.innerHTML = projects.map(p => `
+        <div class="project-item">
+            <div class="project-info">
+                <h4>${p.name || 'Без названия'}</h4>
+                <p>BPM: ${p.bpm} | Длительность: ~${p.duration || 0}с | ${new Date(p.createdAt).toLocaleDateString()}</p>
+            </div>
+            <div class="project-actions">
+                <button class="btn btn-primary" onclick="loadProjectFromList('${p.id}')">Загрузить</button>
+                <button class="btn btn-danger" onclick="deleteProject('${p.id}')">Удалить</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function loadProjectFromList(id) {
+    loadProjectById(id);
+    showSection('beatmaker');
+    showNotification('📂 Проект загружен в Beat Pro!');
+}
+
+function deleteProject(id) {
+    if (!confirm('Ты уверен, что хочешь удалить этот проект?')) return;
+    let projects = getProjects();
+    projects = projects.filter(p => p.id !== id);
+    saveProjectsList(projects);
+    
+    // Уменьшаем счетчик созданных проектов, если это не VIP (чтобы не накручивать)
+    if (!userData.isVip && userData.projectsCreated > 0) {
+        userData.projectsCreated--;
+        saveUserData();
+    }
+    
+    renderProjectsList();
+    updateStats();
+    showNotification('🗑️ Проект удален');
+}
+
+function buyVip() {
+    if (userData.isVip) { 
+        showNotification('👑 У вас уже есть VIP статус!'); 
+        return; 
+    }
+    if (userData.coins >= 1000) {
+        userData.coins -= 1000;
+        userData.isVip = true;
+        userData.projectLimit = 50;
+        saveUserData();
+        updateStats();
+        showNotification('🎉 Поздравляем! Вы получили VIP Producer статус!');
+    } else {
+        showNotification('❌ Недостаточно монет! Нужно 1000 🪙. Поиграй в "Звёздный Кликер"!');
+    }
 }
 
 /* ==========================================================================
@@ -895,7 +1051,8 @@ function startGame(type) {
         'shooter': { title: '🚀 Space Shooter' }, 
         'pacman': { title: '🟡 Pac-Man' }, 
         'invaders': { title: '👾 Space Invaders' }, 
-        'snake': { title: '🐍 Змейка' } 
+        'snake': { title: '🐍 Змейка' },
+        'clicker': { title: '🖱️ Звёздный Кликер' }
     };
     document.getElementById('gameTitle').textContent = games[type].title;
 
@@ -918,6 +1075,8 @@ function startGame(type) {
     } else if (type === 'snake') { 
         snake = [{ x: 15, y: 10 }]; dir = { x: 1, y: 0 }; nextDir = { x: 1, y: 0 }; food = { x: 20, y: 10 };
         startSnake(); 
+    } else if (type === 'clicker') {
+        startClicker();
     }
     userData.gamesPlayed++; 
     updateStats();
@@ -936,6 +1095,7 @@ function closeGame() {
     pauseGame(); 
     document.getElementById('activeGame').classList.remove('active'); 
     input = { left: false, right: false, up: false, down: false, fire: false }; 
+    if (clickerInterval) { clearInterval(clickerInterval); clickerInterval = null; }
 }
 
 document.querySelectorAll('.d-btn, .action-btn').forEach(btn => {
@@ -1069,6 +1229,49 @@ function startSnake() {
   }, 120);
 }
 
+let clickerInterval = null;
+function startClicker() {
+    document.getElementById('gameCanvas').style.display = 'none';
+    document.getElementById('clickerGameArea').style.display = 'block';
+    if (!userData.clicker) userData.clicker = { clickPower: 1, clickCost: 10, autoClick: 0, autoCost: 50 };
+    updateClickerUI();
+    
+    if (clickerInterval) clearInterval(clickerInterval);
+    clickerInterval = setInterval(() => {
+        if (userData.clicker.autoClick > 0) { 
+            userData.coins += userData.clicker.autoClick; 
+            updateClickerUI(); 
+            saveUserData();
+        }
+    }, 1000);
+}
+function clickerClick() {
+    userData.coins += userData.clicker.clickPower; 
+    updateClickerUI();
+    saveUserData();
+}
+function buyClickerUpgrade(type) {
+    if (type === 'click' && userData.coins >= userData.clicker.clickCost) {
+        userData.coins -= userData.clicker.clickCost; 
+        userData.clicker.clickPower += 1; 
+        userData.clicker.clickCost = Math.floor(userData.clicker.clickCost * 1.5); 
+        updateClickerUI(); saveUserData();
+    } else if (type === 'auto' && userData.coins >= userData.clicker.autoCost) {
+        userData.coins -= userData.clicker.autoCost; 
+        userData.clicker.autoClick += 1; 
+        userData.clicker.autoCost = Math.floor(userData.clicker.autoCost * 1.5); 
+        updateClickerUI(); saveUserData();
+    } else {
+        showNotification('❌ Недостаточно монет!');
+    }
+}
+function updateClickerUI() {
+    document.getElementById('clickerCoins').textContent = Math.floor(userData.coins);
+    document.getElementById('clickerCPS').textContent = userData.clicker.autoClick;
+    document.getElementById('clickCost').textContent = userData.clicker.clickCost;
+    document.getElementById('autoCost').textContent = userData.clicker.autoCost;
+}
+
 /* ==========================================================================
    QUESTS ENGINE
    ========================================================================== */
@@ -1127,7 +1330,7 @@ function updateQuestProgress(questId, amount) {
 }
 
 /* ==========================================================================
-   MUSIC SEARCH ENGINE (Прямой переход на YouTube)
+   MUSIC SEARCH ENGINE
    ========================================================================== */
 async function searchMusic() {
     const query = document.getElementById('musicSearchInput').value.trim();
@@ -1141,16 +1344,13 @@ async function searchMusic() {
     list.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--text-muted);">🔍 Ищу треки и ссылки на YouTube...</div>';
     
     try {
-        // Пытаемся получить красивые обложки и названия через Deezer
         const response = await fetch(`https://api.deezer.com/search?q=${encodeURIComponent(query)}&limit=10`);
         const data = await response.json();
         
         if (data.data && data.data.length > 0) {
             list.innerHTML = data.data.map(track => {
-                // Формируем умный поисковый запрос для YouTube
                 const ytQuery = encodeURIComponent(`${track.artist.name} - ${track.title} official audio`);
                 const ytUrl = `https://www.youtube.com/results?search_query=${ytQuery}`;
-                
                 return `
                 <div class="track-item">
                     <img src="${track.album.cover_medium}" class="track-cover" alt="">
@@ -1165,7 +1365,6 @@ async function searchMusic() {
                 </div>
             `}).join('');
         } else {
-            // Если Deezer ничего не нашел, показываем прямую кнопку на YouTube
             const ytUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
             list.innerHTML = `
                 <div class="track-item" style="flex-direction: column; align-items: stretch; gap: 15px; background: rgba(255, 0, 85, 0.1); border-color: #ff0055;">
@@ -1178,8 +1377,6 @@ async function searchMusic() {
             `;
         }
     } catch (error) {
-        console.error(error);
-        // Если сеть заблокировала запрос, сразу даем ссылку на YouTube
         const ytUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
         list.innerHTML = `
             <div class="track-item" style="flex-direction: column; align-items: stretch; gap: 15px; background: rgba(255, 0, 85, 0.1); border-color: #ff0055;">
@@ -1734,6 +1931,7 @@ function initBeatComposer() {
     catch(e) { showCpNotification('⚠️ Хранилище переполнено'); }
   }
 
+  // === МОДИФИЦИРОВАННАЯ ФУНКЦИЯ СОХРАНЕНИЯ С ПРОВЕРКОЙ ЛИМИТА ===
   function saveCurrentProject() {
     let maxStep = 0;
     for (let t = 0; t < TRACKS; t++) {
@@ -1768,6 +1966,12 @@ function initBeatComposer() {
     }
 
     if (!isEditing) {
+      // ПРОВЕРКА ЛИМИТА ПЕРЕД СОЗДАНИЕМ НОВОГО ПРОЕКТА
+      if (projects.length >= userData.projectLimit) {
+          showCpNotification(`⚠️ Лимит проектов (${userData.projectLimit}) достигнут! Оформите VIP в разделе "Тарифы".`);
+          return; // Останавливаем сохранение
+      }
+
       const newProj = {
         id: generateId(),
         name: projectName,
@@ -1779,8 +1983,14 @@ function initBeatComposer() {
       };
       projects.push(newProj);
       saveProjectsList(projects);
+      
+      // Увеличиваем счетчик созданных проектов
+      userData.projectsCreated++;
+      saveUserData();
+      updateStats();
+      
       sessionStorage.removeItem('beatmaker_edit_id');
-      showCpNotification('✅ Новый проект сохранён!');
+      showCpNotification('✅ Новый проект сохранён! Перейди в "Проекты"');
     }
   }
 
