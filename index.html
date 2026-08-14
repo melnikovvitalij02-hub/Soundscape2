@@ -1564,48 +1564,116 @@ function initBeatComposer() {
 
   // ИСПРАВЛЕНИЕ 6: Обработка ошибки папки sounds
   // НОВАЯ ФУНКЦИЯ ДЛЯ VERCEL (Использует manifest.json)
+// ===== "БАЗА ДАННЫХ" ЗВУКОВ =====
+const ALL_SOUNDS = [
+  // 808 BEAT 1 - Drums
+  'sounds/808_BEAT_1/Drums/808_K.wav',
+  'sounds/808_BEAT_1/Drums/808_S.wav',
+  // 808 BEAT 1 - Percussion
+  'sounds/808_BEAT_1/Percussion/808_5.wav',
+  'sounds/808_BEAT_1/Percussion/808_6.wav',
+  'sounds/808_BEAT_1/Percussion/8O8_R.wav',
+  // 808 BEAT 1 - Plates
+  'sounds/808_BEAT_1/Plates/808_2.wav',
+  'sounds/808_BEAT_1/Plates/808_3.wav',
+  'sounds/808_BEAT_1/Plates/808_4.wav',
+  'sounds/808_BEAT_1/Plates/808_7.wav',
+  'sounds/808_BEAT_1/Plates/808_C.wav',
+  'sounds/808_BEAT_1/Plates/808_O.wav',
+  // 909 BEAT 1 - Drums
+  'sounds/909_BEAT_1/Drums/909CX 31 SN3  2.wav',
+  'sounds/909_BEAT_1/Drums/909CX 33 BD3  1.wav',
+  'sounds/909_BEAT_1/Drums/909CX 35 BD1  2.wav',
+  // SFXs
+  'sounds/SFXs/plane1.wav',
+  'sounds/SFXs/plane2.wav',
+  'sounds/SFXs/plane3.wav',
+  'sounds/SFXs/plane4.wav',
+  // Synth Effects
+  'sounds/Synth Effects/FX-1972.wav',
+  'sounds/Synth Effects/FX-8DOTTED.wav',
+  'sounds/Synth Effects/FX-ANALPROBE.wav',
+  'sounds/Synth Effects/FX-APOLLO13.wav',
+  'sounds/Synth Effects/FX-BANGDELAY.wav',
+  'sounds/Synth Effects/FX-BOMB.wav',
+  'sounds/Synth Effects/FX-BPDOWN.wav',
+  'sounds/Synth Effects/FX-BPDOWN2.wav',
+  'sounds/Synth Effects/FX-BPUP.wav',
+  'sounds/Synth Effects/FX-CLASSIC.wav',
+  'sounds/Synth Effects/FX-CLASSIC2.wav',
+  'sounds/Synth Effects/FX-CLASSIC3.wav',
+  'sounds/Synth Effects/FX-CONTAINER.wav',
+  'sounds/Synth Effects/FX-CONTAINER2.wav',
+  'sounds/Synth Effects/FX-CREAMY.wav',
+  'sounds/Synth Effects/FX-DESCENDING1.wav',
+  'sounds/Synth Effects/FX-DUDUM.wav',
+  'sounds/Synth Effects/FX-EMES20.wav',
+  'sounds/Synth Effects/FX-EMES22.wav',
+  'sounds/Synth Effects/FX-GLENDO.wav',
+  'sounds/Synth Effects/FX-KRAYZ.wav',
+  'sounds/Synth Effects/FX-LINUS.wav',
+  'sounds/Synth Effects/FX-LOWCAV.wav',
+  'sounds/Synth Effects/FX-LPDOWN.wav',
+  'sounds/Synth Effects/FX-MARSATTAX.wav',
+  'sounds/Synth Effects/FX-MISTERY.wav',
+  'sounds/Synth Effects/FX-MODARPER.wav',
+  'sounds/Synth Effects/FX-MODERATOR.wav',
+  'sounds/Synth Effects/FX-MODULATE.wav',
+  'sounds/Synth Effects/FX-NASTYCARD.wav',
+  'sounds/Synth Effects/FX-NOABS.wav',
+  'sounds/Synth Effects/FX-NOISEFALL.wav',
+  'sounds/Synth Effects/FX-NOISEFALL2.wav',
+  'sounds/Synth Effects/FX-NOISEFALL3.wav',
+  'sounds/Synth Effects/FX-NOISEFALL4.wav',
+  'sounds/Synth Effects/FX-NOISEFALL5.wav',
+  'sounds/Synth Effects/FX-NOISEFALL6.wav',
+  'sounds/Synth Effects/FX-PEPELOPEZ.wav',
+  'sounds/Synth Effects/FX-PIPELINE.wav',
+  'sounds/Synth Effects/FX-PULSEDOWN.wav',
+  'sounds/Synth Effects/FX-R2D3.wav',
+  'sounds/Synth Effects/FX-RDOWN.wav',
+  'sounds/Synth Effects/FX-RDOWN2.wav',
+  'sounds/Synth Effects/FX-RISE.wav',
+  'sounds/Synth Effects/FX-RISEUP.wav',
+  'sounds/Synth Effects/FX-SCARYHALLS.wav',
+  'sounds/Synth Effects/FX-SCREECH.wav',
+  'sounds/Synth Effects/FX-SEEPU.wav',
+  'sounds/Synth Effects/FX-SEERISE.wav',
+  'sounds/Synth Effects/FX-SPACE.wav',
+  'sounds/Synth Effects/FX-SPACEYWIND.wav',
+  'sounds/Synth Effects/FX-SYNTHBELL.wav',
+  'sounds/Synth Effects/FX-SYNTHCHIME.wav',
+  'sounds/Synth Effects/FX-SYNTHDOG.wav',
+  'sounds/Synth Effects/FX-SYNTHDOWN.wav',
+  'sounds/Synth Effects/FX-SYNTHDOWN2.wav',
+];
+
 async function scanDirectory(path) {
-  soundsList.innerHTML = '<div class="cp-sound-item" style="color:var(--text-muted); justify-content:center;">Загрузка звуков...</div>';
+  soundsList.innerHTML = '<div class="cp-sound-item" style="color:var(--text-muted);">Загрузка...</div>';
   
-  try {
-    const response = await fetch('https://api.github.com/repos/TimSaf1/Soundscape/git/trees/new_src?recursive=1');
-    const data = await response.json();
-    
-    const allSounds = data.tree
-      .filter(item => 
-        item.type === 'blob' && 
-        (item.path.startsWith('sounds/') || item.path.startsWith('public/sounds/')) &&
-        /\.(wav|mp3|ogg|m4a)$/i.test(item.path)
-      )
-      .map(item => item.path.replace(/^public\//, ''));
-    
-    const folders = new Set();
-    const files = [];
-    
-    allSounds.forEach(filePath => {
-      if (!filePath.startsWith(path)) return;
-      const rest = filePath.slice(path.length);
-      if (rest.includes('/')) {
-        folders.add(rest.split('/')[0]);
-      } else {
-        files.push({ 
-          name: rest, 
-          isFolder: false, 
-          href: rest, 
-          fullPath: 'https://raw.githubusercontent.com/TimSaf1/Soundscape/new_src/' + filePath 
-        });
-      }
-    });
-    
-    const items = [];
-    folders.forEach(name => items.push({ name, isFolder: true, href: name + '/' }));
-    items.push(...files);
-    
-    renderSoundsPanel(items);
-  } catch (e) {
-    console.error(e);
-    soundsList.innerHTML = '<div class="cp-sound-item" style="color:#ff8888;">Ошибка: ' + e.message + '</div>';
-  }
+  const folders = new Set();
+  const files = [];
+  
+  ALL_SOUNDS.forEach(filePath => {
+    if (!filePath.startsWith(path)) return;
+    const rest = filePath.slice(path.length);
+    if (rest.includes('/')) {
+      folders.add(rest.split('/')[0]);
+    } else {
+      files.push({ 
+        name: rest, 
+        isFolder: false, 
+        href: rest, 
+        fullPath: filePath 
+      });
+    }
+  });
+  
+  const items = [];
+  folders.forEach(name => items.push({ name, isFolder: true, href: name + '/' }));
+  items.push(...files);
+  
+  renderSoundsPanel(items);
 }
 
   function renderSoundsPanel(items) {
