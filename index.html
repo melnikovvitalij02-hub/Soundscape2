@@ -1563,24 +1563,71 @@ function initBeatComposer() {
   }
 
   // ИСПРАВЛЕНИЕ 6: Обработка ошибки папки sounds
+  // НОВАЯ ФУНКЦИЯ ДЛЯ VERCEL (Использует manifest.json)
   async function scanDirectory(path) {
-    soundsList.innerHTML = '<div class="cp-sound-item" style="color:var(--text-muted); justify-content:center;">Загрузка...</div>';
+    soundsList.innerHTML = '<div class="cp-sound-item" style="color:var(--text-muted); justify-content:center;">Загрузка звуков...</div>';
+    
     try {
-      const response = await fetch(path);
-      if (!response.ok) throw new Error("Directory listing not enabled");
-      const text = await response.text();
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(text, 'text/html');
-      const items = new Map();
-      Array.from(doc.querySelectorAll('a')).forEach(a => {
-        const href = a.getAttribute('href'), name = a.textContent.trim();
-        if (name === '../' || name === '..' || name === 'Parent Directory') return;
-        if (href.endsWith('/') || href.match(/\.(mp3|wav|ogg)$/i))
-          items.set(name, { name, isFolder: href.endsWith('/'), href, fullPath: path + href });
+      // 1. Загружаем список всех файлов из манифеста (делаем это один раз)
+      if (!window.soundManifest) {
+        const response = await fetch('sounds/manifest.json');
+        if (!response.ok) throw new Error("manifest.json не найден!");
+        window.soundManifest = await response.json();
+      }
+
+      // 2. Фильтруем файлы для текущей папки
+      // path приходит как 'sounds/' или 'sounds/808_BEAT_1/'
+      // Нам нужно найти все файлы, которые начинаются с этого пути
+      
+      const currentDirFiles = [];
+      const subFolders = new Set();
+
+      window.soundManifest.forEach(filePath => {
+        // Убираем 'sounds/' из начала для удобства сравнения
+        const relativePath = filePath.replace('sounds/', '');
+        const requestPath = path.replace('sounds/', '');
+
+        if (relativePath.startsWith(requestPath)) {
+          const remainingPath = relativePath.slice(requestPath.length);
+          
+          if (remainingPath.includes('/')) {
+            // Это подпапка
+            const folderName = remainingPath.split('/')[0];
+            subFolders.add(folderName);
+          } else {
+            // Это файл в текущей папке
+            currentDirFiles.push({
+              name: remainingPath,
+              isFolder: false,
+              href: remainingPath,
+              fullPath: filePath // Полный путь для загрузки аудио
+            });
+          }
+        }
       });
-      renderSoundsPanel(Array.from(items.values()));
+
+      // 3. Добавляем папки в список
+      const items = [];
+      subFolders.forEach(folder => {
+        items.push({
+          name: folder,
+          isFolder: true,
+          href: folder + '/',
+          fullPath: path + folder + '/'
+        });
+      });
+      
+      // Добавляем файлы
+      items.push(...currentDirFiles);
+
+      renderSoundsPanel(items);
+
     } catch (e) {
-      soundsList.innerHTML = '<div class="cp-sound-item" style="color:#ff8888; flex-direction:column; text-align:center; padding:15px; font-size:12px;">⚠️ Локальный режим: браузер блокирует чтение папок. Используйте расширение "Live Server" в VS Code или используйте AI-генератор битов!</div>';
+      console.error(e);
+      soundsList.innerHTML = `<div class="cp-sound-item" style="color:#ff8888; flex-direction:column; text-align:center; padding:15px; font-size:12px;">
+        ⚠️ Ошибка: ${e.message}<br>
+        Убедитесь, что файл sounds/manifest.json существует и содержит список файлов.
+      </div>`;
     }
   }
 
