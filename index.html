@@ -1564,56 +1564,49 @@ function initBeatComposer() {
 
   // ИСПРАВЛЕНИЕ 6: Обработка ошибки папки sounds
   // НОВАЯ ФУНКЦИЯ ДЛЯ VERCEL (Использует manifest.json)
-  async function scanDirectory(path) {
-    soundsList.innerHTML = '<div class="cp-sound-item" style="color:var(--text-muted); justify-content:center;">Загрузка звуков...</div>';
+async function scanDirectory(path) {
+  soundsList.innerHTML = '<div class="cp-sound-item" style="color:var(--text-muted); justify-content:center;">Загрузка звуков...</div>';
+  
+  try {
+    const response = await fetch('https://api.github.com/repos/TimSaf1/Soundscape/git/trees/new_src?recursive=1');
+    const data = await response.json();
     
-    try {
-      // Загружаем список всех файлов из GitHub
-      const response = await fetch('https://api.github.com/repos/TimSaf1/Soundscape/git/trees/new_src?recursive=1');
-      const data = await response.json();
-      
-      // Фильтруем только аудиофайлы из папок sounds/ и public/sounds/
-      const allSounds = data.tree
-        .filter(item => 
-          item.type === 'blob' && 
-          (item.path.startsWith('sounds/') || item.path.startsWith('public/sounds/')) &&
-          /\.(wav|mp3|ogg|m4a)$/i.test(item.path)
-        )
-        .map(item => {
-          // Убираем префикс public/ если он есть, чтобы пути были одинаковые
-          const cleanPath = item.path.replace(/^public\//, '');
-          return cleanPath;
+    const allSounds = data.tree
+      .filter(item => 
+        item.type === 'blob' && 
+        (item.path.startsWith('sounds/') || item.path.startsWith('public/sounds/')) &&
+        /\.(wav|mp3|ogg|m4a)$/i.test(item.path)
+      )
+      .map(item => item.path.replace(/^public\//, ''));
+    
+    const folders = new Set();
+    const files = [];
+    
+    allSounds.forEach(filePath => {
+      if (!filePath.startsWith(path)) return;
+      const rest = filePath.slice(path.length);
+      if (rest.includes('/')) {
+        folders.add(rest.split('/')[0]);
+      } else {
+        files.push({ 
+          name: rest, 
+          isFolder: false, 
+          href: rest, 
+          fullPath: 'https://raw.githubusercontent.com/TimSaf1/Soundscape/new_src/' + filePath 
         });
-      
-      const folders = new Set();
-      const files = [];
-      
-      allSounds.forEach(filePath => {
-        if (!filePath.startsWith(path)) return;
-        const rest = filePath.slice(path.length);
-        if (rest.includes('/')) {
-          folders.add(rest.split('/')[0]);
-        } else {
-          files.push({ 
-            name: rest, 
-            isFolder: false, 
-            href: rest, 
-            // Загружаем звуки напрямую с GitHub (raw.githubusercontent.com)
-            fullPath: 'https://raw.githubusercontent.com/TimSaf1/Soundscape/new_src/' + filePath 
-          });
-        }
-      });
-      
-      const items = [];
-      folders.forEach(name => items.push({ name, isFolder: true, href: name + '/' }));
-      items.push(...files);
-      
-      renderSoundsPanel(items);
-    } catch (e) {
-      console.error(e);
-      soundsList.innerHTML = '<div class="cp-sound-item" style="color:#ff8888;">Ошибка: ' + e.message + '</div>';
-    }
+      }
+    });
+    
+    const items = [];
+    folders.forEach(name => items.push({ name, isFolder: true, href: name + '/' }));
+    items.push(...files);
+    
+    renderSoundsPanel(items);
+  } catch (e) {
+    console.error(e);
+    soundsList.innerHTML = '<div class="cp-sound-item" style="color:#ff8888;">Ошибка: ' + e.message + '</div>';
   }
+}
 
   function renderSoundsPanel(items) {
     soundsList.innerHTML = '';
