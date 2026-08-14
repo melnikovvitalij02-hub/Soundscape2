@@ -1568,66 +1568,50 @@ function initBeatComposer() {
     soundsList.innerHTML = '<div class="cp-sound-item" style="color:var(--text-muted); justify-content:center;">Загрузка звуков...</div>';
     
     try {
-      // 1. Загружаем список всех файлов из манифеста (делаем это один раз)
-      if (!window.soundManifest) {
-        const response = await fetch('sounds/manifest.json');
-        if (!response.ok) throw new Error("manifest.json не найден!");
-        window.soundManifest = await response.json();
-      }
-
-      // 2. Фильтруем файлы для текущей папки
-      // path приходит как 'sounds/' или 'sounds/808_BEAT_1/'
-      // Нам нужно найти все файлы, которые начинаются с этого пути
+      // Загружаем список всех файлов из GitHub
+      const response = await fetch('https://api.github.com/repos/TimSaf1/Soundscape/git/trees/new_src?recursive=1');
+      const data = await response.json();
       
-      const currentDirFiles = [];
-      const subFolders = new Set();
-
-      window.soundManifest.forEach(filePath => {
-        // Убираем 'sounds/' из начала для удобства сравнения
-        const relativePath = filePath.replace('sounds/', '');
-        const requestPath = path.replace('sounds/', '');
-
-        if (relativePath.startsWith(requestPath)) {
-          const remainingPath = relativePath.slice(requestPath.length);
-          
-          if (remainingPath.includes('/')) {
-            // Это подпапка
-            const folderName = remainingPath.split('/')[0];
-            subFolders.add(folderName);
-          } else {
-            // Это файл в текущей папке
-            currentDirFiles.push({
-              name: remainingPath,
-              isFolder: false,
-              href: remainingPath,
-              fullPath: filePath // Полный путь для загрузки аудио
-            });
-          }
+      // Фильтруем только аудиофайлы из папок sounds/ и public/sounds/
+      const allSounds = data.tree
+        .filter(item => 
+          item.type === 'blob' && 
+          (item.path.startsWith('sounds/') || item.path.startsWith('public/sounds/')) &&
+          /\.(wav|mp3|ogg|m4a)$/i.test(item.path)
+        )
+        .map(item => {
+          // Убираем префикс public/ если он есть, чтобы пути были одинаковые
+          const cleanPath = item.path.replace(/^public\//, '');
+          return cleanPath;
+        });
+      
+      const folders = new Set();
+      const files = [];
+      
+      allSounds.forEach(filePath => {
+        if (!filePath.startsWith(path)) return;
+        const rest = filePath.slice(path.length);
+        if (rest.includes('/')) {
+          folders.add(rest.split('/')[0]);
+        } else {
+          files.push({ 
+            name: rest, 
+            isFolder: false, 
+            href: rest, 
+            // Загружаем звуки напрямую с GitHub (raw.githubusercontent.com)
+            fullPath: 'https://raw.githubusercontent.com/TimSaf1/Soundscape/new_src/' + filePath 
+          });
         }
       });
-
-      // 3. Добавляем папки в список
-      const items = [];
-      subFolders.forEach(folder => {
-        items.push({
-          name: folder,
-          isFolder: true,
-          href: folder + '/',
-          fullPath: path + folder + '/'
-        });
-      });
       
-      // Добавляем файлы
-      items.push(...currentDirFiles);
-
+      const items = [];
+      folders.forEach(name => items.push({ name, isFolder: true, href: name + '/' }));
+      items.push(...files);
+      
       renderSoundsPanel(items);
-
     } catch (e) {
       console.error(e);
-      soundsList.innerHTML = `<div class="cp-sound-item" style="color:#ff8888; flex-direction:column; text-align:center; padding:15px; font-size:12px;">
-        ⚠️ Ошибка: ${e.message}<br>
-        Убедитесь, что файл sounds/manifest.json существует и содержит список файлов.
-      </div>`;
+      soundsList.innerHTML = '<div class="cp-sound-item" style="color:#ff8888;">Ошибка: ' + e.message + '</div>';
     }
   }
 
