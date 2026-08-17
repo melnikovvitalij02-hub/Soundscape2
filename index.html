@@ -12,7 +12,6 @@
   --text: #ffffff; --text-muted: #8892b0; --border: #a63dff;
   --danger: #ff0055; --success: #00ff88; --purple: #7b2cff;
   --gradient-1: linear-gradient(135deg, #6d28ff 0%, #b026ff 48%, #ff3bd4 100%);
-  --vk-blue: #0077FF;
   --cp-accent: #00f3ff; --cp-purple: #bc13fe;
   --cp-gradient: linear-gradient(135deg, #00f3ff, #bc13fe);
 }
@@ -33,9 +32,9 @@ body.space-bg-active::after { width: 700px; height: 700px; background: radial-gr
 @keyframes pulseGlow { 0%, 100% { box-shadow: 0 0 20px rgba(184, 44, 255, 0.4); } 50% { box-shadow: 0 0 40px rgba(184, 44, 255, 0.6); } }
 @keyframes shimmer { to { background-position: 200% center; } }
 @keyframes recordPulse {
-    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 0, 85, 0.7); }
-    70% { transform: scale(1.05); box-shadow: 0 0 0 20px rgba(255, 0, 85, 0); }
-    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 0, 85, 0); }
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 0, 85, 0.7); }
+  70% { transform: scale(1.05); box-shadow: 0 0 0 20px rgba(255, 0, 85, 0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 0, 85, 0); }
 }
 
 .auth-overlay { position: fixed; inset: 0; background: rgba(5, 7, 20, 0.98); z-index: 10000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
@@ -55,7 +54,10 @@ body.space-bg-active::after { width: 700px; height: 700px; background: radial-gr
 .stats { display: flex; gap: 8px; flex-wrap: wrap; }
 .stat-chip { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 6px 12px; border-radius: 20px; font-size: 12px; display: flex; align-items: center; gap: 5px; }
 .stat-chip b { color: #ffd700; }
-.guest-badge { background: rgba(255,165,0,0.2); color: orange; padding: 3px 8px; border-radius: 10px; font-size: 10px; margin-left: 5px; }
+.user-badge { padding: 3px 8px; border-radius: 10px; font-size: 10px; margin-left: 5px; font-weight: bold; }
+.badge-guest { background: rgba(255,165,0,0.2); color: orange; }
+.badge-user { background: rgba(0, 255, 136, 0.2); color: #00ff88; }
+.badge-vip { background: linear-gradient(90deg, #ffd700, #ff8c00); color: #000; }
 
 .nav { display: flex; justify-content: center; gap: 8px; margin-top: 12px; flex-wrap: wrap; overflow-x: auto; scrollbar-width: none; }
 .nav::-webkit-scrollbar { display: none; }
@@ -86,31 +88,20 @@ body.space-bg-active::after { width: 700px; height: 700px; background: radial-gr
 .game-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; }
 .xp-btn { background: linear-gradient(90deg, #ffd700, #ff8c00); color: #000; border: none; padding: 7px 18px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 12px; }
 
-.game-container { 
-  background: rgba(0,0,0,0.7); 
-  border: 2px solid var(--accent); 
-  border-radius: 16px; 
-  padding: 20px; 
-  margin-top: 25px; 
-  display: none; 
-  position: relative; 
-  box-shadow: 0 0 30px rgba(184, 44, 255, 0.2);
-}
+.game-container { background: rgba(0,0,0,0.7); border: 2px solid var(--accent); border-radius: 16px; padding: 20px; margin-top: 25px; display: none; position: relative; box-shadow: 0 0 30px rgba(184, 44, 255, 0.2); }
 .game-container.active { display: block; }
 canvas.game-canvas { width: 100% !important; max-width: 800px !important; height: 500px !important; margin: 15px auto !important; display: block !important; background: #000 !important; border-radius: 12px !important; border: 1px solid rgba(255,255,255,0.1) !important; touch-action: none !important; }
 
-/* Исправление мобильного управления */
 .mobile-controls { display: none; position: fixed; bottom: 20px; left: 0; right: 0; justify-content: space-between; padding: 0 20px; pointer-events: none; z-index: 9999; }
 .mobile-controls.active { display: flex !important; }
-.d-btn, .action-btn { pointer-events: auto; touch-action: none; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
-.d-pad { display: grid; grid-template-columns: repeat(3, 60px); grid-template-rows: repeat(2, 60px); gap: 8px; }
-.d-btn { width: 60px; height: 60px; background: rgba(184, 44, 255, 0.3); border: 2px solid var(--accent); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; backdrop-filter: blur(5px); }
+.d-pad { display: grid; grid-template-columns: repeat(3, 60px); grid-template-rows: repeat(2, 60px); gap: 8px; pointer-events: auto; }
+.d-btn { width: 60px; height: 60px; background: rgba(184, 44, 255, 0.3); border: 2px solid var(--accent); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; backdrop-filter: blur(5px); user-select: none; touch-action: none; }
 .d-btn:active { background: var(--accent); color: #000; }
 .d-btn.up { grid-column: 2; grid-row: 1; }
 .d-btn.left { grid-column: 1; grid-row: 2; }
 .d-btn.down { grid-column: 2; grid-row: 2; }
 .d-btn.right { grid-column: 3; grid-row: 2; }
-.action-btn { width: 80px; height: 80px; background: rgba(255, 0, 85, 0.3); border: 3px solid var(--danger); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; cursor: pointer; backdrop-filter: blur(5px); }
+.action-btn { width: 80px; height: 80px; background: rgba(255, 0, 85, 0.3); border: 3px solid var(--danger); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; cursor: pointer; backdrop-filter: blur(5px); pointer-events: auto; user-select: none; touch-action: none; }
 .action-btn:active { background: var(--danger); }
 
 .controls { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 15px; }
@@ -138,23 +129,39 @@ canvas.game-canvas { width: 100% !important; max-width: 800px !important; height
 .music-search-box { width: 100%; padding: 16px 20px; padding-right: 60px; border: 2px solid var(--accent); border-radius: 16px; font-size: 16px; background: rgba(0,0,0,0.4); color: #fff; outline: none; transition: all 0.3s; }
 .music-search-box:focus { border-color: #00f3ff; box-shadow: 0 0 25px rgba(0, 243, 255, 0.2); }
 .music-search-btn { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: var(--gradient-1); border: none; color: #fff; width: 44px; height: 44px; border-radius: 12px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; }
+
 .track-list { display: flex; flex-direction: column; gap: 10px; max-height: 60vh; overflow-y: auto; padding-right: 5px; }
 .track-list::-webkit-scrollbar { width: 6px; }
 .track-list::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
 .track-item { display: flex; align-items: center; gap: 15px; padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; cursor: pointer; transition: all 0.2s; }
 .track-item:hover { background: rgba(184, 44, 255, 0.1); border-color: var(--accent); transform: translateX(5px); }
 .track-item.playing { background: rgba(0, 255, 136, 0.1); border-color: var(--success); }
-.track-cover { width: 55px; height: 55px; border-radius: 10px; object-fit: cover; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+.track-cover { width: 60px; height: 60px; border-radius: 10px; object-fit: cover; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
 .track-info { flex: 1; overflow: hidden; }
 .track-title { font-weight: bold; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #fff; }
 .track-artist { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
-.track-actions { display: flex; gap: 8px; align-items: center; }
-.yt-link { 
-  width: auto; padding: 10px 18px; border-radius: 20px; background: #ff0055; 
-  border: none; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; 
+
+.yt-link {
+  padding: 10px 18px; border-radius: 20px; background: #ff0055;
+  border: none; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center;
   font-size: 13px; font-weight: bold; text-decoration: none; gap: 6px; transition: all 0.2s;
 }
 .yt-link:hover { background: #ff3377; transform: scale(1.05); }
+
+.youtube-player-container {
+  margin-top: 20px;
+  background: rgba(0,0,0,0.6);
+  border: 2px solid var(--accent);
+  border-radius: 16px;
+  overflow: hidden;
+  display: none;
+}
+.youtube-player-container.active { display: block; animation: slideIn 0.4s; }
+.youtube-track-info { padding: 15px; background: rgba(184, 44, 255, 0.1); border-bottom: 2px solid var(--accent); }
+.youtube-track-info h3 { color: var(--accent); font-size: 18px; margin-bottom: 5px; }
+.youtube-track-info p { color: var(--text-muted); font-size: 14px; }
+.youtube-iframe-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; }
+.youtube-iframe-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
 
 .profile-header { display: flex; gap: 20px; align-items: center; margin-bottom: 25px; flex-wrap: wrap; }
 .profile-avatar { width: 100px; height: 100px; border-radius: 50%; background: var(--gradient-1); display: flex; align-items: center; justify-content: center; font-size: 50px; flex-shrink: 0; box-shadow: 0 0 30px rgba(184, 44, 255, 0.4); border: 3px solid rgba(255,255,255,0.1); }
@@ -171,7 +178,8 @@ canvas.game-canvas { width: 100% !important; max-width: 800px !important; height
 #chatInput { flex: 1; padding: 12px; border: 2px solid rgba(184, 44, 255, 0.3); border-radius: 10px; background: rgba(255,255,255,0.1); color: #fff; outline: none; }
 
 .quest-section { background: rgba(255,255,255,0.03); border: 1px solid rgba(184, 44, 255, 0.2); border-radius: 16px; padding: 20px; margin: 20px 0; }
-.maze-container { display: grid; grid-template-columns: repeat(10, 35px); grid-template-rows: repeat(10, 35px); gap: 3px; margin: 15px auto; width: fit-content; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
+.maze-container { display: grid; grid-template-columns: repeat(10, 35px); grid-template-rows: repeat(10, 35px); gap: 3px; margin: 15px auto; width: fit-content; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); outline: none; }
+.maze-container:focus { border-color: var(--accent); box-shadow: 0 0 20px rgba(184, 44, 255, 0.3); }
 .maze-cell { width: 35px; height: 35px; background: rgba(255,255,255,0.05); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 20px; transition: all 0.2s; }
 .maze-cell.wall { background: rgba(100,100,100,0.4); border: 1px solid rgba(255,255,255,0.1); }
 .maze-cell.player { background: rgba(184, 44, 255, 0.3); box-shadow: 0 0 15px var(--accent); }
@@ -198,21 +206,18 @@ canvas.game-canvas { width: 100% !important; max-width: 800px !important; height
 .tier-btn { width: 100%; padding: 14px; margin-top: 20px; background: var(--gradient-1); border: none; border-radius: 12px; color: #fff; font-size: 16px; font-weight: 700; cursor: pointer; }
 .tier-btn.gold { background: linear-gradient(90deg, #ffd700, #ff8c00); color: #000; }
 .tier-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-.project-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 15px; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s; }
+
+.project-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 15px; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s; flex-wrap: wrap; gap: 10px; }
 .project-item:hover { border-color: var(--accent); background: rgba(184, 44, 255, 0.05); }
 .project-info h4 { color: var(--accent); margin-bottom: 5px; }
 .project-info p { font-size: 12px; color: var(--text-muted); }
 .project-actions { display: flex; gap: 10px; }
 
-/* Clicker Game Area Styles */
 .clicker-game-area { display: none; text-align: center; padding: 20px; }
 .clicker-game-area.active { display: block; }
 .clicker-target { width: 150px; height: 150px; background: radial-gradient(circle, #ffd700, #ff8c00); border-radius: 50%; margin: 20px auto; cursor: pointer; box-shadow: 0 0 30px #ffd700; transition: transform 0.1s; display: flex; align-items: center; justify-content: center; font-size: 60px; user-select: none; }
 .clicker-target:active { transform: scale(0.95); }
 .clicker-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; max-width: 400px; margin: 20px auto; }
-.clicker-stat-box { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; text-align: center; }
-.clicker-stat-value { font-size: 24px; font-weight: bold; color: #ffd700; }
-.clicker-stat-label { font-size: 12px; color: var(--text-muted); margin-top: 5px; }
 
 @media (max-width: 768px) {
   .hero-title { font-size: 32px; }
@@ -220,10 +225,10 @@ canvas.game-canvas { width: 100% !important; max-width: 800px !important; height
 }
 
 body {
-    background: radial-gradient(circle at 50% 22%, rgba(137, 28, 255, .22), transparent 32%),
-    radial-gradient(circle at 15% 70%, rgba(81, 29, 255, .18), transparent 30%),
-    radial-gradient(circle at 90% 75%, rgba(255, 24, 211, .12), transparent 27%),
-    linear-gradient(180deg, #07020f 0%, #0b061b 45%, #030108 100%);
+  background: radial-gradient(circle at 50% 22%, rgba(137, 28, 255, .22), transparent 32%),
+  radial-gradient(circle at 15% 70%, rgba(81, 29, 255, .18), transparent 30%),
+  radial-gradient(circle at 90% 75%, rgba(255, 24, 211, .12), transparent 27%),
+  linear-gradient(180deg, #07020f 0%, #0b061b 45%, #030108 100%);
 }
 .header { background: rgba(7, 3, 18, .88); border-bottom: 1px solid rgba(183, 63, 255, .42); box-shadow: 0 8px 35px rgba(89, 0, 255, .14); }
 .logo { color: #fff !important; font-weight: 950 !important; letter-spacing: .035em; text-shadow: 0 0 5px rgba(255,255,255,.85), 0 0 14px rgba(179, 53, 255, .85); }
@@ -234,9 +239,7 @@ body {
 #spaceCanvas, body.space-bg-active::before, body.space-bg-active::after { pointer-events: none !important; }
 .header, .nav, .page-wrapper, .section, button, a, input, select, textarea { pointer-events: auto; }
 
-/* ==========================================================================
-   BEAT COMPOSER PRO STYLES
-   ========================================================================== */
+/* Beat Composer Styles */
 #beatmaker .cp-wrapper {
   background: radial-gradient(ellipse at top, #1a1f3a 0%, #0a0e27 40%, #050714 100%);
   color: #fff; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -341,390 +344,395 @@ body {
 <body class="space-bg-active">
 
 <div class="auth-overlay active" id="authOverlay">
-<div class="auth-box">
-<h2>🎵 SOUNDSCAPE PRO</h2>
-<p>Войди или создай аккаунт для доступа ко всем функциям</p>
-<input type="text" class="auth-input" id="authUsername" placeholder="Имя пользователя">
-<input type="password" class="auth-input" id="authPassword" placeholder="Пароль">
-<button class="auth-btn" onclick="registerUser()">🚀 Войти / Регистрация</button>
-<button class="auth-btn guest-btn" onclick="guestLogin()">👤 Играть как гость</button>
-</div>
+  <div class="auth-box">
+    <h2>🎵 SOUNDSCAPE PRO</h2>
+    <p>Войди или создай аккаунт для доступа ко всем функциям</p>
+    <input type="text" class="auth-input" id="authUsername" placeholder="Имя пользователя">
+    <input type="password" class="auth-input" id="authPassword" placeholder="Пароль">
+    <button class="auth-btn" id="registerBtn">🚀 Войти / Регистрация</button>
+    <button class="auth-btn guest-btn" id="guestBtn">👤 Играть как гость</button>
+  </div>
 </div>
 
 <canvas id="spaceCanvas"></canvas>
 <div class="notification" id="notification">Уведомление</div>
 
 <header class="header">
-<div class="header-inner">
-<div class="logo">🎵 SOUNDSCAPE</div>
-<div class="stats">
-<div class="stat-chip">⭐ <b id="userXP">0</b> XP</div>
-<div class="stat-chip">🪙 <b id="userCoins">0</b></div>
-<div class="stat-chip">👤 <b id="userName">Гость</b><span id="userBadge" class="guest-badge">ГОСТЬ</span></div>
-</div>
-</div>
-<div class="nav">
-<button class="nav-btn active" onclick="showSection('home', event)">🏠 Главная</button>
-<button class="nav-btn" onclick="showSection('studio', event)">🎙️ AI Студия</button>
-<button class="nav-btn" onclick="showSection('beatmaker', event)">🎹 Beat Pro</button>
-<button class="nav-btn" onclick="showSection('projects', event)">📁 Проекты</button>
-<button class="nav-btn" onclick="showSection('tariffs', event)">💎 Тарифы</button>
-<button class="nav-btn" onclick="showSection('games', event)">🎮 Игры</button>
-<button class="nav-btn" onclick="showSection('quests', event)">📜 Квесты</button>
-<button class="nav-btn" onclick="showSection('music', event)">🎵 Музыка</button>
-<button class="nav-btn" onclick="showSection('profile', event)">👤 Профиль</button>
-<button class="nav-btn" onclick="showSection('chat', event)">💬 Чат</button>
-<button class="nav-btn" onclick="logout()" style="background:rgba(255,0,85,0.2);color:#ff0055;">🚪 Выйти</button>
-</div>
+  <div class="header-inner">
+    <div class="logo">🎵 SOUNDSCAPE</div>
+    <div class="stats">
+      <div class="stat-chip">⭐ <b id="userXP">0</b> XP</div>
+      <div class="stat-chip">🪙 <b id="userCoins">0</b></div>
+      <div class="stat-chip">👤 <b id="userName">Гость</b><span id="userBadge" class="user-badge badge-guest">ГОСТЬ</span></div>
+    </div>
+  </div>
+  <div class="nav">
+    <button class="nav-btn active" data-section="home">🏠 Главная</button>
+    <button class="nav-btn" data-section="studio">🎙️ AI Студия</button>
+    <button class="nav-btn" data-section="beatmaker"> Beat Pro</button>
+    <button class="nav-btn" data-section="projects">📁 Проекты</button>
+    <button class="nav-btn" data-section="tariffs">💎 Тарифы</button>
+    <button class="nav-btn" data-section="games">🎮 Игры</button>
+    <button class="nav-btn" data-section="quests">📜 Квесты</button>
+    <button class="nav-btn" data-section="music">🎵 Музыка</button>
+    <button class="nav-btn" data-section="profile">👤 Профиль</button>
+    <button class="nav-btn" data-section="chat">💬 Чат</button>
+    <button class="nav-btn" id="logoutBtn" style="background:rgba(255,0,85,0.2);color:#ff0055;">🚪 Выйти</button>
+  </div>
 </header>
 
 <div class="page-wrapper">
 
-<div id="home" class="section active">
-<div class="hero-section">
-<h1 class="hero-title">SOUNDSCAPE PRO</h1>
-<p class="hero-subtitle">Погрузись в музыкальную вселенную. Записывай мелодии, генерируй биты с помощью AI, играй в аркадные миссии и стань профессиональным космическим продюсером.</p>
-<div class="hero-buttons">
-<button class="hero-btn hero-btn-primary" onclick="showSection('studio')">🎙️ В AI Студию</button>
-<button class="hero-btn hero-btn-secondary" onclick="showSection('beatmaker')">🎹 Beat Pro</button>
-<button class="hero-btn hero-btn-secondary" onclick="showSection('games')">🎮 Играть</button>
-</div>
-</div>
-</div>
-
-<div id="studio" class="section">
-<h2 class="section-title">🎙️ AI Студия Звукозаписи</h2>
-<div class="studio-container">
-<div class="studio-grid">
-<div class="record-panel">
-<h3 style="color: var(--accent); margin-bottom: 15px;">Запись голоса / мелодии</h3>
-<button class="record-btn" id="recordBtn" onclick="toggleRecording()">
-<span id="recordIcon">🎤</span>
-<span id="recordText">REC</span>
-</button>
-<div class="visualizer-container">
-<canvas id="studioVisualizer"></canvas>
-</div>
-<p id="recordStatus" style="color: var(--text-muted); font-size: 13px; margin-top: 10px;">Нажмите REC для записи мелодии</p>
-<audio id="recordedAudio" controls style="width: 100%; margin-top: 15px; display: none;"></audio>
-</div>
-<div class="record-panel">
-<h3 style="color: var(--success); margin-bottom: 15px;">🤖 AI Генератор бита</h3>
-<p style="color: var(--text-muted); font-size: 13px; margin-bottom: 15px;">AI проанализирует вашу мелодию и создаст ритм-секцию</p>
-<div class="ai-controls">
-<label style="display: block; text-align: left; color: var(--success); font-size: 12px; margin-bottom: 5px;">Жанр музыки:</label>
-<select id="genreSelect">
-<option value="hiphop">Hip-Hop / Rap</option>
-<option value="trap">Trap</option>
-<option value="house">House</option>
-<option value="techno">Techno</option>
-<option value="lofi">Lo-Fi</option>
-</select>
-<label style="display: block; text-align: left; color: var(--success); font-size: 12px; margin-bottom: 5px;">Добавить инструменты:</label>
-<select id="instrumentSelect" multiple size="3" style="height: 80px;">
-<option value="kick" selected>Kick Drum</option>
-<option value="snare" selected>Snare</option>
-<option value="hihat" selected>Hi-Hat</option>
-<option value="bass">Bass Line</option>
-</select>
-<button class="ai-generate-btn" onclick="generateAIBeat()" id="generateBtn" disabled>🤖 Сгенерировать бит из мелодии</button>
-</div>
-</div>
-</div>
-</div>
-</div>
-
-<div id="beatmaker" class="section">
-<h2 class="section-title">🎹 Beat Composer Pro</h2>
-<div class="cp-wrapper">
-  <div class="cp-notification" id="cpNotification">Уведомление</div>
-  <header class="cp-header">
-    <div class="cp-header-top">
-      <div class="cp-logo"> BEAT COMPOSER PRO</div>
-      <input type="text" id="cpProjectNameInput" class="cp-project-name-input" value="My Beat" placeholder="Project name">
-      <button class="cp-btn-back" onclick="showSection('home')">← Назад</button>
-    </div>
-    <div class="cp-controls-bar">
-      <button class="cp-btn cp-btn-primary" id="cpPlayBtn">▶️ Play</button>
-      <button class="cp-btn cp-btn-reset" id="cpResetBtn">⏹️ Reset</button>
-      <button class="cp-btn cp-btn-download" id="cpDownloadBtn">💾 Export MP3</button>
-      <button class="cp-btn" id="cpSaveProjectBtn" style="background: linear-gradient(90deg, #ffaa00, #ff8800); color: #000;">💾 Сохранить</button>
-      <span class="cp-bpm-label">BPM:</span>
-      <input type="number" id="cpBpmInput" class="cp-bpm-input" value="120" min="40" max="300">
-      <select id="cpDivisionSelect" class="cp-btn" style="padding: 8px 12px;">
-        <option value="0.25">1/64</option><option value="0.5">1/32</option>
-        <option value="1" selected>1/16 (default)</option><option value="2">1/8</option><option value="4">1/4</option>
-      </select>
-      <label class="cp-summing-toggle">
-        <label class="cp-toggle-switch"><input type="checkbox" id="cpSummingToggle" checked><span class="cp-toggle-slider"></span></label>
-        <span>Суммировать</span>
-      </label>
-    </div>
-  </header>
-
-  <div class="cp-main-container">
-    <div class="cp-sounds-panel">
-      <div class="cp-panel-title">📁 sounds/</div>
-      <div id="cpSoundsList" style="display: flex; flex-direction: column; gap: 4px;"></div>
-    </div>
-    <div class="cp-sequencer-area">
-      <div class="cp-custom-scrollbar" id="cpCustomScrollbar">
-        <div class="cp-scrollbar-thumb" id="cpScrollbarThumb"></div>
-        <div class="cp-scrollbar-playhead" id="cpScrollbarPlayhead"></div>
-      </div>
-      <div class="cp-grid-container" id="cpGridContainer">
-        <div class="cp-playback-cursor" id="cpPlaybackCursor" style="left: 110px;"></div>
+  <div id="home" class="section active">
+    <div class="hero-section">
+      <h1 class="hero-title">SOUNDSCAPE PRO</h1>
+      <p class="hero-subtitle">Погрузись в музыкальную вселенную. Записывай мелодии, генерируй биты с помощью AI, играй в аркадные миссии и стань профессиональным космическим продюсером.</p>
+      <div class="hero-buttons">
+        <button class="hero-btn hero-btn-primary" data-goto="studio">🎙️ В AI Студию</button>
+        <button class="hero-btn hero-btn-secondary" data-goto="beatmaker">🎹 Beat Pro</button>
+        <button class="hero-btn hero-btn-secondary" data-goto="games">🎮 Играть</button>
       </div>
     </div>
   </div>
 
-  <div class="cp-visualizer-container"><canvas id="cpVisualizerCanvas"></canvas></div>
-  <div class="cp-context-menu" id="cpContextMenu"></div>
-
-  <div class="cp-modal" id="cpPropertiesModal">
-    <div class="cp-modal-content">
-      <div class="cp-modal-header">
-        <h3>Edit Note</h3>
-        <button class="cp-btn" style="padding: 4px 8px;" onclick="document.getElementById('cpPropertiesModal').style.display='none'">✕</button>
-      </div>
-      <div class="cp-modal-body">
-        <div class="cp-tabs">
-          <div class="cp-tab active" onclick="cpSwitchTab('basic')">Основные</div>
-          <div class="cp-tab" onclick="cpSwitchTab('fx')">FX & Фильтры</div>
+  <div id="studio" class="section">
+    <h2 class="section-title">🎙️ AI Студия Звукозаписи</h2>
+    <div class="studio-container">
+      <div class="studio-grid">
+        <div class="record-panel">
+          <h3 style="color: var(--accent); margin-bottom: 15px;">Запись голоса / мелодии</h3>
+          <button class="record-btn" id="recordBtn">
+            <span id="recordIcon">🎤</span>
+            <span id="recordText">REC</span>
+          </button>
+          <div class="visualizer-container">
+            <canvas id="studioVisualizer"></canvas>
+          </div>
+          <p id="recordStatus" style="color: var(--text-muted); font-size: 13px; margin-top: 10px;">Нажмите REC для записи мелодии</p>
+          <audio id="recordedAudio" controls style="width: 100%; margin-top: 15px; display: none;"></audio>
         </div>
-        <div id="cpTab-basic" class="cp-tab-content active">
-          <label>Volume (0–1):</label>
-          <input type="number" id="cpVolumeInput" min="0" max="1" step="0.01" value="1">
-          <label>Speed (0.1–3.0):</label>
-          <input type="number" id="cpSpeedInput" min="0.1" max="3.0" step="0.1" value="1.0">
-          <label>Pitch (semitones, -12 to 12):</label>
-          <input type="number" id="cpPitchInput" min="-12" max="12" step="1" value="0">
-        </div>
-        <div id="cpTab-fx" class="cp-tab-content">
-          <div class="cp-fx-group enabled">
-            <div class="cp-fx-group-header"><div class="cp-fx-group-title">Обрезка (Trim)</div></div>
-            <div class="cp-fx-knobs-row">
-              <div class="cp-fx-knob"><div class="cp-fx-knob-label">Start (s)</div><input type="range" class="cp-fx-vertical-slider" id="cp-fx-trim-start" min="0" max="3.0" step="0.01" value="0"><div class="cp-fx-knob-value" id="cp-val-trim-start">0.00</div></div>
-              <div class="cp-fx-knob"><div class="cp-fx-knob-label">End Cut (s)</div><input type="range" class="cp-fx-vertical-slider" id="cp-fx-trim-end" min="0" max="3.0" step="0.01" value="0"><div class="cp-fx-knob-value" id="cp-val-trim-end">0.00</div></div>
-            </div>
-          </div>
-          <div class="cp-fx-group disabled" id="cp-grp-distortion">
-            <div class="cp-fx-group-header"><div class="cp-fx-group-title">Distortion</div><label class="cp-toggle-switch"><input type="checkbox" id="cp-fx-dist-active"><span class="cp-toggle-slider"></span></label></div>
-            <div class="cp-fx-knobs-row">
-              <div class="cp-fx-knob"><div class="cp-fx-knob-label">Drive</div><input type="range" class="cp-fx-vertical-slider" id="cp-fx-dist-drive" min="0" max="100" value="20"><div class="cp-fx-knob-value" id="cp-val-dist-drive">20</div></div>
-              <div class="cp-fx-knob"><div class="cp-fx-knob-label">Tone (Hz)</div><input type="range" class="cp-fx-vertical-slider" id="cp-fx-dist-tone" min="100" max="10000" value="2000"><div class="cp-fx-knob-value" id="cp-val-dist-tone">2000</div></div>
-            </div>
-          </div>
-          <div class="cp-fx-group disabled" id="cp-grp-bitcrusher">
-            <div class="cp-fx-group-header"><div class="cp-fx-group-title">Bitcrusher</div><label class="cp-toggle-switch"><input type="checkbox" id="cp-fx-bc-active"><span class="cp-toggle-slider"></span></label></div>
-            <div class="cp-fx-knobs-row">
-              <div class="cp-fx-knob"><div class="cp-fx-knob-label">Bits</div><input type="range" class="cp-fx-vertical-slider" id="cp-fx-bc-bits" min="1" max="16" value="8"><div class="cp-fx-knob-value" id="cp-val-bc-bits">8</div></div>
-              <div class="cp-fx-knob"><div class="cp-fx-knob-label">Freq Red</div><input type="range" class="cp-fx-vertical-slider" id="cp-fx-bc-freq" min="0.1" max="5" step="0.1" value="1"><div class="cp-fx-knob-value" id="cp-val-bc-freq">1</div></div>
-            </div>
-          </div>
-          <div class="cp-fx-group disabled" id="cp-grp-compressor">
-            <div class="cp-fx-group-header"><div class="cp-fx-group-title">Compressor</div><label class="cp-toggle-switch"><input type="checkbox" id="cp-fx-comp-active"><span class="cp-toggle-slider"></span></label></div>
-            <div class="cp-fx-knobs-row">
-              <div class="cp-fx-knob"><div class="cp-fx-knob-label">Thresh (dB)</div><input type="range" class="cp-fx-vertical-slider" id="cp-fx-comp-thresh" min="-60" max="0" value="-24"><div class="cp-fx-knob-value" id="cp-val-comp-thresh">-24</div></div>
-              <div class="cp-fx-knob"><div class="cp-fx-knob-label">Ratio</div><input type="range" class="cp-fx-vertical-slider" id="cp-fx-comp-ratio" min="1" max="20" value="4"><div class="cp-fx-knob-value" id="cp-val-comp-ratio">4</div></div>
-            </div>
-          </div>
-          <div class="cp-fx-group disabled" id="cp-grp-reverb">
-            <div class="cp-fx-group-header"><div class="cp-fx-group-title">Reverb</div><label class="cp-toggle-switch"><input type="checkbox" id="cp-fx-rev-active"><span class="cp-toggle-slider"></span></label></div>
-            <div class="cp-fx-knobs-row">
-              <div class="cp-fx-knob"><div class="cp-fx-knob-label">Mix (%)</div><input type="range" class="cp-fx-vertical-slider" id="cp-fx-rev-mix" min="0" max="100" value="30"><div class="cp-fx-knob-value" id="cp-val-rev-mix">30</div></div>
-              <div class="cp-fx-knob"><div class="cp-fx-knob-label">Decay (s)</div><input type="range" class="cp-fx-vertical-slider" id="cp-fx-rev-decay" min="0.1" max="3.0" step="0.1" value="1.5"><div class="cp-fx-knob-value" id="cp-val-rev-decay">1.5</div></div>
-            </div>
-          </div>
-          <div class="cp-fx-group disabled" id="cp-grp-delay">
-            <div class="cp-fx-group-header"><div class="cp-fx-group-title">Delay</div><label class="cp-toggle-switch"><input type="checkbox" id="cp-fx-del-active"><span class="cp-toggle-slider"></span></label></div>
-            <div class="cp-fx-knobs-row">
-              <div class="cp-fx-knob"><div class="cp-fx-knob-label">Time (s)</div><input type="range" class="cp-fx-vertical-slider" id="cp-fx-del-time" min="0.05" max="1.0" step="0.05" value="0.3"><div class="cp-fx-knob-value" id="cp-val-del-time">0.3</div></div>
-              <div class="cp-fx-knob"><div class="cp-fx-knob-label">Feedback</div><input type="range" class="cp-fx-vertical-slider" id="cp-fx-del-fb" min="0" max="90" value="40"><div class="cp-fx-knob-value" id="cp-val-del-fb">40</div></div>
-              <div class="cp-fx-knob"><div class="cp-fx-knob-label">Mix (%)</div><input type="range" class="cp-fx-vertical-slider" id="cp-fx-del-mix" min="0" max="100" value="30"><div class="cp-fx-knob-value" id="cp-val-del-mix">30</div></div>
-            </div>
-          </div>
-          <div class="cp-fx-group disabled" id="cp-grp-killer">
-            <div class="cp-fx-group-header"><div class="cp-fx-group-title">Feedback Killer</div><label class="cp-toggle-switch"><input type="checkbox" id="cp-fx-kill-active"><span class="cp-toggle-slider"></span></label></div>
-            <div class="cp-fx-knobs-row">
-              <div class="cp-fx-knob"><div class="cp-fx-knob-label">Cutoff (Hz)</div><input type="range" class="cp-fx-vertical-slider" id="cp-fx-kill-freq" min="20" max="1000" value="200"><div class="cp-fx-knob-value" id="cp-val-kill-freq">200</div></div>
-              <div class="cp-fx-knob"><div class="cp-fx-knob-label">Resonance</div><input type="range" class="cp-fx-vertical-slider" id="cp-fx-kill-q" min="0.1" max="10" step="0.1" value="1"><div class="cp-fx-knob-value" id="cp-val-kill-q">1.0</div></div>
-            </div>
-          </div>
-          <div class="cp-fx-group enabled" id="cp-grp-eq">
-            <div class="cp-fx-group-header"><div class="cp-fx-group-title">Equalizer</div></div>
-            <div class="cp-fx-eq-group">
-              <div class="cp-fx-eq-band"><div class="cp-fx-eq-band-label">LOW</div><div class="cp-fx-knob"><div class="cp-fx-knob-label">Gain</div><input type="range" class="cp-fx-vertical-slider" id="cp-fx-eq-low" min="-12" max="12" value="0"><div class="cp-fx-knob-value" id="cp-val-eq-low">0</div></div></div>
-              <div class="cp-fx-eq-band"><div class="cp-fx-eq-band-label">MID</div><div class="cp-fx-knob"><div class="cp-fx-knob-label">Gain</div><input type="range" class="cp-fx-vertical-slider" id="cp-fx-eq-mid" min="-12" max="12" value="0"><div class="cp-fx-knob-value" id="cp-val-eq-mid">0</div></div></div>
-              <div class="cp-fx-eq-band"><div class="cp-fx-eq-band-label">HIGH</div><div class="cp-fx-knob"><div class="cp-fx-knob-label">Gain</div><input type="range" class="cp-fx-vertical-slider" id="cp-fx-eq-high" min="-12" max="12" value="0"><div class="cp-fx-knob-value" id="cp-val-eq-high">0</div></div></div>
-            </div>
-          </div>
-          <div class="cp-fx-group enabled" id="cp-grp-panner">
-            <div class="cp-fx-group-header"><div class="cp-fx-group-title">Panning</div></div>
-            <div class="cp-fx-knobs-row">
-              <div class="cp-fx-knob"><div class="cp-fx-knob-label">L ← Pan → R</div><input type="range" class="cp-fx-vertical-slider" id="cp-fx-pan" min="-100" max="100" value="0"><div class="cp-fx-knob-value" id="cp-fx-pan-val">0</div></div>
-            </div>
+        <div class="record-panel">
+          <h3 style="color: var(--success); margin-bottom: 15px;">🤖 AI Генератор бита</h3>
+          <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 15px;">AI проанализирует вашу мелодию и создаст ритм-секцию</p>
+          <div class="ai-controls">
+            <label style="display: block; text-align: left; color: var(--success); font-size: 12px; margin-bottom: 5px;">Жанр музыки:</label>
+            <select id="genreSelect">
+              <option value="hiphop">Hip-Hop / Rap</option>
+              <option value="trap">Trap</option>
+              <option value="house">House</option>
+              <option value="techno">Techno</option>
+              <option value="lofi">Lo-Fi</option>
+            </select>
+            <label style="display: block; text-align: left; color: var(--success); font-size: 12px; margin-bottom: 5px;">Добавить инструменты:</label>
+            <select id="instrumentSelect" multiple size="3" style="height: 80px;">
+              <option value="kick" selected>Kick Drum</option>
+              <option value="snare" selected>Snare</option>
+              <option value="hihat" selected>Hi-Hat</option>
+              <option value="bass">Bass Line</option>
+            </select>
+            <button class="ai-generate-btn" id="generateBtn" disabled>🤖 Сгенерировать бит из мелодии</button>
           </div>
         </div>
       </div>
-      <div class="cp-modal-buttons">
-        <button class="cp-btn cp-btn-primary" id="cpSaveNoteBtn">Save</button>
-        <button class="cp-btn" id="cpCancelNoteBtn">Cancel</button>
+    </div>
+  </div>
+
+  <div id="beatmaker" class="section">
+    <h2 class="section-title">🎹 Beat Composer Pro</h2>
+    <div class="cp-wrapper">
+      <div class="cp-notification" id="cpNotification">Уведомление</div>
+      <header class="cp-header">
+        <div class="cp-header-top">
+          <div class="cp-logo"> BEAT COMPOSER PRO</div>
+          <input type="text" id="cpProjectNameInput" class="cp-project-name-input" value="My Beat" placeholder="Project name">
+          <button class="cp-btn-back" data-goto="home">← Назад</button>
+        </div>
+        <div class="cp-controls-bar">
+          <button class="cp-btn cp-btn-primary" id="cpPlayBtn">▶️ Play</button>
+          <button class="cp-btn cp-btn-reset" id="cpResetBtn">⏹️ Reset</button>
+          <button class="cp-btn cp-btn-download" id="cpDownloadBtn">💾 Export MP3</button>
+          <button class="cp-btn" id="cpSaveProjectBtn" style="background: linear-gradient(90deg, #ffaa00, #ff8800); color: #000;">💾 Сохранить</button>
+          <span class="cp-bpm-label">BPM:</span>
+          <input type="number" id="cpBpmInput" class="cp-bpm-input" value="120" min="40" max="300">
+          <select id="cpDivisionSelect" class="cp-btn" style="padding: 8px 12px;">
+            <option value="0.25">1/64</option><option value="0.5">1/32</option>
+            <option value="1" selected>1/16 (default)</option><option value="2">1/8</option><option value="4">1/4</option>
+          </select>
+          <label class="cp-summing-toggle">
+            <label class="cp-toggle-switch"><input type="checkbox" id="cpSummingToggle" checked><span class="cp-toggle-slider"></span></label>
+            <span>Суммировать</span>
+          </label>
+        </div>
+      </header>
+      <div class="cp-main-container">
+        <div class="cp-sounds-panel">
+          <div class="cp-panel-title">📁 sounds/</div>
+          <div id="cpSoundsList" style="display: flex; flex-direction: column; gap: 4px;"></div>
+        </div>
+        <div class="cp-sequencer-area">
+          <div class="cp-custom-scrollbar" id="cpCustomScrollbar">
+            <div class="cp-scrollbar-thumb" id="cpScrollbarThumb"></div>
+            <div class="cp-scrollbar-playhead" id="cpScrollbarPlayhead"></div>
+          </div>
+          <div class="cp-grid-container" id="cpGridContainer">
+            <div class="cp-playback-cursor" id="cpPlaybackCursor" style="left: 110px;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="cp-visualizer-container"><canvas id="cpVisualizerCanvas"></canvas></div>
+      <div class="cp-context-menu" id="cpContextMenu"></div>
+      <div class="cp-modal" id="cpPropertiesModal">
+        <div class="cp-modal-content">
+          <div class="cp-modal-header">
+            <h3>Edit Note</h3>
+            <button class="cp-btn" style="padding: 4px 8px;" id="closePropsBtn">✕</button>
+          </div>
+          <div class="cp-modal-body">
+            <div class="cp-tabs">
+              <div class="cp-tab active" data-tab="basic">Основные</div>
+              <div class="cp-tab" data-tab="fx">FX & Фильтры</div>
+            </div>
+            <div id="cpTab-basic" class="cp-tab-content active">
+              <label>Volume (0–1):</label>
+              <input type="number" id="cpVolumeInput" min="0" max="1" step="0.01" value="1">
+              <label>Speed (0.1–3.0):</label>
+              <input type="number" id="cpSpeedInput" min="0.1" max="3.0" step="0.1" value="1.0">
+              <label>Pitch (semitones, -12 to 12):</label>
+              <input type="number" id="cpPitchInput" min="-12" max="12" step="1" value="0">
+            </div>
+            <div id="cpTab-fx" class="cp-tab-content">
+              <div class="cp-fx-group enabled">
+                <div class="cp-fx-group-header"><div class="cp-fx-group-title">Обрезка (Trim)</div></div>
+                <div class="cp-fx-knobs-row">
+                  <div class="cp-fx-knob"><div class="cp-fx-knob-label">Start (s)</div><input type="range" class="cp-fx-vertical-slider" id="cp-fx-trim-start" min="0" max="3.0" step="0.01" value="0"><div class="cp-fx-knob-value" id="cp-val-trim-start">0.00</div></div>
+                  <div class="cp-fx-knob"><div class="cp-fx-knob-label">End Cut (s)</div><input type="range" class="cp-fx-vertical-slider" id="cp-fx-trim-end" min="0" max="3.0" step="0.01" value="0"><div class="cp-fx-knob-value" id="cp-val-trim-end">0.00</div></div>
+                </div>
+              </div>
+              <div class="cp-fx-group disabled" id="cp-grp-distortion">
+                <div class="cp-fx-group-header"><div class="cp-fx-group-title">Distortion</div><label class="cp-toggle-switch"><input type="checkbox" id="cp-fx-dist-active"><span class="cp-toggle-slider"></span></label></div>
+                <div class="cp-fx-knobs-row">
+                  <div class="cp-fx-knob"><div class="cp-fx-knob-label">Drive</div><input type="range" class="cp-fx-vertical-slider" id="cp-fx-dist-drive" min="0" max="100" value="20"><div class="cp-fx-knob-value" id="cp-val-dist-drive">20</div></div>
+                  <div class="cp-fx-knob"><div class="cp-fx-knob-label">Tone (Hz)</div><input type="range" class="cp-fx-vertical-slider" id="cp-fx-dist-tone" min="100" max="10000" value="2000"><div class="cp-fx-knob-value" id="cp-val-dist-tone">2000</div></div>
+                </div>
+              </div>
+              <div class="cp-fx-group disabled" id="cp-grp-bitcrusher">
+                <div class="cp-fx-group-header"><div class="cp-fx-group-title">Bitcrusher</div><label class="cp-toggle-switch"><input type="checkbox" id="cp-fx-bc-active"><span class="cp-toggle-slider"></span></label></div>
+                <div class="cp-fx-knobs-row">
+                  <div class="cp-fx-knob"><div class="cp-fx-knob-label">Bits</div><input type="range" class="cp-fx-vertical-slider" id="cp-fx-bc-bits" min="1" max="16" value="8"><div class="cp-fx-knob-value" id="cp-val-bc-bits">8</div></div>
+                  <div class="cp-fx-knob"><div class="cp-fx-knob-label">Freq Red</div><input type="range" class="cp-fx-vertical-slider" id="cp-fx-bc-freq" min="0.1" max="5" step="0.1" value="1"><div class="cp-fx-knob-value" id="cp-val-bc-freq">1</div></div>
+                </div>
+              </div>
+              <div class="cp-fx-group disabled" id="cp-grp-compressor">
+                <div class="cp-fx-group-header"><div class="cp-fx-group-title">Compressor</div><label class="cp-toggle-switch"><input type="checkbox" id="cp-fx-comp-active"><span class="cp-toggle-slider"></span></label></div>
+                <div class="cp-fx-knobs-row">
+                  <div class="cp-fx-knob"><div class="cp-fx-knob-label">Thresh (dB)</div><input type="range" class="cp-fx-vertical-slider" id="cp-fx-comp-thresh" min="-60" max="0" value="-24"><div class="cp-fx-knob-value" id="cp-val-comp-thresh">-24</div></div>
+                  <div class="cp-fx-knob"><div class="cp-fx-knob-label">Ratio</div><input type="range" class="cp-fx-vertical-slider" id="cp-fx-comp-ratio" min="1" max="20" value="4"><div class="cp-fx-knob-value" id="cp-val-comp-ratio">4</div></div>
+                </div>
+              </div>
+              <div class="cp-fx-group disabled" id="cp-grp-reverb">
+                <div class="cp-fx-group-header"><div class="cp-fx-group-title">Reverb</div><label class="cp-toggle-switch"><input type="checkbox" id="cp-fx-rev-active"><span class="cp-toggle-slider"></span></label></div>
+                <div class="cp-fx-knobs-row">
+                  <div class="cp-fx-knob"><div class="cp-fx-knob-label">Mix (%)</div><input type="range" class="cp-fx-vertical-slider" id="cp-fx-rev-mix" min="0" max="100" value="30"><div class="cp-fx-knob-value" id="cp-val-rev-mix">30</div></div>
+                  <div class="cp-fx-knob"><div class="cp-fx-knob-label">Decay (s)</div><input type="range" class="cp-fx-vertical-slider" id="cp-fx-rev-decay" min="0.1" max="3.0" step="0.1" value="1.5"><div class="cp-fx-knob-value" id="cp-val-rev-decay">1.5</div></div>
+                </div>
+              </div>
+              <div class="cp-fx-group disabled" id="cp-grp-delay">
+                <div class="cp-fx-group-header"><div class="cp-fx-group-title">Delay</div><label class="cp-toggle-switch"><input type="checkbox" id="cp-fx-del-active"><span class="cp-toggle-slider"></span></label></div>
+                <div class="cp-fx-knobs-row">
+                  <div class="cp-fx-knob"><div class="cp-fx-knob-label">Time (s)</div><input type="range" class="cp-fx-vertical-slider" id="cp-fx-del-time" min="0.05" max="1.0" step="0.05" value="0.3"><div class="cp-fx-knob-value" id="cp-val-del-time">0.3</div></div>
+                  <div class="cp-fx-knob"><div class="cp-fx-knob-label">Feedback</div><input type="range" class="cp-fx-vertical-slider" id="cp-fx-del-fb" min="0" max="90" value="40"><div class="cp-fx-knob-value" id="cp-val-del-fb">40</div></div>
+                  <div class="cp-fx-knob"><div class="cp-fx-knob-label">Mix (%)</div><input type="range" class="cp-fx-vertical-slider" id="cp-fx-del-mix" min="0" max="100" value="30"><div class="cp-fx-knob-value" id="cp-val-del-mix">30</div></div>
+                </div>
+              </div>
+              <div class="cp-fx-group disabled" id="cp-grp-killer">
+                <div class="cp-fx-group-header"><div class="cp-fx-group-title">Feedback Killer</div><label class="cp-toggle-switch"><input type="checkbox" id="cp-fx-kill-active"><span class="cp-toggle-slider"></span></label></div>
+                <div class="cp-fx-knobs-row">
+                  <div class="cp-fx-knob"><div class="cp-fx-knob-label">Cutoff (Hz)</div><input type="range" class="cp-fx-vertical-slider" id="cp-fx-kill-freq" min="20" max="1000" value="200"><div class="cp-fx-knob-value" id="cp-val-kill-freq">200</div></div>
+                  <div class="cp-fx-knob"><div class="cp-fx-knob-label">Resonance</div><input type="range" class="cp-fx-vertical-slider" id="cp-fx-kill-q" min="0.1" max="10" step="0.1" value="1"><div class="cp-fx-knob-value" id="cp-val-kill-q">1.0</div></div>
+                </div>
+              </div>
+              <div class="cp-fx-group enabled" id="cp-grp-eq">
+                <div class="cp-fx-group-header"><div class="cp-fx-group-title">Equalizer</div></div>
+                <div class="cp-fx-eq-group">
+                  <div class="cp-fx-eq-band"><div class="cp-fx-eq-band-label">LOW</div><div class="cp-fx-knob"><div class="cp-fx-knob-label">Gain</div><input type="range" class="cp-fx-vertical-slider" id="cp-fx-eq-low" min="-12" max="12" value="0"><div class="cp-fx-knob-value" id="cp-val-eq-low">0</div></div></div>
+                  <div class="cp-fx-eq-band"><div class="cp-fx-eq-band-label">MID</div><div class="cp-fx-knob"><div class="cp-fx-knob-label">Gain</div><input type="range" class="cp-fx-vertical-slider" id="cp-fx-eq-mid" min="-12" max="12" value="0"><div class="cp-fx-knob-value" id="cp-val-eq-mid">0</div></div></div>
+                  <div class="cp-fx-eq-band"><div class="cp-fx-eq-band-label">HIGH</div><div class="cp-fx-knob"><div class="cp-fx-knob-label">Gain</div><input type="range" class="cp-fx-vertical-slider" id="cp-fx-eq-high" min="-12" max="12" value="0"><div class="cp-fx-knob-value" id="cp-val-eq-high">0</div></div></div>
+                </div>
+              </div>
+              <div class="cp-fx-group enabled" id="cp-grp-panner">
+                <div class="cp-fx-group-header"><div class="cp-fx-group-title">Panning</div></div>
+                <div class="cp-fx-knobs-row">
+                  <div class="cp-fx-knob"><div class="cp-fx-knob-label">L ← Pan → R</div><input type="range" class="cp-fx-vertical-slider" id="cp-fx-pan" min="-100" max="100" value="0"><div class="cp-fx-knob-value" id="cp-fx-pan-val">0</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="cp-modal-buttons">
+            <button class="cp-btn cp-btn-primary" id="cpSaveNoteBtn">Save</button>
+            <button class="cp-btn" id="cpCancelNoteBtn">Cancel</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-</div>
-</div>
 
-<div id="projects" class="section">
-<h2 class="section-title">📁 Мои проекты</h2>
-<div class="profile-card">
-<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap: wrap; gap: 10px;">
-  <div style="font-size: 16px;">
-    Создано проектов: <b id="projCountDisplay" style="color:var(--accent)">0</b> / <b id="projLimitDisplay" style="color:var(--success)">3</b>
+  <div id="projects" class="section">
+    <h2 class="section-title">📁 Мои проекты</h2>
+    <div class="profile-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap: wrap; gap: 10px;">
+        <div style="font-size: 16px;">
+          Создано проектов: <b id="projCountDisplay" style="color:var(--accent)">0</b> / <b id="projLimitDisplay" style="color:var(--success)">3</b>
+        </div>
+        <div id="vipBadgeProjects" style="display:none; background:linear-gradient(90deg, #ffd700, #ff8c00); color:#000; padding:6px 16px; border-radius:20px; font-weight:bold; font-size: 14px;"> VIP PRODUCER</div>
+      </div>
+      <div id="projectsListContainer" style="display:flex; flex-direction:column; gap:10px;"></div>
+    </div>
   </div>
-  <div id="vipBadgeProjects" style="display:none; background:linear-gradient(90deg, #ffd700, #ff8c00); color:#000; padding:6px 16px; border-radius:20px; font-weight:bold; font-size: 14px;">👑 VIP PRODUCER</div>
-</div>
-<div id="projectsListContainer" style="display:flex; flex-direction:column; gap:10px;"></div>
-</div>
-</div>
 
-<div id="tariffs" class="section">
-<h2 class="section-title">💎 Тарифные планы</h2>
-<div class="tiers-grid">
-<div class="tier-card">
-<h3>Free</h3>
-<div class="p-stat-val" style="color: var(--text-muted);">Бесплатно</div>
-<ul class="tier-features">
-<li>Лимит проектов: 3</li>
-<li>Базовые функции Beat Maker</li>
-<li>Стандартная поддержка</li>
-</ul>
-<button class="tier-btn" disabled>Текущий тариф</button>
-</div>
-<div class="tier-card featured">
-<div class="tier-badge">РЕКОМЕНДУЕМ</div>
-<h3>VIP Producer</h3>
-<div class="p-stat-val" style="color: #ffd700;">1000 🪙</div>
-<ul class="tier-features">
-<li>Лимит проектов: 50</li>
-<li>Золотой бейдж в профиле</li>
-<li>Приоритетная поддержка</li>
-<li>Ранний доступ к новым фичам</li>
-</ul>
-<button class="tier-btn gold" onclick="buyVip()">Купить VIP</button>
-</div>
-</div>
-<p style="text-align: center; color: var(--text-muted); margin-top: 30px; font-size: 14px;">💡 <i>Не хватает монет? Играй в "Звёздный Кликер" в разделе Игры, чтобы заработать!</i></p>
-</div>
-
-<div id="games" class="section">
-<h2 class="section-title">🎮 Выбери миссию</h2>
-<div class="games-grid">
-<div class="game-card" onclick="startGame('shooter')"><div class="game-icon">🚀</div><div class="game-title">Space Shooter</div><div class="game-desc">Космический шутер с боссами!</div><button class="xp-btn">+100 XP</button></div>
-<div class="game-card" onclick="startGame('pacman')"><div class="game-icon">🟡</div><div class="game-title">Звёздный Pac-Man</div><div class="game-desc">6 приведений, собирай точки!</div><button class="xp-btn">+200 XP</button></div>
-<div class="game-card" onclick="startGame('invaders')"><div class="game-icon">👾</div><div class="game-title">Space Invaders</div><div class="game-desc">Классика! Уничтожь пришельцев</div><button class="xp-btn">+50 XP</button></div>
-<div class="game-card" onclick="startGame('snake')"><div class="game-icon">🐍</div><div class="game-title">Звёздная змейка</div><div class="game-desc">Собирай звёзды</div><button class="xp-btn">+15 XP</button></div>
-<div class="game-card" onclick="startGame('clicker')"><div class="game-icon">🖱️</div><div class="game-title">Звёздный Кликер</div><div class="game-desc">Кликай, копи монеты и покупай улучшения!</div><button class="xp-btn">Бесконечный XP</button></div>
-</div>
-<div id="activeGame" class="game-container">
-<h3 id="gameTitle" style="text-align:center;margin-bottom:10px;color:var(--accent);"></h3>
-<canvas id="gameCanvas" class="game-canvas" width="800" height="500"></canvas>
-
-<!-- Исправленный блок кликера -->
-<div id="clickerGameArea" class="clicker-game-area">
-  <div style="font-size: 24px; margin-bottom: 10px;">Монеты: <span id="clickerCoins" style="color: #ffd700; font-weight: bold;">0</span></div>
-  <div style="font-size: 16px; margin-bottom: 20px;">Прибыль в секунду: <span id="clickerCPS" style="color: #00ff88;">0</span></div>
-  <div id="clickerTarget" class="clicker-target">⭐</div>
-  <div class="clicker-stats">
-    <button class="btn btn-primary" onclick="buyClickerUpgrade('click')">Усилить клик (Цена: <span id="clickCost">10</span>)</button>
-    <button class="btn btn-primary" onclick="buyClickerUpgrade('auto')">Авто-клик (Цена: <span id="autoCost">50</span>)</button>
+  <div id="tariffs" class="section">
+    <h2 class="section-title">💎 Тарифные планы</h2>
+    <div class="tiers-grid">
+      <div class="tier-card">
+        <h3>Free</h3>
+        <div class="p-stat-val" style="color: var(--text-muted);">Бесплатно</div>
+        <ul class="tier-features">
+          <li>Лимит проектов: 3</li>
+          <li>Базовые функции Beat Maker</li>
+          <li>Стандартная поддержка</li>
+        </ul>
+        <button class="tier-btn" disabled>Текущий тариф</button>
+      </div>
+      <div class="tier-card featured">
+        <div class="tier-badge">РЕКОМЕНДУЕМ</div>
+        <h3>VIP Producer</h3>
+        <div class="p-stat-val" style="color: #ffd700;">1000 🪙</div>
+        <ul class="tier-features">
+          <li>Лимит проектов: 50</li>
+          <li>Золотой бейдж в профиле</li>
+          <li>Приоритетная поддержка</li>
+          <li>Ранний доступ к новым фичам</li>
+        </ul>
+        <button class="tier-btn gold" id="buyVipBtn">Купить VIP</button>
+      </div>
+    </div>
+    <p style="text-align: center; color: var(--text-muted); margin-top: 30px; font-size: 14px;">
+      💡 <i>Не хватает монет? Играй в "Звёздный Кликер" в разделе Игры, чтобы заработать!</i>
+    </p>
   </div>
-</div>
 
-<div class="mobile-controls" id="mobileControls">
-<div class="d-pad">
-<div class="d-btn up" data-dir="up">⬆️</div>
-<div class="d-btn left" data-dir="left">⬅️</div>
-<div class="d-btn down" data-dir="down">⬇️</div>
-<div class="d-btn right" data-dir="right">➡️</div>
-</div>
-<div class="action-btn" data-dir="fire">🔥</div>
-</div>
-<div class="controls">
-<button class="btn btn-primary" onclick="launchGame()">▶ Старт</button>
-<button class="btn" onclick="pauseGame()">⏸ Пауза</button>
-<button class="btn btn-danger" onclick="closeGame()">❌ Закрыть</button>
-</div>
-<div id="gameInfo" style="text-align:center;margin-top:10px;color:var(--accent); font-weight: bold; font-size:14px;"></div>
-</div>
-</div>
-
-<div id="quests" class="section">
-<h2 class="section-title">📜 Активные квесты</h2>
-<div class="quest-section">
-<h3 style="margin-bottom:12px;color:var(--accent);">🌌 Квест 1: Лабиринт сокровищ</h3>
-<div style="text-align:center;margin-bottom:8px; color: var(--text-muted);">Собери <b id="starsCollected" style="color:var(--accent)">0</b> из <b id="totalStars">5</b> ⭐</div>
-<div class="maze-container" id="mazeGrid" tabindex="0"></div>
-<div style="text-align:center;margin-top:10px;">
-<button class="btn btn-primary" onclick="initMazeQuest()">🔄 Заново</button>
-</div>
-</div>
-<div id="questsList" style="max-width:600px;margin:20px auto 0;"></div>
-</div>
-
-<div id="music" class="section">
-<h2 class="section-title">🎵 Глобальный поиск музыки</h2>
-<div class="music-container">
-  <div class="music-search-wrapper">
-    <input type="text" class="music-search-box" id="musicSearchInput" placeholder="🔍 Введите исполнителя или название трека..." onkeypress="if(event.key==='Enter') searchMusic()">
-    <button class="music-search-btn" onclick="searchMusic()">🔍</button>
+  <div id="games" class="section">
+    <h2 class="section-title">🎮 Выбери миссию</h2>
+    <div class="games-grid">
+      <div class="game-card" data-game="shooter"><div class="game-icon"></div><div class="game-title">Space Shooter</div><div class="game-desc">Космический шутер с боссами!</div><button class="xp-btn">+100 XP</button></div>
+      <div class="game-card" data-game="pacman"><div class="game-icon">🟡</div><div class="game-title">Звёздный Pac-Man</div><div class="game-desc">6 приведений, собирай точки!</div><button class="xp-btn">+200 XP</button></div>
+      <div class="game-card" data-game="invaders"><div class="game-icon">👾</div><div class="game-title">Space Invaders</div><div class="game-desc">Классика! Уничтожь пришельцев</div><button class="xp-btn">+50 XP</button></div>
+      <div class="game-card" data-game="snake"><div class="game-icon"></div><div class="game-title">Звёздная змейка</div><div class="game-desc">Собирай звёзды</div><button class="xp-btn">+15 XP</button></div>
+      <div class="game-card" data-game="clicker"><div class="game-icon">🖱️</div><div class="game-title">Звёздный Кликер</div><div class="game-desc">Кликай, копи монеты и покупай улучшения!</div><button class="xp-btn">Бесконечный XP</button></div>
+    </div>
+    <div id="activeGame" class="game-container">
+      <h3 id="gameTitle" style="text-align:center;margin-bottom:10px;color:var(--accent);"></h3>
+      <canvas id="gameCanvas" class="game-canvas" width="800" height="500"></canvas>
+      <div id="clickerGameArea" class="clicker-game-area">
+        <div style="font-size: 24px; margin-bottom: 10px;">Монеты: <span id="clickerCoins" style="color: #ffd700; font-weight: bold;">0</span></div>
+        <div style="font-size: 16px; margin-bottom: 20px;">Прибыль в секунду: <span id="clickerCPS" style="color: #00ff88;">0</span></div>
+        <div id="clickerTarget" class="clicker-target">⭐</div>
+        <div class="clicker-stats">
+          <button class="btn btn-primary" id="buyClickBtn">Усилить клик (Цена: <span id="clickCost">10</span>)</button>
+          <button class="btn btn-primary" id="buyAutoBtn">Авто-клик (Цена: <span id="autoCost">50</span>)</button>
+        </div>
+      </div>
+      <div class="mobile-controls" id="mobileControls">
+        <div class="d-pad">
+          <div class="d-btn up" data-dir="up">⬆️</div>
+          <div class="d-btn left" data-dir="left">⬅️</div>
+          <div class="d-btn down" data-dir="down">️</div>
+          <div class="d-btn right" data-dir="right">➡️</div>
+        </div>
+        <div class="action-btn" data-dir="fire"></div>
+      </div>
+      <div class="controls">
+        <button class="btn btn-primary" id="launchGameBtn">▶ Старт</button>
+        <button class="btn" id="pauseGameBtn">⏸ Пауза</button>
+        <button class="btn btn-danger" id="closeGameBtn">❌ Закрыть</button>
+      </div>
+      <div id="gameInfo" style="text-align:center;margin-top:10px;color:var(--accent); font-weight: bold; font-size:14px;"></div>
+    </div>
   </div>
-  <div id="trackList" class="track-list">
-    <div style="text-align: center; padding: 40px; color: var(--text-muted);">Введите запрос, чтобы найти музыку и перейти к полной версии на YouTube</div>
+
+  <div id="quests" class="section">
+    <h2 class="section-title">📜 Активные квесты</h2>
+    <div class="quest-section">
+      <h3 style="margin-bottom:12px;color:var(--accent);">🌌 Квест 1: Лабиринт сокровищ</h3>
+      <div style="text-align:center;margin-bottom:8px; color: var(--text-muted);">Собери <b id="starsCollected" style="color:var(--accent)">0</b> из <b id="totalStars">5</b> ⭐</div>
+      <div class="maze-container" id="mazeGrid" tabindex="0"></div>
+      <div style="text-align:center;margin-top:10px;">
+        <button class="btn btn-primary" id="resetMazeBtn">🔄 Заново</button>
+      </div>
+    </div>
+    <div id="questsList" style="max-width:600px;margin:20px auto 0;"></div>
   </div>
-</div>
-</div>
 
-<div id="profile" class="section">
-<h2 class="section-title">👤 Профиль пилота</h2>
-<div class="profile-card">
-<div class="profile-header">
-<div class="profile-avatar">👨‍🚀</div>
-<div class="profile-info">
-<div class="profile-name" id="profileName" style="font-size: 24px; font-weight: bold; margin-bottom: 5px;">Гость</div>
-<div style="color: var(--text-muted); font-size: 14px;">Космический продюсер</div>
-<div class="profile-stats">
-<div class="p-stat"><div class="p-stat-val" id="profileXP">0</div><div class="p-stat-label">Всего XP</div></div>
-<div class="p-stat"><div class="p-stat-val" id="profileCoins">0</div><div class="p-stat-label">Монет</div></div>
-<div class="p-stat"><div class="p-stat-val" id="profileTracks">0</div><div class="p-stat-label">Треков</div></div>
-</div>
-</div>
-</div>
-</div>
-</div>
+  <div id="music" class="section">
+    <h2 class="section-title">🎵 Глобальный поиск музыки</h2>
+    <div class="music-container">
+      <div class="music-search-wrapper">
+        <input type="text" class="music-search-box" id="musicSearchInput" placeholder="🔍 Введите исполнителя или название трека..." onkeypress="if(event.key==='Enter') searchMusic()">
+        <button class="music-search-btn" id="searchMusicBtn"></button>
+      </div>
+      <div id="trackList" class="track-list">
+        <div style="text-align: center; padding: 40px; color: var(--text-muted);">Введите запрос, чтобы найти музыку и послушать на YouTube</div>
+      </div>
+      <div id="youtubePlayerContainer" class="youtube-player-container">
+        <div class="youtube-track-info">
+          <h3 id="youtubeTrackTitle">Название трека</h3>
+          <p id="youtubeTrackArtist">Исполнитель</p>
+        </div>
+        <div class="youtube-iframe-wrapper">
+          <iframe id="youtubePlayer" src="" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<div id="chat" class="section">
-<h2 class="section-title">💬 Глобальный чат</h2>
-<div class="chat-card">
-<div id="chatMessages" class="chat-messages"></div>
-<div class="chat-input-wrapper">
-<input type="text" id="chatInput" placeholder="Сообщение..." autocomplete="off" onkeypress="if(event.key==='Enter') sendMessage()">
-<button class="btn btn-primary" onclick="sendMessage()">Отправить</button>
-</div>
-</div>
-</div>
+  <div id="profile" class="section">
+    <h2 class="section-title">👤 Профиль пилота</h2>
+    <div class="profile-card">
+      <div class="profile-header">
+        <div class="profile-avatar">👨‍🚀</div>
+        <div class="profile-info">
+          <div class="profile-name" id="profileName" style="font-size: 24px; font-weight: bold; margin-bottom: 5px;">Гость</div>
+          <div style="color: var(--text-muted); font-size: 14px;">Космический продюсер</div>
+          <div class="profile-stats">
+            <div class="p-stat"><div class="p-stat-val" id="profileXP">0</div><div class="p-stat-label">Всего XP</div></div>
+            <div class="p-stat"><div class="p-stat-val" id="profileCoins">0</div><div class="p-stat-label">Монет</div></div>
+            <div class="p-stat"><div class="p-stat-val" id="profileTracks">0</div><div class="p-stat-label">Треков</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="chat" class="section">
+    <h2 class="section-title">💬 Глобальный чат</h2>
+    <div class="chat-card">
+      <div id="chatMessages" class="chat-messages"></div>
+      <div class="chat-input-wrapper">
+        <input type="text" id="chatInput" placeholder="Сообщение..." autocomplete="off" onkeypress="if(event.key==='Enter') sendMessage()">
+        <button class="btn btn-primary" id="sendChatBtn">Отправить</button>
+      </div>
+    </div>
+  </div>
 
 </div>
 
 <script>
 /* ==========================================================================
-   GLOBAL STATE & VARIABLES
+   GLOBAL STATE
    ========================================================================== */
 let currentUser = null;
 let isGuest = false;
-let userData = { 
-  xp: 0, coins: 100, tracksCreated: 0, gamesPlayed: 0, 
+let userData = {
+  xp: 0, coins: 100, tracksCreated: 0, gamesPlayed: 0,
   clicker: { clickPower: 1, clickCost: 10, autoClick: 0, autoCost: 50 },
   projectsCreated: 0,
   projectLimit: 3,
@@ -744,9 +752,9 @@ let input = { left: false, right: false, up: false, down: false, fire: false };
 let clickerInterval = null;
 
 let questsData = [
-{ id: 'q1', title: 'Первая игра', desc: 'Сыграй в любую игру 1 раз', target: 1, current: 0, reward: 50, icon: '🎮', completed: false },
-{ id: 'q2', title: 'Мастер игры', desc: 'Набери 500 очков в любой игре', target: 500, current: 0, reward: 150, icon: '🏆', completed: false },
-{ id: 'q3', title: 'Коллекционер', desc: 'Собери 1000 XP', target: 1000, current: 0, reward: 200, icon: '💎', completed: false }
+  { id: 'q1', title: 'Первая игра', desc: 'Сыграй в любую игру 1 раз', target: 1, current: 0, reward: 50, icon: '', completed: false },
+  { id: 'q2', title: 'Мастер игры', desc: 'Набери 500 очков в любой игре', target: 500, current: 0, reward: 150, icon: '🏆', completed: false },
+  { id: 'q3', title: 'Коллекционер', desc: 'Собери 1000 XP', target: 1000, current: 0, reward: 200, icon: '💎', completed: false }
 ];
 
 let chatData = JSON.parse(localStorage.getItem('soundscape_chat') || '[]');
@@ -755,332 +763,460 @@ let chatData = JSON.parse(localStorage.getItem('soundscape_chat') || '[]');
    INITIALIZATION
    ========================================================================== */
 window.onload = function() {
-    const saved = localStorage.getItem('soundscape_user');
-    if (saved) {
-        const data = JSON.parse(saved);
-        currentUser = data.username;
-        isGuest = data.isGuest || false;
-        // Безопасное слияние, чтобы не потерять новые поля (clicker, isVip и т.д.)
-        userData = { ...userData, ...(data.userData || {}) }; 
-        document.getElementById('authOverlay').classList.remove('active');
-        updateStats();
-    }
-    initAudioContext();
-    initSpaceBackground();
-    renderQuests();
-    renderChat();
-    initBeatComposer();
-    
-    // Фокус на лабиринт для управления с клавиатуры
-    document.getElementById('mazeGrid').addEventListener('keydown', handleMazeInput);
+  // Восстановление сессии
+  const saved = localStorage.getItem('soundscape_user');
+  if (saved) {
+    try {
+      const data = JSON.parse(saved);
+      currentUser = data.username;
+      isGuest = data.isGuest || false;
+      userData = { ...userData, ...(data.userData || {}) };
+      document.getElementById('authOverlay').classList.remove('active');
+      updateStats();
+    } catch(e) { console.error('Ошибка загрузки данных:', e); }
+  }
+
+  initAudioContext();
+  initSpaceBackground();
+  renderQuests();
+  renderChat();
+  initBeatComposer();
+  setupEventListeners();
 };
 
+function setupEventListeners() {
+  // Навигация
+  document.querySelectorAll('.nav-btn[data-section]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      showSection(btn.dataset.section);
+    });
+  });
+
+  // Кнопки перехода
+  document.querySelectorAll('[data-goto]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      showSection(btn.dataset.goto);
+    });
+  });
+
+  // Авторизация
+  document.getElementById('registerBtn').addEventListener('click', registerUser);
+  document.getElementById('guestBtn').addEventListener('click', guestLogin);
+  document.getElementById('logoutBtn').addEventListener('click', logout);
+
+  // Игры
+  document.querySelectorAll('.game-card[data-game]').forEach(card => {
+    card.addEventListener('click', (e) => {
+      e.stopPropagation();
+      startGame(card.dataset.game);
+    });
+  });
+  document.getElementById('launchGameBtn').addEventListener('click', launchGame);
+  document.getElementById('pauseGameBtn').addEventListener('click', pauseGame);
+  document.getElementById('closeGameBtn').addEventListener('click', closeGame);
+
+  // Мобильное управление - только для кнопок внутри mobile-controls
+  document.querySelectorAll('#mobileControls .d-btn, #mobileControls .action-btn').forEach(btn => {
+    const dir = btn.dataset.dir;
+    if (!dir) return;
+    
+    btn.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      input[dir] = true;
+    }, { passive: false });
+    
+    btn.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      input[dir] = false;
+    }, { passive: false });
+    
+    btn.addEventListener('mousedown', (e) => {
+      e.stopPropagation();
+      input[dir] = true;
+    });
+    
+    btn.addEventListener('mouseup', (e) => {
+      e.stopPropagation();
+      input[dir] = false;
+    });
+    
+    btn.addEventListener('mouseleave', () => {
+      input[dir] = false;
+    });
+  });
+
+  // Клавиатура
+  document.addEventListener('keydown', (e) => {
+    // Не перехватываем если фокус на input
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    
+    if (e.code === 'ArrowLeft' || e.code === 'KeyA') input.left = true;
+    if (e.code === 'ArrowRight' || e.code === 'KeyD') input.right = true;
+    if (e.code === 'ArrowUp' || e.code === 'KeyW') input.up = true;
+    if (e.code === 'ArrowDown' || e.code === 'KeyS') input.down = true;
+    if (e.code === 'Space') input.fire = true;
+  });
+  
+  document.addEventListener('keyup', (e) => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    
+    if (e.code === 'ArrowLeft' || e.code === 'KeyA') input.left = false;
+    if (e.code === 'ArrowRight' || e.code === 'KeyD') input.right = false;
+    if (e.code === 'ArrowUp' || e.code === 'KeyW') input.up = false;
+    if (e.code === 'ArrowDown' || e.code === 'KeyS') input.down = false;
+    if (e.code === 'Space') input.fire = false;
+  });
+
+  // Кликер
+  document.getElementById('clickerTarget').addEventListener('click', clickerClick);
+  document.getElementById('buyClickBtn').addEventListener('click', () => buyClickerUpgrade('click'));
+  document.getElementById('buyAutoBtn').addEventListener('click', () => buyClickerUpgrade('auto'));
+
+  // Квесты
+  document.getElementById('resetMazeBtn').addEventListener('click', initMazeQuest);
+  document.getElementById('mazeGrid').addEventListener('keydown', handleMazeInput);
+
+  // Музыка
+  document.getElementById('searchMusicBtn').addEventListener('click', searchMusic);
+
+  // Чат
+  document.getElementById('sendChatBtn').addEventListener('click', sendMessage);
+
+  // VIP
+  document.getElementById('buyVipBtn').addEventListener('click', buyVip);
+
+  // Запись
+  document.getElementById('recordBtn').addEventListener('click', toggleRecording);
+  document.getElementById('generateBtn').addEventListener('click', generateAIBeat);
+}
+
 function updateStats() {
-    document.getElementById('userXP').textContent = userData.xp;
-    document.getElementById('userCoins').textContent = userData.coins;
-    document.getElementById('profileXP').textContent = userData.xp;
-    document.getElementById('profileCoins').textContent = userData.coins;
-    document.getElementById('profileTracks').textContent = userData.tracksCreated;
-    document.getElementById('userName').textContent = currentUser;
-    document.getElementById('profileName').textContent = currentUser;
-    
-    const projects = getProjects();
-    document.getElementById('projCountDisplay').textContent = projects.length;
-    document.getElementById('projLimitDisplay').textContent = userData.projectLimit;
-    
-    // ИСПРАВЛЕНИЕ 1: Корректное отображение бейджа
-    const badge = document.getElementById('userBadge');
-    if (userData.isVip) {
-        document.getElementById('vipBadgeProjects').style.display = 'block';
-        badge.textContent = 'VIP';
-        badge.className = '';
-        badge.style.background = 'linear-gradient(90deg, #ffd700, #ff8c00)';
-        badge.style.color = '#000';
-        badge.style.padding = '3px 8px';
-        badge.style.borderRadius = '10px';
-        badge.style.fontSize = '10px';
-    } else if (isGuest) {
-        document.getElementById('vipBadgeProjects').style.display = 'none';
-        badge.textContent = 'ГОСТЬ';
-        badge.className = 'guest-badge';
-        badge.style.background = '';
-        badge.style.color = '';
-    } else {
-        document.getElementById('vipBadgeProjects').style.display = 'none';
-        badge.textContent = 'USER';
-        badge.className = '';
-        badge.style.background = 'rgba(0, 255, 136, 0.2)';
-        badge.style.color = '#00ff88';
-        badge.style.padding = '3px 8px';
-        badge.style.borderRadius = '10px';
-        badge.style.fontSize = '10px';
-    }
+  document.getElementById('userXP').textContent = userData.xp;
+  document.getElementById('userCoins').textContent = userData.coins;
+  document.getElementById('profileXP').textContent = userData.xp;
+  document.getElementById('profileCoins').textContent = userData.coins;
+  document.getElementById('profileTracks').textContent = userData.tracksCreated;
+  document.getElementById('userName').textContent = currentUser || 'Гость';
+  document.getElementById('profileName').textContent = currentUser || 'Гость';
+
+  const projects = getProjects();
+  document.getElementById('projCountDisplay').textContent = projects.length;
+  document.getElementById('projLimitDisplay').textContent = userData.projectLimit;
+
+  // Корректное отображение бейджа
+  const badge = document.getElementById('userBadge');
+  if (userData.isVip) {
+    document.getElementById('vipBadgeProjects').style.display = 'block';
+    badge.textContent = 'VIP';
+    badge.className = 'user-badge badge-vip';
+  } else if (isGuest) {
+    document.getElementById('vipBadgeProjects').style.display = 'none';
+    badge.textContent = 'ГОСТЬ';
+    badge.className = 'user-badge badge-guest';
+  } else if (currentUser) {
+    document.getElementById('vipBadgeProjects').style.display = 'none';
+    badge.textContent = 'USER';
+    badge.className = 'user-badge badge-user';
+  }
 }
 
 function showNotification(text) {
-    const div = document.getElementById('notification');
-    div.textContent = text;
-    div.classList.add('show');
-    setTimeout(() => div.classList.remove('show'), 3000);
+  const div = document.getElementById('notification');
+  div.textContent = text;
+  div.classList.add('show');
+  setTimeout(() => div.classList.remove('show'), 3000);
 }
 
-function showSection(id, event) {
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    if (event && event.target) event.target.classList.add('active');
-    window.scrollTo(0, 0);
-    
-    if (id === 'projects') renderProjectsList();
-    
-    // Скрываем мобильное управление при смене секции
-    document.getElementById('mobileControls').classList.remove('active');
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  
+  const navBtn = document.querySelector(`.nav-btn[data-section="${id}"]`);
+  if (navBtn) navBtn.classList.add('active');
+  
+  window.scrollTo(0, 0);
+  
+  if (id === 'projects') renderProjectsList();
+  if (id === 'quests') setTimeout(() => document.getElementById('mazeGrid').focus(), 100);
+  
+  // Скрываем мобильное управление при смене секции
+  document.getElementById('mobileControls').classList.remove('active');
 }
 
 function registerUser() {
-    const username = document.getElementById('authUsername').value.trim();
-    if (username.length < 3) { showNotification('❌ Имя минимум 3 символа'); return; }
-    currentUser = username;
-    isGuest = false;
-    document.getElementById('authOverlay').classList.remove('active');
-    updateStats();
-    showNotification('✅ Добро пожаловать, ' + username + '!');
-    saveUserData();
+  const username = document.getElementById('authUsername').value.trim();
+  if (username.length < 3) { showNotification('❌ Имя минимум 3 символа'); return; }
+  currentUser = username;
+  isGuest = false;
+  document.getElementById('authOverlay').classList.remove('active');
+  updateStats();
+  showNotification('✅ Добро пожаловать, ' + username + '!');
+  saveUserData();
 }
 
 function guestLogin() {
-    currentUser = 'Гость_' + Math.floor(Math.random() * 10000);
-    isGuest = true;
-    document.getElementById('authOverlay').classList.remove('active');
-    updateStats();
-    showNotification('👤 Гостевой режим');
+  currentUser = 'Гость_' + Math.floor(Math.random() * 10000);
+  isGuest = true;
+  document.getElementById('authOverlay').classList.remove('active');
+  updateStats();
+  showNotification('👤 Гостевой режим');
+  saveUserData();
 }
 
 function logout() {
-    localStorage.removeItem('soundscape_user');
-    location.reload();
+  localStorage.removeItem('soundscape_user');
+  location.reload();
 }
 
 function saveUserData() {
-    localStorage.setItem('soundscape_user', JSON.stringify({ username: currentUser, isGuest: isGuest, userData: userData }));
+  localStorage.setItem('soundscape_user', JSON.stringify({ username: currentUser, isGuest: isGuest, userData: userData }));
 }
 
-// --- ФУНКЦИИ ДЛЯ ПРОЕКТОВ И VIP ---
+/* ==========================================================================
+   PROJECTS & VIP
+   ========================================================================== */
 function renderProjectsList() {
-    const projects = getProjects();
-    const container = document.getElementById('projectsListContainer');
-    if (projects.length === 0) {
-        container.innerHTML = '<div style="text-align:center; color:var(--text-muted); padding:40px;">Пока нет сохраненных проектов. Создай свой первый бит в Beat Pro!</div>';
-        return;
-    }
-    container.innerHTML = projects.map(p => `
-        <div class="project-item">
-            <div class="project-info">
-                <h4>${p.name || 'Без названия'}</h4>
-                <p>BPM: ${p.bpm} | Длительность: ~${p.duration || 0}с | ${new Date(p.createdAt).toLocaleDateString()}</p>
-            </div>
-            <div class="project-actions">
-                <button class="btn btn-primary" onclick="loadProjectFromList('${p.id}')">Загрузить</button>
-                <button class="btn btn-danger" onclick="deleteProject('${p.id}')">Удалить</button>
-            </div>
-        </div>
-    `).join('');
+  const projects = getProjects();
+  const container = document.getElementById('projectsListContainer');
+  if (projects.length === 0) {
+    container.innerHTML = '<div style="text-align:center; color:var(--text-muted); padding:40px;">Пока нет сохраненных проектов. Создай свой первый бит в Beat Pro!</div>';
+    return;
+  }
+  container.innerHTML = projects.map(p => `
+    <div class="project-item">
+      <div class="project-info">
+        <h4>${p.name || 'Без названия'}</h4>
+        <p>BPM: ${p.bpm} | Длительность: ~${p.duration || 0}с | ${new Date(p.createdAt).toLocaleDateString()}</p>
+      </div>
+      <div class="project-actions">
+        <button class="btn btn-primary" onclick="loadProjectFromList('${p.id}')">Загрузить</button>
+        <button class="btn btn-danger" onclick="deleteProject('${p.id}')">Удалить</button>
+      </div>
+    </div>
+  `).join('');
 }
-function loadProjectFromList(id) { loadProjectById(id); showSection('beatmaker'); showNotification('📂 Проект загружен!'); }
+
+function loadProjectFromList(id) {
+  loadProjectById(id);
+  showSection('beatmaker');
+  showNotification('📂 Проект загружен!');
+}
+
 function deleteProject(id) {
-    if (!confirm('Удалить этот проект?')) return;
-    let projects = getProjects().filter(p => p.id !== id);
-    saveProjectsList(projects);
-    if (!userData.isVip && userData.projectsCreated > 0) userData.projectsCreated--;
-    saveUserData();
-    renderProjectsList();
-    updateStats();
-    showNotification('🗑️ Проект удален');
+  if (!confirm('Удалить этот проект?')) return;
+  let projects = getProjects().filter(p => p.id !== id);
+  saveProjectsList(projects);
+  if (!userData.isVip && userData.projectsCreated > 0) userData.projectsCreated--;
+  saveUserData();
+  renderProjectsList();
+  updateStats();
+  showNotification('️ Проект удален');
 }
+
 function buyVip() {
-    if (userData.isVip) { showNotification('👑 У вас уже есть VIP!'); return; }
-    if (userData.coins >= 1000) {
-        userData.coins -= 1000;
-        userData.isVip = true;
-        userData.projectLimit = 50;
-        saveUserData();
-        updateStats();
-        showNotification('🎉 Поздравляем! Вы получили VIP Producer!');
-    } else {
-        showNotification('❌ Недостаточно монет! Нужно 1000 🪙');
-    }
+  if (userData.isVip) { showNotification('👑 У вас уже есть VIP!'); return; }
+  if (userData.coins >= 1000) {
+    userData.coins -= 1000;
+    userData.isVip = true;
+    userData.projectLimit = 50;
+    saveUserData();
+    updateStats();
+    showNotification('🎉 Поздравляем! Вы получили VIP Producer!');
+  } else {
+    showNotification('❌ Недостаточно монет! Нужно 1000 ');
+  }
 }
 
 /* ==========================================================================
    AI STUDIO & RECORDING
    ========================================================================== */
 async function initAudioContext() {
-    if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        analyser = audioCtx.createAnalyser();
-        analyser.fftSize = 256;
-    }
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 256;
+  }
 }
-// ... (Функции записи и AI остались без изменений для экономии места, они работают корректно)
+
 async function toggleRecording() {
-    const btn = document.getElementById('recordBtn');
-    const status = document.getElementById('recordStatus');
-    const audioEl = document.getElementById('recordedAudio');
-    const genBtn = document.getElementById('generateBtn');
-    if (!isRecording) {
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            mediaRecorder = new MediaRecorder(stream);
-            audioChunks = [];
-            mediaRecorder.ondataavailable = (event) => { audioChunks.push(event.data); };
-            mediaRecorder.onstop = () => {
-                recordedBlob = new Blob(audioChunks, { type: 'audio/wav' });
-                audioEl.src = URL.createObjectURL(recordedBlob);
-                audioEl.style.display = 'block';
-                genBtn.disabled = false;
-                status.textContent = '✅ Запись завершена. Можно генерировать бит!';
-                status.style.color = 'var(--success)';
-                analyzeAudioPitch(recordedBlob);
-            };
-            mediaRecorder.start();
-            isRecording = true;
-            btn.classList.add('recording');
-            document.getElementById('recordIcon').textContent = '⏹';
-            document.getElementById('recordText').textContent = 'STOP';
-            status.textContent = '🔴 Идет запись...';
-            status.style.color = 'var(--danger)';
-            visualizeRecording(stream);
-        } catch (err) { showNotification('❌ Ошибка доступа к микрофону'); }
-    } else {
-        mediaRecorder.stop();
-        mediaRecorder.stream.getTracks().forEach(track => track.stop());
-        isRecording = false;
-        btn.classList.remove('recording');
-        document.getElementById('recordIcon').textContent = '🎤';
-        document.getElementById('recordText').textContent = 'REC';
-    }
+  const btn = document.getElementById('recordBtn');
+  const status = document.getElementById('recordStatus');
+  const audioEl = document.getElementById('recordedAudio');
+  const genBtn = document.getElementById('generateBtn');
+  
+  if (!isRecording) {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorder = new MediaRecorder(stream);
+      audioChunks = [];
+      
+      mediaRecorder.ondataavailable = (event) => { audioChunks.push(event.data); };
+      mediaRecorder.onstop = () => {
+        recordedBlob = new Blob(audioChunks, { type: 'audio/wav' });
+        audioEl.src = URL.createObjectURL(recordedBlob);
+        audioEl.style.display = 'block';
+        genBtn.disabled = false;
+        status.textContent = '✅ Запись завершена. Можно генерировать бит!';
+        status.style.color = 'var(--success)';
+        analyzeAudioPitch(recordedBlob);
+      };
+      
+      mediaRecorder.start();
+      isRecording = true;
+      btn.classList.add('recording');
+      document.getElementById('recordIcon').textContent = '⏹';
+      document.getElementById('recordText').textContent = 'STOP';
+      status.textContent = '🔴 Идет запись...';
+      status.style.color = 'var(--danger)';
+      visualizeRecording(stream);
+    } catch (err) { showNotification('❌ Ошибка доступа к микрофону'); }
+  } else {
+    mediaRecorder.stop();
+    mediaRecorder.stream.getTracks().forEach(track => track.stop());
+    isRecording = false;
+    btn.classList.remove('recording');
+    document.getElementById('recordIcon').textContent = '🎤';
+    document.getElementById('recordText').textContent = 'REC';
+  }
 }
+
 function visualizeRecording(stream) {
-    const source = audioCtx.createMediaStreamSource(stream);
-    source.connect(analyser);
-    const canvas = document.getElementById('studioVisualizer');
-    const ctx = canvas.getContext('2d');
-    canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
-    const bufferLength = analyser.frequencyBinCount;
-    const dataArray = new Uint8Array(bufferLength);
-    function draw() {
-        if (!isRecording) { ctx.clearRect(0, 0, canvas.width, canvas.height); return; }
-        requestAnimationFrame(draw);
-        analyser.getByteFrequencyData(dataArray);
-        ctx.fillStyle = 'rgba(0,0,0,0.2)';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        const barWidth = (canvas.width / bufferLength) * 2.5;
-        let x = 0;
-        for (let i = 0; i < bufferLength; i++) {
-            const barHeight = (dataArray[i] / 255) * canvas.height;
-            const gradient = ctx.createLinearGradient(0, canvas.height, 0, canvas.height - barHeight);
-            gradient.addColorStop(0, '#b82cff'); gradient.addColorStop(1, '#00f3ff');
-            ctx.fillStyle = gradient;
-            ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
-            x += barWidth + 1;
-        }
+  const source = audioCtx.createMediaStreamSource(stream);
+  source.connect(analyser);
+  const canvas = document.getElementById('studioVisualizer');
+  const ctx = canvas.getContext('2d');
+  canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
+  const bufferLength = analyser.frequencyBinCount;
+  const dataArray = new Uint8Array(bufferLength);
+  
+  function draw() {
+    if (!isRecording) { ctx.clearRect(0, 0, canvas.width, canvas.height); return; }
+    requestAnimationFrame(draw);
+    analyser.getByteFrequencyData(dataArray);
+    ctx.fillStyle = 'rgba(0,0,0,0.2)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    const barWidth = (canvas.width / bufferLength) * 2.5;
+    let x = 0;
+    for (let i = 0; i < bufferLength; i++) {
+      const barHeight = (dataArray[i] / 255) * canvas.height;
+      const gradient = ctx.createLinearGradient(0, canvas.height, 0, canvas.height - barHeight);
+      gradient.addColorStop(0, '#b82cff'); gradient.addColorStop(1, '#00f3ff');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+      x += barWidth + 1;
     }
-    draw();
+  }
+  draw();
 }
+
 async function analyzeAudioPitch(blob) {
-    showNotification('🤖 AI анализирует мелодию...');
-    const audioBuffer = await audioCtx.decodeAudioData(await blob.arrayBuffer());
-    const data = audioBuffer.getChannelData(0);
-    detectedNotes = [];
-    for (let i = 0; i < data.length - 2048; i += 512) {
-        const freq = autoCorrelate(data.slice(i, i + 2048), audioBuffer.sampleRate);
-        if (freq > 50 && freq < 1000) detectedNotes.push({ time: i / audioBuffer.sampleRate, note: freqToNote(freq) });
-    }
-    showNotification('✅ Мелодия распознана!');
+  showNotification(' AI анализирует мелодию...');
+  const audioBuffer = await audioCtx.decodeAudioData(await blob.arrayBuffer());
+  const data = audioBuffer.getChannelData(0);
+  detectedNotes = [];
+  for (let i = 0; i < data.length - 2048; i += 512) {
+    const freq = autoCorrelate(data.slice(i, i + 2048), audioBuffer.sampleRate);
+    if (freq > 50 && freq < 1000) detectedNotes.push({ time: i / audioBuffer.sampleRate, note: freqToNote(freq) });
+  }
+  showNotification('✅ Мелодия распознана!');
 }
+
 function autoCorrelate(buf, sampleRate) {
-    let rms = 0;
-    for (let i = 0; i < buf.length; i++) rms += buf[i] * buf[i];
-    rms = Math.sqrt(rms / buf.length);
-    if (rms < 0.01) return 0;
-    let r1 = 0, r2 = buf.length - 1, thres = 0.2;
-    for (let i = 0; i < buf.length / 2; i++) { if (Math.abs(buf[i]) < thres) { r1 = i; break; } }
-    for (let i = 1; i < buf.length / 2; i++) { if (Math.abs(buf[buf.length - i]) < thres) { r2 = buf.length - i; break; } }
-    buf = buf.slice(r1, r2);
-    const c = new Array(buf.length).fill(0);
-    for (let i = 0; i < buf.length; i++) { for (let j = 0; j < buf.length - i; j++) { c[i] += buf[j] * buf[j + i]; } }
-    let d = 0; while (d < buf.length / 2 && c[d] > c[d + 1]) d++;
-    let maxval = -1, maxpos = -1;
-    for (let i = d; i < buf.length; i++) { if (c[i] > maxval) { maxval = c[i]; maxpos = i; } }
-    return sampleRate / maxpos;
+  let rms = 0;
+  for (let i = 0; i < buf.length; i++) rms += buf[i] * buf[i];
+  rms = Math.sqrt(rms / buf.length);
+  if (rms < 0.01) return 0;
+  let r1 = 0, r2 = buf.length - 1, thres = 0.2;
+  for (let i = 0; i < buf.length / 2; i++) { if (Math.abs(buf[i]) < thres) { r1 = i; break; } }
+  for (let i = 1; i < buf.length / 2; i++) { if (Math.abs(buf[buf.length - i]) < thres) { r2 = buf.length - i; break; } }
+  buf = buf.slice(r1, r2);
+  const c = new Array(buf.length).fill(0);
+  for (let i = 0; i < buf.length; i++) { for (let j = 0; j < buf.length - i; j++) { c[i] += buf[j] * buf[j + i]; } }
+  let d = 0; while (d < buf.length / 2 && c[d] > c[d + 1]) d++;
+  let maxval = -1, maxpos = -1;
+  for (let i = d; i < buf.length; i++) { if (c[i] > maxval) { maxval = c[i]; maxpos = i; } }
+  return sampleRate / maxpos;
 }
+
 function freqToNote(freq) {
-    const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
-    const halfSteps = Math.round(12 * Math.log2(freq / (440 * Math.pow(2, -4.75))));
-    return notes[halfSteps % 12];
+  const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+  const halfSteps = Math.round(12 * Math.log2(freq / (440 * Math.pow(2, -4.75))));
+  return notes[halfSteps % 12];
 }
+
 function generateAIBeat() {
-    if (detectedNotes.length === 0) { showNotification('❌ Сначала запишите мелодию!'); return; }
-    showNotification('🤖 Генерация бита...');
-    userData.tracksCreated++;
-    updateStats();
-    saveUserData();
-    setTimeout(() => { showSection('beatmaker'); showNotification('✅ Бит сгенерирован!'); }, 1000);
+  if (detectedNotes.length === 0) { showNotification('❌ Сначала запишите мелодию!'); return; }
+  showNotification('🤖 Генерация бита...');
+  userData.tracksCreated++;
+  updateStats();
+  saveUserData();
+  setTimeout(() => { showSection('beatmaker'); showNotification('✅ Бит сгенерирован!'); }, 1000);
 }
 
 /* ==========================================================================
    GAMES ENGINE
    ========================================================================== */
 function startGame(type) {
-    currentGame = type;
-    gameScore = 0;
-    document.getElementById('activeGame').classList.add('active');
-    document.getElementById('mobileControls').classList.remove('active'); // Сброс
-    
-    if (gameInterval) clearInterval(gameInterval);
-    canvas = document.getElementById('gameCanvas');
-    ctx = canvas.getContext('2d');
-    canvas.width = 800; canvas.height = 500;
-
-    const games = { 'shooter': { title: '🚀 Space Shooter' }, 'pacman': { title: '🟡 Pac-Man' }, 'invaders': { title: '👾 Space Invaders' }, 'snake': { title: '🐍 Змейка' }, 'clicker': { title: '🖱️ Кликер' } };
-    document.getElementById('gameTitle').textContent = games[type].title;
-
-    if (type === 'clicker') {
-        // ИСПРАВЛЕНИЕ 2: Корректное отображение кликера
-        document.getElementById('clickerGameArea').classList.add('active');
-        document.getElementById('gameCanvas').style.display = 'none';
-        startClicker();
-    } else {
-        document.getElementById('clickerGameArea').classList.remove('active');
-        document.getElementById('gameCanvas').style.display = 'block';
-        // ИСПРАВЛЕНИЕ 3: Показывать управление только для canvas-игр на мобильных
-        if (window.innerWidth <= 768) {
-            document.getElementById('mobileControls').classList.add('active');
-        }
-        
-        if (type === 'shooter') { player = { x: canvas.width/2 - 20, y: canvas.height - 60, w: 40, h: 40, cooldown: 0 }; bullets = []; enemies = []; startShooter(); } 
-        else if (type === 'pacman') { 
-            mazeData = ['####################','#........#.........#','#.####.#.#.#.####.#.#','#.#....#...#....#.#.#','#.#.##.#.#.#.##.#.#.#','#.#.#......#.#....#.#','#...#.####.#.####...#','#.#.#......#.#....#.#','#.#.##.####.##.#....#','#.#....#..#....#....#','#.####.#..#.####....#','#......#..#.........#','####################'];
-            pacman = { x: 1, y: 1, dir: { x: 0, y: 0 }, nextDir: { x: 0, y: 0 } };
-            ghosts = [ { x: 10, y: 6, color: '#ff0055' }, { x: 9, y: 6, color: '#ffb8ff' }, { x: 10, y: 7, color: '#00f3ff' } ];
-            dots = [];
-            for (let y = 0; y < mazeData.length; y++) for (let x = 0; x < mazeData[y].length; x++) if (mazeData[y][x] === '.') dots.push({ x, y });
-            startPacman(); 
-        } 
-        else if (type === 'invaders') { 
-            invaderPlayer = { x: canvas.width/2, y: canvas.height - 40, w: 30, h: 20 };
-            bullets = []; invaderBullets = []; invaderDirection = 1; enemies = [];
-            for (let row = 0; row < 4; row++) for (let col = 0; col < 8; col++) enemies.push({ x: 50 + col * 60, y: 50 + row * 40, w: 30, h: 25 });
-            startInvaders(); 
-        } 
-        else if (type === 'snake') { 
-            snake = [{ x: 15, y: 10 }]; dir = { x: 1, y: 0 }; nextDir = { x: 1, y: 0 }; food = { x: 20, y: 10 };
-            startSnake(); 
-        }
+  currentGame = type;
+  gameScore = 0;
+  document.getElementById('activeGame').classList.add('active');
+  document.getElementById('mobileControls').classList.remove('active');
+  
+  if (gameInterval) clearInterval(gameInterval);
+  canvas = document.getElementById('gameCanvas');
+  ctx = canvas.getContext('2d');
+  canvas.width = 800; canvas.height = 500;
+  
+  const games = {
+    'shooter': { title: '🚀 Space Shooter' },
+    'pacman': { title: '🟡 Pac-Man' },
+    'invaders': { title: '👾 Space Invaders' },
+    'snake': { title: '🐍 Змейка' },
+    'clicker': { title: '🖱️ Кликер' }
+  };
+  document.getElementById('gameTitle').textContent = games[type].title;
+  
+  if (type === 'clicker') {
+    document.getElementById('clickerGameArea').classList.add('active');
+    document.getElementById('gameCanvas').style.display = 'none';
+    startClicker();
+  } else {
+    document.getElementById('clickerGameArea').classList.remove('active');
+    document.getElementById('gameCanvas').style.display = 'block';
+    // Показываем мобильное управление только на мобильных устройствах
+    if (window.innerWidth <= 768 || 'ontouchstart' in window) {
+      document.getElementById('mobileControls').classList.add('active');
     }
-    userData.gamesPlayed++; 
-    updateStats();
-    updateQuestProgress('q1', 1);
+    
+    if (type === 'shooter') {
+      player = { x: canvas.width/2 - 20, y: canvas.height - 60, w: 40, h: 40, cooldown: 0 };
+      bullets = []; enemies = [];
+      startShooter();
+    } else if (type === 'pacman') {
+      mazeData = ['####################','#........#.........#','#.####.#.#.#.####.#.#','#.#....#...#....#.#.#','#.#.##.#.#.#.##.#.#.#','#.#.#......#.#....#.#','#...#.####.#.####...#','#.#.#......#.#....#.#','#.#.##.####.##.#....#','#.#....#..#....#....#','#.####.#..#.####....#','#......#..#.........#','####################'];
+      pacman = { x: 1, y: 1, dir: { x: 0, y: 0 }, nextDir: { x: 0, y: 0 } };
+      ghosts = [ { x: 10, y: 6, color: '#ff0055' }, { x: 9, y: 6, color: '#ffb8ff' }, { x: 10, y: 7, color: '#00f3ff' } ];
+      dots = [];
+      for (let y = 0; y < mazeData.length; y++) for (let x = 0; x < mazeData[y].length; x++) if (mazeData[y][x] === '.') dots.push({ x, y });
+      startPacman();
+    } else if (type === 'invaders') {
+      invaderPlayer = { x: canvas.width/2, y: canvas.height - 40, w: 30, h: 20 };
+      bullets = []; invaderBullets = []; invaderDirection = 1; enemies = [];
+      for (let row = 0; row < 4; row++) for (let col = 0; col < 8; col++) enemies.push({ x: 50 + col * 60, y: 50 + row * 40, w: 30, h: 25 });
+      startInvaders();
+    } else if (type === 'snake') {
+      snake = [{ x: 15, y: 10 }]; dir = { x: 1, y: 0 }; nextDir = { x: 1, y: 0 }; food = { x: 20, y: 10 };
+      startSnake();
+    }
+  }
+  userData.gamesPlayed++;
+  updateStats();
+  updateQuestProgress('q1', 1);
 }
 
 function launchGame() {
@@ -1092,40 +1228,14 @@ function launchGame() {
 
 function pauseGame() { if (gameInterval) { clearInterval(gameInterval); gameInterval = null; } }
 
-function closeGame() { 
-    pauseGame(); 
-    document.getElementById('activeGame').classList.remove('active'); 
-    // ИСПРАВЛЕНИЕ 3: Скрытие управления при выходе
-    document.getElementById('mobileControls').classList.remove('active');
-    input = { left: false, right: false, up: false, down: false, fire: false }; 
-    if (clickerInterval) { clearInterval(clickerInterval); clickerInterval = null; }
+function closeGame() {
+  pauseGame();
+  document.getElementById('activeGame').classList.remove('active');
+  document.getElementById('mobileControls').classList.remove('active');
+  input = { left: false, right: false, up: false, down: false, fire: false };
+  if (clickerInterval) { clearInterval(clickerInterval); clickerInterval = null; }
 }
 
-// Обработчики для мобильного управления (тач и мышь)
-document.querySelectorAll('.d-btn, .action-btn').forEach(btn => {
-  const dir = btn.dataset.dir;
-  btn.addEventListener('touchstart', (e) => { e.preventDefault(); input[dir] = true; });
-  btn.addEventListener('touchend', (e) => { e.preventDefault(); input[dir] = false; });
-  btn.addEventListener('mousedown', () => input[dir] = true);
-  btn.addEventListener('mouseup', () => input[dir] = false);
-});
-
-document.addEventListener('keydown', (e) => {
-  if (e.code === 'ArrowLeft' || e.code === 'KeyA') input.left = true;
-  if (e.code === 'ArrowRight' || e.code === 'KeyD') input.right = true;
-  if (e.code === 'ArrowUp' || e.code === 'KeyW') input.up = true;
-  if (e.code === 'ArrowDown' || e.code === 'KeyS') input.down = true;
-  if (e.code === 'Space') input.fire = true;
-});
-document.addEventListener('keyup', (e) => {
-  if (e.code === 'ArrowLeft' || e.code === 'KeyA') input.left = false;
-  if (e.code === 'ArrowRight' || e.code === 'KeyD') input.right = false;
-  if (e.code === 'ArrowUp' || e.code === 'KeyW') input.up = false;
-  if (e.code === 'ArrowDown' || e.code === 'KeyS') input.down = false;
-  if (e.code === 'Space') input.fire = false;
-});
-
-// ... (Логика игр shooter, pacman, invaders, snake осталась без изменений, она рабочая)
 let player, bullets, enemies;
 function startShooter() {
   if (gameInterval) clearInterval(gameInterval);
@@ -1153,6 +1263,7 @@ function startShooter() {
     document.getElementById('gameInfo').textContent = `Счёт: ${gameScore}`;
   }, 16);
 }
+
 let pacman, ghosts, dots, mazeData;
 function startPacman() {
   if (gameInterval) clearInterval(gameInterval);
@@ -1184,6 +1295,7 @@ function startPacman() {
     document.getElementById('gameInfo').textContent = `Счёт: ${gameScore}`;
   }, 150);
 }
+
 let invaderPlayer, invaderBullets, invaderDirection;
 function startInvaders() {
   if (gameInterval) clearInterval(gameInterval);
@@ -1208,10 +1320,11 @@ function startInvaders() {
     ctx.fillText('🚀', invaderPlayer.x, invaderPlayer.y + 25);
     bullets.forEach(b => ctx.fillText('✨', b.x, b.y + 10));
     enemies.forEach(e => ctx.fillText('👾', e.x, e.y + 25));
-    invaderBullets.forEach(b => ctx.fillText('🔥', b.x, b.y + 10));
+    invaderBullets.forEach(b => ctx.fillText('', b.x, b.y + 10));
     document.getElementById('gameInfo').textContent = `Счёт: ${gameScore}`;
   }, 16);
 }
+
 let snake, dir, nextDir, food;
 function startSnake() {
   if (gameInterval) clearInterval(gameInterval);
@@ -1225,58 +1338,53 @@ function startSnake() {
     if (head.x === food.x && head.y === food.y) { gameScore += 15; food = { x: Math.floor(Math.random() * (cols-2)) + 1, y: Math.floor(Math.random() * (rows-2)) + 1 }; } else snake.pop();
     const cellSize = 20; ctx.fillStyle = '#000'; ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.font = '20px Arial';
-    snake.forEach((s, i) => { ctx.fillText(i === 0 ? '🐍' : '🟩', s.x * cellSize, s.y * cellSize + cellSize - 2); });
+    snake.forEach((s, i) => { ctx.fillText(i === 0 ? '🐍' : '', s.x * cellSize, s.y * cellSize + cellSize - 2); });
     ctx.fillText('🍎', food.x * cellSize, food.y * cellSize + cellSize - 2);
     document.getElementById('gameInfo').textContent = `Счёт: ${gameScore}`;
   }, 120);
 }
 
-// ИСПРАВЛЕНИЕ 2: Кликер теперь корректно работает
 function startClicker() {
-    if (!userData.clicker) userData.clicker = { clickPower: 1, clickCost: 10, autoClick: 0, autoCost: 50 };
-    updateClickerUI();
-    if (clickerInterval) clearInterval(clickerInterval);
-    
-    // Привязка события клика к элементу, а не к window, чтобы избежать конфликтов
-    const target = document.getElementById('clickerTarget');
-    target.onclick = (e) => {
-        e.preventDefault();
-        userData.coins += userData.clicker.clickPower;
-        updateClickerUI();
-        saveUserData();
-    };
-    
-    clickerInterval = setInterval(() => {
-        if (userData.clicker.autoClick > 0) {
-            userData.coins += userData.clicker.autoClick;
-            updateClickerUI();
-            saveUserData();
-        }
-    }, 1000);
+  if (!userData.clicker) userData.clicker = { clickPower: 1, clickCost: 10, autoClick: 0, autoCost: 50 };
+  updateClickerUI();
+  if (clickerInterval) clearInterval(clickerInterval);
+  clickerInterval = setInterval(() => {
+    if (userData.clicker.autoClick > 0) {
+      userData.coins += userData.clicker.autoClick;
+      updateClickerUI();
+      saveUserData();
+    }
+  }, 1000);
+}
+
+function clickerClick() {
+  userData.coins += userData.clicker.clickPower;
+  updateClickerUI();
+  saveUserData();
 }
 
 function buyClickerUpgrade(type) {
-    if (type === 'click' && userData.coins >= userData.clicker.clickCost) {
-        userData.coins -= userData.clicker.clickCost; 
-        userData.clicker.clickPower += 1; 
-        userData.clicker.clickCost = Math.floor(userData.clicker.clickCost * 1.5); 
-    } else if (type === 'auto' && userData.coins >= userData.clicker.autoCost) {
-        userData.coins -= userData.clicker.autoCost; 
-        userData.clicker.autoClick += 1; 
-        userData.clicker.autoCost = Math.floor(userData.clicker.autoCost * 1.5); 
-    } else {
-        showNotification('❌ Недостаточно монет!');
-        return;
-    }
-    updateClickerUI();
-    saveUserData();
+  if (type === 'click' && userData.coins >= userData.clicker.clickCost) {
+    userData.coins -= userData.clicker.clickCost;
+    userData.clicker.clickPower += 1;
+    userData.clicker.clickCost = Math.floor(userData.clicker.clickCost * 1.5);
+  } else if (type === 'auto' && userData.coins >= userData.clicker.autoCost) {
+    userData.coins -= userData.clicker.autoCost;
+    userData.clicker.autoClick += 1;
+    userData.clicker.autoCost = Math.floor(userData.clicker.autoCost * 1.5);
+  } else {
+    showNotification('❌ Недостаточно монет!');
+    return;
+  }
+  updateClickerUI();
+  saveUserData();
 }
 
 function updateClickerUI() {
-    document.getElementById('clickerCoins').textContent = Math.floor(userData.coins);
-    document.getElementById('clickerCPS').textContent = userData.clicker.autoClick;
-    document.getElementById('clickCost').textContent = userData.clicker.clickCost;
-    document.getElementById('autoCost').textContent = userData.clicker.autoCost;
+  document.getElementById('clickerCoins').textContent = Math.floor(userData.coins);
+  document.getElementById('clickerCPS').textContent = userData.clicker.autoClick;
+  document.getElementById('clickCost').textContent = userData.clicker.clickCost;
+  document.getElementById('autoCost').textContent = userData.clicker.autoCost;
 }
 
 /* ==========================================================================
@@ -1284,9 +1392,10 @@ function updateClickerUI() {
    ========================================================================== */
 let mazePlayerPos = { x: 1, y: 1 };
 let mazeCompleted = false;
+
 function initMazeQuest() {
   const maze = [[1,0,1,1,1,1,1,1,1,1],[1,0,0,0,0,0,1,0,0,1],[1,1,1,0,1,0,1,0,1,1],[1,0,0,0,1,0,0,0,0,1],[1,0,1,1,1,1,1,1,0,1],[1,0,0,0,0,0,0,1,0,1],[1,1,1,1,1,0,0,1,0,1],[1,0,0,0,1,0,0,0,0,1],[1,0,1,0,0,0,1,1,0,1],[1,1,1,1,1,1,1,1,1,1]];
-  mazePlayerPos = { x: 1, y: 1 }; 
+  mazePlayerPos = { x: 1, y: 1 };
   let stars = [{ x: 3, y: 1, c: false },{ x: 8, y: 1, c: false },{ x: 5, y: 5, c: false },{ x: 1, y: 8, c: false },{ x: 8, y: 8, c: false }];
   mazeCompleted = false;
   
@@ -1295,15 +1404,14 @@ function initMazeQuest() {
     for (let y = 0; y < 10; y++) {
       for (let x = 0; x < 10; x++) {
         const cell = document.createElement('div'); cell.className = 'maze-cell';
-        if (maze[y][x] === 1) { cell.classList.add('wall'); cell.textContent = '🌑'; }
-        else if (mazePlayerPos.x === x && mazePlayerPos.y === y) { cell.classList.add('player'); cell.textContent = '🚀'; }
+        if (maze[y][x] === 1) { cell.classList.add('wall'); cell.textContent = ''; }
+        else if (mazePlayerPos.x === x && mazePlayerPos.y === y) { cell.classList.add('player'); cell.textContent = ''; }
         else { const star = stars.find(s => s.x === x && s.y === y && !s.collected); if (star) { cell.classList.add('star'); cell.textContent = '⭐'; } }
         grid.appendChild(cell);
       }
     }
   }
   
-  // ИСПРАВЛЕНИЕ 3: Управление лабиринтом вынесено в отдельную функцию и работает надежно
   window.handleMazeInput = function(e) {
     if (mazeCompleted) return;
     let dx = 0, dy = 0;
@@ -1312,18 +1420,17 @@ function initMazeQuest() {
     else if (e.key === 'ArrowLeft' || e.key === 'a') dx = -1;
     else if (e.key === 'ArrowRight' || e.key === 'd') dx = 1;
     else return;
-    
     e.preventDefault();
     const newX = mazePlayerPos.x + dx, newY = mazePlayerPos.y + dy;
     if (newX >= 0 && newX < 10 && newY >= 0 && newY < 10 && maze[newY][newX] === 0) {
       mazePlayerPos.x = newX; mazePlayerPos.y = newY;
-      stars.forEach(star => { 
-          if (!star.collected && star.x === newX && star.y === newY) { 
-              star.collected = true; userData.xp += 20; updateStats(); 
-          } 
+      stars.forEach(star => {
+        if (!star.collected && star.x === newX && star.y === newY) {
+          star.collected = true; userData.xp += 20; updateStats();
+        }
       });
-      if (stars.every(s => s.collected) && !mazeCompleted) { 
-          mazeCompleted = true; userData.xp += 100; updateStats(); showNotification('🎉 Лабиринт пройден! +100 XP'); 
+      if (stars.every(s => s.collected) && !mazeCompleted) {
+        mazeCompleted = true; userData.xp += 100; updateStats(); showNotification('🎉 Лабиринт пройден! +100 XP');
       }
       render();
     }
@@ -1332,49 +1439,109 @@ function initMazeQuest() {
   document.getElementById('mazeGrid').focus();
 }
 
+function handleMazeInput(e) {
+  if (window.handleMazeInput) window.handleMazeInput(e);
+}
+
 function renderQuests() {
   const container = document.getElementById('questsList');
   container.innerHTML = questsData.map(q => `<div class="quest-card"><div class="quest-header"><div class="quest-icon">${q.icon}</div><div><div class="quest-title">${q.title}</div><div class="quest-desc">${q.desc}</div></div></div><div class="quest-progress-bar"><div class="quest-progress-fill" style="width: ${Math.min(100, (q.current / q.target) * 100)}%"></div></div><div class="quest-reward">+${q.reward} XP</div></div>`).join('');
 }
+
 function updateQuestProgress(questId, amount) {
-    const quest = questsData.find(q => q.id === questId);
-    if (quest && !quest.completed) {
-        quest.current += amount;
-        if (quest.current >= quest.target) {
-            quest.completed = true;
-            userData.xp += quest.reward;
-            updateStats();
-            renderQuests();
-            showNotification(`🏆 Квест "${quest.title}" выполнен!`);
-        }
+  const quest = questsData.find(q => q.id === questId);
+  if (quest && !quest.completed) {
+    quest.current += amount;
+    if (quest.current >= quest.target) {
+      quest.completed = true;
+      userData.xp += quest.reward;
+      updateStats();
+      renderQuests();
+      showNotification(` Квест "${quest.title}" выполнен!`);
     }
+  }
 }
 
 /* ==========================================================================
-   MUSIC SEARCH ENGINE
+   MUSIC SEARCH ENGINE - DEEZER + YOUTUBE
    ========================================================================== */
 async function searchMusic() {
-    const query = document.getElementById('musicSearchInput').value.trim();
-    const list = document.getElementById('trackList');
-    if (!query) { list.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--text-muted);">Введите запрос</div>'; return; }
-    list.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--text-muted);">🔍 Ищу...</div>';
-    try {
-        const response = await fetch(`https://api.deezer.com/search?q=${encodeURIComponent(query)}&limit=10`);
-        const data = await response.json();
-        if (data.data && data.data.length > 0) {
-            list.innerHTML = data.data.map(track => {
-                const ytUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(track.artist.name + ' - ' + track.title + ' official audio')}`;
-                return `<div class="track-item">
-                    <img src="${track.album.cover_medium}" class="track-cover" alt="">
-                    <div class="track-info"><div class="track-title">${track.title}</div><div class="track-artist">${track.artist.name}</div></div>
-                    <a href="${ytUrl}" target="_blank" class="yt-link"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg> YouTube</a>
-                </div>`}).join('');
-        } else {
-            list.innerHTML = `<div class="track-item" style="flex-direction:column; gap:15px; background:rgba(255,0,85,0.1); border-color:#ff0055;"><div style="color:var(--text-muted);">Ничего не найдено, попробуйте YouTube:</div><a href="https://www.youtube.com/results?search_query=${encodeURIComponent(query)}" target="_blank" class="btn btn-primary" style="text-align:center;">Искать на YouTube</a></div>`;
-        }
-    } catch (error) {
-        list.innerHTML = `<div class="track-item" style="flex-direction:column; gap:15px; background:rgba(255,0,85,0.1); border-color:#ff0055;"><div style="color:var(--text-muted);">Сеть недоступна:</div><a href="https://www.youtube.com/results?search_query=${encodeURIComponent(query)}" target="_blank" class="btn btn-primary" style="text-align:center;">Искать на YouTube</a></div>`;
+  const query = document.getElementById('musicSearchInput').value.trim();
+  const list = document.getElementById('trackList');
+  const playerContainer = document.getElementById('youtubePlayerContainer');
+  
+  if (!query) {
+    list.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--text-muted);">Введите запрос для поиска</div>';
+    playerContainer.classList.remove('active');
+    return;
+  }
+  
+  list.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--text-muted);">🔍 Ищу треки...</div>';
+  playerContainer.classList.remove('active');
+  
+  try {
+    const response = await fetch(`https://api.deezer.com/search?q=${encodeURIComponent(query)}&limit=10`);
+    const data = await response.json();
+    
+    if (data.data && data.data.length > 0) {
+      list.innerHTML = data.data.map(track => {
+        const ytQuery = encodeURIComponent(`${track.artist.name} - ${track.title} official video`);
+        return `
+          <div class="track-item" onclick="playYouTubeVideo('${ytQuery}', '${escapeHtml(track.title)}', '${escapeHtml(track.artist.name)}')">
+            <img src="${track.album.cover_medium}" class="track-cover" alt="" onerror="this.src='https://via.placeholder.com/60/b82cff/ffffff?text=♪'">
+            <div class="track-info">
+              <div class="track-title">${escapeHtml(track.title)}</div>
+              <div class="track-artist">${escapeHtml(track.artist.name)}</div>
+            </div>
+            <button class="yt-link" onclick="event.stopPropagation(); playYouTubeVideo('${ytQuery}', '${escapeHtml(track.title)}', '${escapeHtml(track.artist.name)}')">▶ YouTube</button>
+          </div>
+        `;
+      }).join('');
+    } else {
+      const ytQuery = encodeURIComponent(query);
+      list.innerHTML = `
+        <div class="track-item" style="flex-direction: column; align-items: stretch; gap: 15px; background: rgba(255, 0, 85, 0.1); border-color: #ff0055;">
+          <div style="text-align: center; color: var(--text-muted);">Ничего не найдено, попробуйте YouTube:</div>
+          <button class="btn btn-primary" style="text-align:center;" onclick="playYouTubeVideo('${ytQuery}', '${escapeHtml(query)}', 'Поиск')">
+            🔍 Искать на YouTube
+          </button>
+        </div>
+      `;
     }
+  } catch (error) {
+    console.error(error);
+    const ytQuery = encodeURIComponent(query);
+    list.innerHTML = `
+      <div class="track-item" style="flex-direction: column; align-items: stretch; gap: 15px; background: rgba(255, 0, 85, 0.1); border-color: #ff0055;">
+        <div style="text-align: center; color: var(--text-muted);">Сеть недоступна. Открываем YouTube:</div>
+        <button class="btn btn-primary" style="text-align:center;" onclick="playYouTubeVideo('${ytQuery}', '${escapeHtml(query)}', 'Поиск')">
+          🔍 Искать на YouTube
+        </button>
+      </div>
+    `;
+  }
+}
+
+function playYouTubeVideo(ytQuery, title, artist) {
+  const playerContainer = document.getElementById('youtubePlayerContainer');
+  const player = document.getElementById('youtubePlayer');
+  const titleEl = document.getElementById('youtubeTrackTitle');
+  const artistEl = document.getElementById('youtubeTrackArtist');
+  
+  // Используем YouTube embed с поиском
+  player.src = `https://www.youtube.com/embed?listType=search&list=${ytQuery}&autoplay=1`;
+  titleEl.textContent = title;
+  artistEl.textContent = artist;
+  playerContainer.classList.add('active');
+  
+  setTimeout(() => {
+    playerContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 100);
+}
+
+function escapeHtml(text) {
+  if (!text) return '';
+  return text.replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
 /* ==========================================================================
@@ -1382,36 +1549,39 @@ async function searchMusic() {
    ========================================================================== */
 function renderChat() {
   const container = document.getElementById('chatMessages');
-  container.innerHTML = chatData.map(m => `<div class="chat-message"><div class="chat-author">👤 ${m.author}</div><div class="chat-text">${m.text}</div></div>`).join('');
+  container.innerHTML = chatData.map(m => `<div class="chat-message"><div class="chat-author"> ${m.author}</div><div class="chat-text">${m.text}</div></div>`).join('');
   container.scrollTop = container.scrollHeight;
 }
+
 function sendMessage() {
   const inputEl = document.getElementById('chatInput'); const text = inputEl.value.trim();
-  if (text && currentUser) { 
-      chatData.push({ author: currentUser, text: text }); 
-      if (chatData.length > 50) chatData.shift(); 
-      localStorage.setItem('soundscape_chat', JSON.stringify(chatData)); 
-      inputEl.value = ''; renderChat(); 
+  if (text && currentUser) {
+    chatData.push({ author: currentUser, text: text });
+    if (chatData.length > 50) chatData.shift();
+    localStorage.setItem('soundscape_chat', JSON.stringify(chatData));
+    inputEl.value = '';
+    renderChat();
   }
 }
+
 function initSpaceBackground() {
-    const canvas = document.getElementById('spaceCanvas');
-    const ctx = canvas.getContext('2d');
-    let stars = [];
-    function resize() {
-        canvas.width = window.innerWidth; canvas.height = window.innerHeight; stars = [];
-        for (let i = 0; i < 200; i++) stars.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, r: Math.random() * 1.5 + 0.3, alpha: Math.random(), speed: Math.random() * 0.02 + 0.005 });
-    }
-    function draw() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        stars.forEach(s => {
-            s.alpha += s.speed;
-            ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(255, 255, 255, ${(Math.sin(s.alpha) + 1) / 2 * 0.9})`; ctx.fill();
-        });
-        requestAnimationFrame(draw);
-    }
-    window.addEventListener('resize', resize); resize(); draw();
+  const canvas = document.getElementById('spaceCanvas');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+  function resize() {
+    canvas.width = window.innerWidth; canvas.height = window.innerHeight; stars = [];
+    for (let i = 0; i < 200; i++) stars.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, r: Math.random() * 1.5 + 0.3, alpha: Math.random(), speed: Math.random() * 0.02 + 0.005 });
+  }
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    stars.forEach(s => {
+      s.alpha += s.speed;
+      ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255, 255, 255, ${(Math.sin(s.alpha) + 1) / 2 * 0.9})`; ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize', resize); resize(); draw();
 }
 
 /* ==========================================================================
@@ -1424,7 +1594,7 @@ function initBeatComposer() {
   let selectedNote = null, division = 1, clipboard = null;
   let projectName = 'My Beat', bpm = 120, stepDurationMs = (60 / bpm) / 4 * 1000;
   let enableSumming = true, isPlaying = false, currentStep = 0, playInterval = null, previewSource = null;
-
+  
   const container = document.getElementById('cpGridContainer');
   const soundsList = document.getElementById('cpSoundsList');
   const contextMenu = document.getElementById('cpContextMenu');
@@ -1441,14 +1611,15 @@ function initBeatComposer() {
   const customScrollbar = document.getElementById('cpCustomScrollbar');
   const scrollbarThumb = document.getElementById('cpScrollbarThumb');
   const scrollbarPlayhead = document.getElementById('cpScrollbarPlayhead');
-
+  
   const cpAudioContext = new (window.AudioContext || window.webkitAudioContext)();
   const audioBuffers = new Map();
   const cpAnalyser = cpAudioContext.createAnalyser(); cpAnalyser.fftSize = 256;
   const masterGain = cpAudioContext.createGain();
   const masterLimiter = cpAudioContext.createDynamicsCompressor();
-  masterLimiter.threshold.value = -0.5; masterLimiter.knee.value = 0; masterLimiter.ratio.value = 20; masterLimiter.attack.value = 0.001; masterLimiter.release.value = 0.1;
-
+  masterLimiter.threshold.value = -0.5; masterLimiter.knee.value = 0;
+  masterLimiter.ratio.value = 20; masterLimiter.attack.value = 0.001; masterLimiter.release.value = 0.1;
+  
   function updateMasterRouting() {
     masterGain.disconnect(); cpAnalyser.disconnect();
     if (enableSumming) { masterGain.connect(cpAnalyser); }
@@ -1456,12 +1627,13 @@ function initBeatComposer() {
     cpAnalyser.connect(cpAudioContext.destination);
   }
   updateMasterRouting();
-
+  
   function makeDistortionCurve(amount) {
     const k = amount, n = 44100, curve = new Float32Array(n), deg = Math.PI / 180;
     for (let i = 0; i < n; ++i) { const x = (i * 2) / n - 1; curve[i] = (3 + k) * x * 20 * deg / (Math.PI + k * Math.abs(x)); }
     return curve;
   }
+  
   function createImpulseResponse(duration, decay, ctx) {
     const rate = ctx.sampleRate, length = rate * duration;
     const impulse = ctx.createBuffer(2, length, rate);
@@ -1469,6 +1641,7 @@ function initBeatComposer() {
     for (let i = 0; i < length; i++) { const v = (Math.random() * 2 - 1) * Math.pow(1 - i / length, decay); L[i] = v; R[i] = v * (0.8 + Math.random() * 0.2); }
     return impulse;
   }
+  
   function buildFxChain(ctx, source, fx, destination) {
     let node = source;
     if (fx.eq && (fx.eq.active || fx.eq.low !== 0 || fx.eq.mid !== 0 || fx.eq.high !== 0)) {
@@ -1494,7 +1667,8 @@ function initBeatComposer() {
           for (let i = 0; i < inL.length; i++) {
             phaser += freqRed;
             if (phaser >= 1.0) { phaser = 0.0; lastValue = (inL[i] > 0 ? 1 : -1) * Math.floor(Math.abs(inL[i]) / stepVal + 0.5) * stepVal; }
-            outL[i] = lastValue; outR[i] = (inR[i] > 0 ? 1 : -1) * Math.floor(Math.abs(inR[i]) / stepVal + 0.5) * stepVal;
+            outL[i] = lastValue;
+            outR[i] = (inR[i] > 0 ? 1 : -1) * Math.floor(Math.abs(inR[i]) / stepVal + 0.5) * stepVal;
           }
         };
         node.connect(crusher); node = crusher;
@@ -1527,7 +1701,7 @@ function initBeatComposer() {
     node.connect(gain); gain.connect(destination);
     return gain;
   }
-
+  
   let isDraggingThumb = false, dragStartX = 0, dragStartLeft = 0;
   function updateScrollbarThumb() {
     const trackWidth = customScrollbar.clientWidth - 4;
@@ -1556,126 +1730,33 @@ function initBeatComposer() {
   document.addEventListener('mouseup', () => { isDraggingThumb = false; });
   container.addEventListener('scroll', updateScrollbarThumb);
   window.addEventListener('resize', updateScrollbarThumb);
-
+  
   function updateScrollbarPlayhead() {
     const totalWidth = container.scrollWidth;
     scrollbarPlayhead.style.left = (((100 + currentStep * CELL_WIDTH) / totalWidth) * customScrollbar.clientWidth) + 'px';
   }
-
-  // ИСПРАВЛЕНИЕ 6: Обработка ошибки папки sounds
-  // НОВАЯ ФУНКЦИЯ ДЛЯ VERCEL (Использует manifest.json)
-// ===== "БАЗА ДАННЫХ" ЗВУКОВ =====
-const ALL_SOUNDS = [
-  // 808 BEAT 1 - Drums
-  'sounds/808_BEAT_1/Drums/808_K.wav',
-  'sounds/808_BEAT_1/Drums/808_S.wav',
-  // 808 BEAT 1 - Percussion
-  'sounds/808_BEAT_1/Percussion/808_5.wav',
-  'sounds/808_BEAT_1/Percussion/808_6.wav',
-  'sounds/808_BEAT_1/Percussion/8O8_R.wav',
-  // 808 BEAT 1 - Plates
-  'sounds/808_BEAT_1/Plates/808_2.wav',
-  'sounds/808_BEAT_1/Plates/808_3.wav',
-  'sounds/808_BEAT_1/Plates/808_4.wav',
-  'sounds/808_BEAT_1/Plates/808_7.wav',
-  'sounds/808_BEAT_1/Plates/808_C.wav',
-  'sounds/808_BEAT_1/Plates/808_O.wav',
-  // 909 BEAT 1 - Drums
-  'sounds/909_BEAT_1/Drums/909CX 31 SN3  2.wav',
-  'sounds/909_BEAT_1/Drums/909CX 33 BD3  1.wav',
-  'sounds/909_BEAT_1/Drums/909CX 35 BD1  2.wav',
-  // SFXs
-  'sounds/SFXs/plane1.wav',
-  'sounds/SFXs/plane2.wav',
-  'sounds/SFXs/plane3.wav',
-  'sounds/SFXs/plane4.wav',
-  // Synth Effects
-  'sounds/Synth Effects/FX-1972.wav',
-  'sounds/Synth Effects/FX-8DOTTED.wav',
-  'sounds/Synth Effects/FX-ANALPROBE.wav',
-  'sounds/Synth Effects/FX-APOLLO13.wav',
-  'sounds/Synth Effects/FX-BANGDELAY.wav',
-  'sounds/Synth Effects/FX-BOMB.wav',
-  'sounds/Synth Effects/FX-BPDOWN.wav',
-  'sounds/Synth Effects/FX-BPDOWN2.wav',
-  'sounds/Synth Effects/FX-BPUP.wav',
-  'sounds/Synth Effects/FX-CLASSIC.wav',
-  'sounds/Synth Effects/FX-CLASSIC2.wav',
-  'sounds/Synth Effects/FX-CLASSIC3.wav',
-  'sounds/Synth Effects/FX-CONTAINER.wav',
-  'sounds/Synth Effects/FX-CONTAINER2.wav',
-  'sounds/Synth Effects/FX-CREAMY.wav',
-  'sounds/Synth Effects/FX-DESCENDING1.wav',
-  'sounds/Synth Effects/FX-DUDUM.wav',
-  'sounds/Synth Effects/FX-EMES20.wav',
-  'sounds/Synth Effects/FX-EMES22.wav',
-  'sounds/Synth Effects/FX-GLENDO.wav',
-  'sounds/Synth Effects/FX-KRAYZ.wav',
-  'sounds/Synth Effects/FX-LINUS.wav',
-  'sounds/Synth Effects/FX-LOWCAV.wav',
-  'sounds/Synth Effects/FX-LPDOWN.wav',
-  'sounds/Synth Effects/FX-MARSATTAX.wav',
-  'sounds/Synth Effects/FX-MISTERY.wav',
-  'sounds/Synth Effects/FX-MODARPER.wav',
-  'sounds/Synth Effects/FX-MODERATOR.wav',
-  'sounds/Synth Effects/FX-MODULATE.wav',
-  'sounds/Synth Effects/FX-NASTYCARD.wav',
-  'sounds/Synth Effects/FX-NOABS.wav',
-  'sounds/Synth Effects/FX-NOISEFALL.wav',
-  'sounds/Synth Effects/FX-NOISEFALL2.wav',
-  'sounds/Synth Effects/FX-NOISEFALL3.wav',
-  'sounds/Synth Effects/FX-NOISEFALL4.wav',
-  'sounds/Synth Effects/FX-NOISEFALL5.wav',
-  'sounds/Synth Effects/FX-NOISEFALL6.wav',
-  'sounds/Synth Effects/FX-PEPELOPEZ.wav',
-  'sounds/Synth Effects/FX-PIPELINE.wav',
-  'sounds/Synth Effects/FX-PULSEDOWN.wav',
-  'sounds/Synth Effects/FX-R2D3.wav',
-  'sounds/Synth Effects/FX-RDOWN.wav',
-  'sounds/Synth Effects/FX-RDOWN2.wav',
-  'sounds/Synth Effects/FX-RISE.wav',
-  'sounds/Synth Effects/FX-RISEUP.wav',
-  'sounds/Synth Effects/FX-SCARYHALLS.wav',
-  'sounds/Synth Effects/FX-SCREECH.wav',
-  'sounds/Synth Effects/FX-SEEPU.wav',
-  'sounds/Synth Effects/FX-SEERISE.wav',
-  'sounds/Synth Effects/FX-SPACE.wav',
-  'sounds/Synth Effects/FX-SPACEYWIND.wav',
-  'sounds/Synth Effects/FX-SYNTHBELL.wav',
-  'sounds/Synth Effects/FX-SYNTHCHIME.wav',
-  'sounds/Synth Effects/FX-SYNTHDOG.wav',
-  'sounds/Synth Effects/FX-SYNTHDOWN.wav',
-  'sounds/Synth Effects/FX-SYNTHDOWN2.wav',
-];
-
-async function scanDirectory(path) {
-  soundsList.innerHTML = '<div class="cp-sound-item" style="color:var(--text-muted);">Загрузка...</div>';
   
-  const folders = new Set();
-  const files = [];
-  
-  ALL_SOUNDS.forEach(filePath => {
-    if (!filePath.startsWith(path)) return;
-    const rest = filePath.slice(path.length);
-    if (rest.includes('/')) {
-      folders.add(rest.split('/')[0]);
-    } else {
-      files.push({ 
-        name: rest, 
-        isFolder: false, 
-        href: rest, 
-        fullPath: filePath 
+  async function scanDirectory(path) {
+    soundsList.innerHTML = '<div class="cp-sound-item" style="color:var(--text-muted);">Загрузка...</div>';
+    try {
+      const response = await fetch(path);
+      if (!response.ok) throw new Error("Directory listing not enabled");
+      const text = await response.text();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(text, 'text/html');
+      const items = new Map();
+      Array.from(doc.querySelectorAll('a')).forEach(a => {
+        const href = a.getAttribute('href'), name = a.textContent.trim();
+        if (name === '../' || name === '..' || name === 'Parent Directory') return;
+        if (href.endsWith('/') || href.match(/\.(mp3|wav|ogg)$/i))
+          items.set(name, { name, isFolder: href.endsWith('/'), href, fullPath: path + href });
       });
+      renderSoundsPanel(Array.from(items.values()));
+    } catch (e) {
+      soundsList.innerHTML = '<div class="cp-sound-item" style="color:#ff8888; flex-direction:column; text-align:center; padding:15px;">⚠️ Для загрузки звуков нужен локальный сервер с папкой sounds/</div>';
     }
-  });
+  }
   
-  const items = [];
-  folders.forEach(name => items.push({ name, isFolder: true, href: name + '/' }));
-  items.push(...files);
-  
-  renderSoundsPanel(items);
-}
-
   function renderSoundsPanel(items) {
     soundsList.innerHTML = '';
     if (currentFolderPath !== '') {
@@ -1705,17 +1786,17 @@ async function scanDirectory(path) {
       soundsList.appendChild(el);
     });
   }
-
+  
   async function loadAudioBuffer(url) {
     if (audioBuffers.has(url)) return audioBuffers.get(url);
     try { const r = await fetch(url); const b = await cpAudioContext.decodeAudioData(await r.arrayBuffer()); audioBuffers.set(url, b); return b; }
     catch(e) { return null; }
   }
-
+  
   function startPlayback() { if (cpAudioContext.state === 'suspended') cpAudioContext.resume(); isPlaying = true; playBtn.textContent = '⏸️ Pause'; playStep(); }
   function stopPlayback() { isPlaying = false; playBtn.textContent = '▶️ Play'; if (playInterval) { clearTimeout(playInterval); playInterval = null; } }
   function resetPlayback() { stopPlayback(); currentStep = 0; updateCursorVisuals(); }
-
+  
   function playStep() {
     if (!isPlaying) return;
     for (let t = 0; t < TRACKS; t++) {
@@ -1739,7 +1820,7 @@ async function scanDirectory(path) {
     currentStep = (currentStep + 1) % STEPS;
     playInterval = setTimeout(playStep, stepDurationMs);
   }
-
+  
   function updateCursorVisuals() {
     const leftPos = 100 + currentStep * CELL_WIDTH;
     playbackCursor.style.left = `${leftPos}px`;
@@ -1748,7 +1829,7 @@ async function scanDirectory(path) {
     else if (leftPos < cl) container.scrollLeft = leftPos;
     updateScrollbarPlayhead();
   }
-
+  
   function createGrid() {
     container.querySelectorAll('.cp-track-row').forEach(r => r.remove());
     for (let t = 0; t < TRACKS; t++) {
@@ -1766,7 +1847,7 @@ async function scanDirectory(path) {
     }
     setTimeout(updateScrollbarThumb, 100); renderNotes();
   }
-
+  
   function renderNotes() {
     document.querySelectorAll('.cp-note').forEach(n => n.remove());
     for (let t = 0; t < TRACKS; t++)
@@ -1782,7 +1863,7 @@ async function scanDirectory(path) {
         }
       }
   }
-
+  
   function handleCellClick(e) {
     const t = +e.target.dataset.track, s = +e.target.dataset.step;
     if (!currentSoundFile) { showCpNotification('Сначала выберите звук!'); return; }
@@ -1795,11 +1876,11 @@ async function scanDirectory(path) {
     });
     renderNotes(); showCpNotification('Note placed!');
   }
-
+  
   function canPlaceNote(t, s, d) { for (let i = s; i < s + d; i++) { if (i >= STEPS || grid[t][Math.floor(i)] !== null) return false; } return true; }
   function placeNote(t, s, name, file, dur, vol, spd, pit, fx) { const n = { soundName: name, file, duration: dur, volume: vol, speed: spd, pitch: pit, fx }; for (let i = s; i < s + dur && i < STEPS; i++) grid[t][Math.floor(i)] = i === s ? n : 'occupied'; }
   function clearNoteAt(t, s) { if (!grid[t][s] || grid[t][s] === 'occupied') return; const e = s + (grid[t][s].duration || 1); for (let i = s; i < e && i < STEPS; i++) grid[t][i] = null; }
-
+  
   function showContextMenu(e, t, s) {
     e.preventDefault();
     const note = grid[t][s];
@@ -1825,7 +1906,7 @@ async function scanDirectory(path) {
         document.getElementById('cp-fx-eq-mid').value = fx.eq?.mid || 0; document.getElementById('cp-val-eq-mid').textContent = fx.eq?.mid || 0;
         document.getElementById('cp-fx-eq-high').value = fx.eq?.high || 0; document.getElementById('cp-val-eq-high').textContent = fx.eq?.high || 0;
         document.getElementById('cp-fx-pan').value = fx.panner?.pan || 0; document.getElementById('cp-fx-pan-val').textContent = fx.panner?.pan || 0;
-        updateFxGroupsVisual(); cpSwitchTab('basic'); propertiesModal.style.display = 'flex'; contextMenu.style.display = 'none';
+        updateFxGroupsVisual(); switchCpTab('basic'); propertiesModal.style.display = 'flex'; contextMenu.style.display = 'none';
       };
       const copy = document.createElement('div'); copy.textContent = '📋 Copy'; copy.onclick = () => { clipboard = { ...note }; showCpNotification('Copied!'); contextMenu.style.display = 'none'; };
       contextMenu.append(del, prop, copy);
@@ -1836,14 +1917,21 @@ async function scanDirectory(path) {
     }
     document.addEventListener('click', () => contextMenu.style.display = 'none', { once: true });
   }
-
-  window.cpSwitchTab = (n) => { document.querySelectorAll('.cp-tab').forEach(t => t.classList.remove('active')); document.querySelectorAll('.cp-tab-content').forEach(t => t.classList.remove('active')); event.target.classList.add('active'); document.getElementById(`cpTab-${n}`).classList.add('active'); };
+  
+  function switchCpTab(n) {
+    document.querySelectorAll('.cp-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.cp-tab-content').forEach(t => t.classList.remove('active'));
+    document.querySelector(`.cp-tab[data-tab="${n}"]`).classList.add('active');
+    document.getElementById(`cpTab-${n}`).classList.add('active');
+  }
+  
   function updateFxGroupsVisual() {
     [['cp-fx-dist-active','cp-grp-distortion'],['cp-fx-bc-active','cp-grp-bitcrusher'],['cp-fx-comp-active','cp-grp-compressor'],['cp-fx-rev-active','cp-grp-reverb'],['cp-fx-del-active','cp-grp-delay'],['cp-fx-kill-active','cp-grp-killer']].forEach(([id, grp]) => {
       const g = document.getElementById(grp), c = document.getElementById(id).checked;
       g.classList.toggle('enabled', c); g.classList.toggle('disabled', !c);
     });
   }
+  
   ['cp-fx-dist-active','cp-fx-bc-active','cp-fx-comp-active','cp-fx-rev-active','cp-fx-del-active','cp-fx-kill-active'].forEach(id => document.getElementById(id).addEventListener('change', updateFxGroupsVisual));
   ['cp-fx-trim-start','cp-fx-trim-end','cp-fx-dist-drive','cp-fx-dist-tone','cp-fx-bc-bits','cp-fx-bc-freq','cp-fx-comp-thresh','cp-fx-comp-ratio','cp-fx-rev-mix','cp-fx-rev-decay','cp-fx-del-time','cp-fx-del-fb','cp-fx-del-mix','cp-fx-kill-freq','cp-fx-kill-q','cp-fx-eq-low','cp-fx-eq-mid','cp-fx-eq-high','cp-fx-pan'].forEach(id => {
     document.getElementById(id).addEventListener('input', (e) => {
@@ -1851,7 +1939,7 @@ async function scanDirectory(path) {
       const d = document.getElementById(valId); if (d) d.textContent = id.includes('trim') ? parseFloat(e.target.value).toFixed(2) : (id === 'cp-fx-kill-q' ? parseFloat(e.target.value).toFixed(1) : e.target.value);
     });
   });
-
+  
   document.getElementById('cpSaveNoteBtn').addEventListener('click', () => {
     const { track, step, note } = selectedNote; clearNoteAt(track, step);
     if (canPlaceNote(track, step, 1)) {
@@ -1871,8 +1959,14 @@ async function scanDirectory(path) {
     } else { placeNote(track, step, note.soundName, note.file, note.duration || 1, note.volume || 1.0, note.speed || 1.0, note.pitch || 0, note.fx || {}); showCpNotification('Overlaps!'); }
     propertiesModal.style.display = 'none';
   });
+  
   document.getElementById('cpCancelNoteBtn').addEventListener('click', () => propertiesModal.style.display = 'none');
-
+  document.getElementById('closePropsBtn').addEventListener('click', () => propertiesModal.style.display = 'none');
+  
+  document.querySelectorAll('.cp-tab').forEach(tab => {
+    tab.addEventListener('click', () => switchCpTab(tab.dataset.tab));
+  });
+  
   const cpCanvas = document.getElementById('cpVisualizerCanvas'), cpCanvasCtx = cpCanvas.getContext('2d');
   function resizeCpCanvas() { cpCanvas.width = cpCanvas.offsetWidth; cpCanvas.height = cpCanvas.offsetHeight; }
   window.addEventListener('resize', resizeCpCanvas); resizeCpCanvas();
@@ -1889,21 +1983,22 @@ async function scanDirectory(path) {
     }
   }
   drawCpVisualizer();
-
+  
   function showCpNotification(msg) { notification.textContent = msg; notification.classList.add('show'); setTimeout(() => notification.classList.remove('show'), 2000); }
   function setCurrentStep(s) { currentStep = Math.max(0, Math.min(STEPS - 1, s)); updateCursorVisuals(); }
+  
   let isDraggingCursor = false;
   playbackCursor.addEventListener('mousedown', (e) => { isDraggingCursor = true; e.preventDefault(); });
   document.addEventListener('mousemove', (e) => { if (!isDraggingCursor) return; const r = container.getBoundingClientRect(); setCurrentStep(Math.round((e.clientX - r.left + container.scrollLeft - 100) / CELL_WIDTH)); });
   document.addEventListener('mouseup', () => { isDraggingCursor = false; });
+  
   playBtn.addEventListener('click', () => isPlaying ? stopPlayback() : startPlayback());
   resetBtn.addEventListener('click', resetPlayback);
   projectNameInput.addEventListener('input', (e) => projectName = e.target.value || 'My Beat');
   bpmInput.addEventListener('input', (e) => { const v = parseInt(e.target.value); if (v >= 40 && v <= 300) { bpm = v; stepDurationMs = (60 / bpm) / 4 * 1000; } });
   summingToggle.addEventListener('change', (e) => { enableSumming = e.target.checked; updateMasterRouting(); showCpNotification(enableSumming ? 'Суммирование вкл' : 'Суммирование выкл'); });
-  document.addEventListener('keydown', (e) => { if (e.code === 'Space' && e.target.tagName !== 'INPUT' && document.getElementById('beatmaker').classList.contains('active')) { e.preventDefault(); isPlaying ? stopPlayback() : startPlayback(); } });
   divisionSelect.addEventListener('change', e => division = parseFloat(e.target.value));
-
+  
   downloadBtn.addEventListener('click', async () => {
     showCpNotification('Анализ и рендеринг...');
     let maxStep = 0; const needed = new Set(); let has = false;
@@ -1959,12 +2054,12 @@ async function scanDirectory(path) {
     document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
     showCpNotification('MP3 (320kbps) сохранен!');
   });
-
+  
   const PROJECTS_KEY = 'beatmaker_pro_projects';
   function generateId() { return 'proj_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9); }
   function getProjects() { try { return JSON.parse(localStorage.getItem(PROJECTS_KEY) || '[]'); } catch(e) { return []; } }
   function saveProjectsList(list) { try { localStorage.setItem(PROJECTS_KEY, JSON.stringify(list)); } catch(e) { showCpNotification('⚠️ Хранилище переполнено'); } }
-
+  
   function saveCurrentProject() {
     let maxStep = 0;
     for (let t = 0; t < TRACKS; t++) {
@@ -2005,11 +2100,10 @@ async function scanDirectory(path) {
       userData.projectsCreated++;
       saveUserData();
       updateStats();
-      sessionStorage.removeItem('beatmaker_edit_id');
       showCpNotification('✅ Новый проект сохранён!');
     }
   }
-
+  
   function loadProjectById(id) {
     const projects = getProjects();
     const proj = projects.find(p => p.id === id);
@@ -2029,16 +2123,17 @@ async function scanDirectory(path) {
     renderNotes();
     showCpNotification(`📂 Загружен: ${projectName}`);
   }
-
+  
   document.getElementById('cpSaveProjectBtn').addEventListener('click', saveCurrentProject);
+  
   (function checkEditParam() {
     const params = new URLSearchParams(window.location.search);
     const editId = params.get('edit');
     if (editId) setTimeout(() => loadProjectById(editId), 300);
   })();
-
-  createGrid(); 
-  scanDirectory('sounds/'); 
+  
+  createGrid();
+  scanDirectory('sounds/');
   updateFxGroupsVisual();
   new ResizeObserver(updateScrollbarThumb).observe(container);
 }
