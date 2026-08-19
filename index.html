@@ -12,7 +12,6 @@
 --text: #ffffff; --text-muted: #8892b0; --border: #a63dff;
 --danger: #ff0055; --success: #00ff88; --purple: #7b2cff;
 --gradient-1: linear-gradient(135deg, #6d28ff 0%, #b026ff 48%, #ff3bd4 100%);
---vk-blue: #0077FF;
 --cp-accent: #00f3ff; --cp-purple: #bc13fe;
 --cp-gradient: linear-gradient(135deg, #00f3ff, #bc13fe);
 }
@@ -53,7 +52,10 @@ body.space-bg-active::after { width: 700px; height: 700px; background: radial-gr
 .stats { display: flex; gap: 8px; flex-wrap: wrap; }
 .stat-chip { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 6px 12px; border-radius: 20px; font-size: 12px; display: flex; align-items: center; gap: 5px; }
 .stat-chip b { color: #ffd700; }
-.guest-badge { background: rgba(255,165,0,0.2); color: orange; padding: 3px 8px; border-radius: 10px; font-size: 10px; margin-left: 5px; }
+.user-badge { padding: 3px 8px; border-radius: 10px; font-size: 10px; margin-left: 5px; font-weight: bold; }
+.badge-guest { background: rgba(255,165,0,0.2); color: orange; }
+.badge-user { background: rgba(0, 255, 136, 0.2); color: #00ff88; }
+.badge-vip { background: linear-gradient(90deg, #ffd700, #ff8c00); color: #000; }
 .nav { display: flex; justify-content: center; gap: 8px; margin-top: 12px; flex-wrap: wrap; overflow-x: auto; scrollbar-width: none; }
 .nav::-webkit-scrollbar { display: none; }
 .nav-btn { padding: 8px 16px; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; background: rgba(255,255,255,0.05); color: var(--text); cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; transition: all 0.3s; font-size: 13px; font-weight: 600; white-space: nowrap; }
@@ -72,12 +74,13 @@ body.space-bg-active::after { width: 700px; height: 700px; background: radial-gr
 .section { display: none; animation: slideIn 0.4s; }
 .section.active { display: block; }
 .section-title { text-align: center; font-size: 32px; font-weight: 800; margin-bottom: 25px; background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.games-grid, .charts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; }
-.game-card, .chart-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(184, 44, 255, 0.2); border-radius: 16px; padding: 25px; text-align: center; cursor: pointer; transition: all 0.3s; }
-.game-card:hover, .chart-card:hover { border-color: var(--accent); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(184, 44, 255, 0.15); background: rgba(184, 44, 255, 0.05); }
-.game-icon { font-size: 50px; margin-bottom: 12px; display: block; }
-.game-title, .chart-title { font-size: 18px; font-weight: bold; margin: 8px 0; color: var(--accent); }
-.game-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; }
+.games-grid, .charts-grid, .friends-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; }
+.game-card, .chart-card, .friend-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(184, 44, 255, 0.2); border-radius: 16px; padding: 25px; text-align: center; cursor: pointer; transition: all 0.3s; }
+.game-card:hover, .chart-card:hover, .friend-card:hover { border-color: var(--accent); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(184, 44, 255, 0.15); background: rgba(184, 44, 255, 0.05); }
+.game-icon, .friend-avatar-lg { font-size: 50px; margin-bottom: 12px; display: block; }
+.friend-avatar-lg { width: 80px; height: 80px; margin: 0 auto 15px; background: var(--gradient-1); display: flex; align-items: center; justify-content: center; font-size: 40px; border-radius: 50%; }
+.game-title, .chart-title, .friend-name { font-size: 18px; font-weight: bold; margin: 8px 0; color: var(--accent); }
+.game-desc, .friend-bio { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; }
 .xp-btn { background: linear-gradient(90deg, #ffd700, #ff8c00); color: #000; border: none; padding: 7px 18px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 12px; }
 .game-container { background: rgba(0,0,0,0.7); border: 2px solid var(--accent); border-radius: 16px; padding: 15px; margin-top: 25px; display: none; position: relative; }
 .game-container.active { display: block; }
@@ -111,7 +114,7 @@ canvas.game-canvas { width: 100% !important; max-width: 800px !important; height
 .ai-generate-btn { width: 100%; padding: 15px; background: linear-gradient(90deg, #00ff88, #00cc66); border: none; border-radius: 10px; color: #000; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 15px; }
 .ai-generate-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0, 255, 136, 0.3); }
 .ai-generate-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-.music-container, .profile-card, .chat-card { background: linear-gradient(145deg, rgba(18, 8, 39, .86), rgba(7, 4, 18, .78)); border: 1px solid rgba(151, 61, 255, .30); padding: 30px 20px; border-radius: 20px; max-width: 900px; margin: 0 auto; }
+.music-container, .profile-card, .chat-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(184, 44, 255, 0.2); padding: 30px 20px; border-radius: 20px; max-width: 900px; margin: 0 auto; }
 .music-search-wrapper { position: relative; margin-bottom: 25px; }
 .music-search-box { width: 100%; padding: 16px 20px; padding-right: 60px; border: 2px solid var(--accent); border-radius: 16px; font-size: 16px; background: rgba(0,0,0,0.4); color: #fff; outline: none; transition: all 0.3s; }
 .music-search-box:focus { border-color: #00f3ff; box-shadow: 0 0 25px rgba(0, 243, 255, 0.2); }
@@ -172,6 +175,11 @@ canvas.game-canvas { width: 100% !important; max-width: 800px !important; height
 .project-info h4 { color: var(--accent); margin-bottom: 5px; }
 .project-info p { font-size: 12px; color: var(--text-muted); }
 .project-actions { display: flex; gap: 10px; }
+.clicker-game-area { display: none; text-align: center; padding: 20px; }
+.clicker-game-area.active { display: block; }
+.clicker-target { width: 150px; height: 150px; background: radial-gradient(circle, #ffd700, #ff8c00); border-radius: 50%; margin: 20px auto; cursor: pointer; box-shadow: 0 0 30px #ffd700; transition: transform 0.1s; display: flex; align-items: center; justify-content: center; font-size: 60px; user-select: none; }
+.clicker-target:active { transform: scale(0.95); }
+.clicker-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; max-width: 400px; margin: 20px auto; }
 @media (max-width: 768px) {
 .hero-title { font-size: 32px; }
 .mobile-controls { display: flex !important; }
@@ -296,6 +304,7 @@ overflow: hidden; box-shadow: 0 0 60px rgba(0, 243, 255, 0.15);
 </style>
 </head>
 <body class="space-bg-active">
+
 <div class="auth-overlay active" id="authOverlay">
 <div class="auth-box">
 <h2>🎵 SOUNDSCAPE PRO</h2>
@@ -306,15 +315,17 @@ overflow: hidden; box-shadow: 0 0 60px rgba(0, 243, 255, 0.15);
 <button class="auth-btn guest-btn" onclick="guestLogin()">👤 Играть как гость</button>
 </div>
 </div>
+
 <canvas id="spaceCanvas"></canvas>
 <div class="notification" id="notification">Уведомление</div>
+
 <header class="header">
 <div class="header-inner">
 <div class="logo">🎵 SOUNDSCAPE</div>
 <div class="stats">
 <div class="stat-chip">⭐ <b id="userXP">0</b> XP</div>
 <div class="stat-chip">🪙 <b id="userCoins">0</b></div>
-<div class="stat-chip">👤 <b id="userName">Гость</b><span id="userBadge" class="guest-badge">ГОСТЬ</span></div>
+<div class="stat-chip">👤 <b id="userName">Гость</b><span id="userBadge" class="user-badge badge-guest">ГОСТЬ</span></div>
 </div>
 </div>
 <div class="nav">
@@ -323,14 +334,16 @@ overflow: hidden; box-shadow: 0 0 60px rgba(0, 243, 255, 0.15);
 <button class="nav-btn" onclick="showSection('beatmaker', event)">🎹 Beat Pro</button>
 <button class="nav-btn" onclick="showSection('projects', event)">📁 Проекты</button>
 <button class="nav-btn" onclick="showSection('tariffs', event)">💎 Тарифы</button>
+<button class="nav-btn" onclick="showSection('charts', event)">🔥 Чарты</button>
+<button class="nav-btn" onclick="showSection('friends', event)">👥 Друзья</button>
 <button class="nav-btn" onclick="showSection('games', event)">🎮 Игры</button>
 <button class="nav-btn" onclick="showSection('quests', event)">📜 Квесты</button>
-<button class="nav-btn" onclick="showSection('music', event)">🎵 Музыка</button>
 <button class="nav-btn" onclick="showSection('profile', event)">👤 Профиль</button>
 <button class="nav-btn" onclick="showSection('chat', event)">💬 Чат</button>
 <button class="nav-btn" onclick="logout()" style="background:rgba(255,0,85,0.2);color:#ff0055;">🚪 Выйти</button>
 </div>
 </header>
+
 <div class="page-wrapper">
 <div id="home" class="section active">
 <div class="hero-section">
@@ -343,6 +356,7 @@ overflow: hidden; box-shadow: 0 0 60px rgba(0, 243, 255, 0.15);
 </div>
 </div>
 </div>
+
 <div id="studio" class="section">
 <h2 class="section-title">🎙️ AI Студия Звукозаписи</h2>
 <div class="studio-container">
@@ -384,13 +398,14 @@ overflow: hidden; box-shadow: 0 0 60px rgba(0, 243, 255, 0.15);
 </div>
 </div>
 </div>
+
 <div id="beatmaker" class="section">
 <h2 class="section-title">🎹 Beat Composer Pro</h2>
 <div class="cp-wrapper">
 <div class="cp-notification" id="cpNotification">Уведомление</div>
 <header class="cp-header">
 <div class="cp-header-top">
-<div class="cp-logo"> BEAT COMPOSER PRO</div>
+<div class="cp-logo">⚡ BEAT COMPOSER PRO</div>
 <input type="text" id="cpProjectNameInput" class="cp-project-name-input" value="My Beat" placeholder="Project name">
 <button class="cp-btn-back" onclick="showSection('home')">← Назад</button>
 </div>
@@ -522,6 +537,7 @@ overflow: hidden; box-shadow: 0 0 60px rgba(0, 243, 255, 0.15);
 </div>
 </div>
 </div>
+
 <div id="projects" class="section">
 <h2 class="section-title">📁 Мои проекты</h2>
 <div class="profile-card">
@@ -534,6 +550,7 @@ overflow: hidden; box-shadow: 0 0 60px rgba(0, 243, 255, 0.15);
 <div id="projectsListContainer" style="display:flex; flex-direction:column; gap:10px;"></div>
 </div>
 </div>
+
 <div id="tariffs" class="section">
 <h2 class="section-title">💎 Тарифные планы</h2>
 <div class="tiers-grid">
@@ -562,6 +579,23 @@ overflow: hidden; box-shadow: 0 0 60px rgba(0, 243, 255, 0.15);
 </div>
 <p style="text-align: center; color: var(--text-muted); margin-top: 30px; font-size: 14px;">💡 <i>Не хватает монет? Играй в "Звёздный Кликер" в разделе Игры, чтобы заработать!</i></p>
 </div>
+
+<div id="charts" class="section">
+<h2 class="section-title">🔥 Горячие Чарты</h2>
+<div class="charts-grid" id="chartsGrid"></div>
+</div>
+
+<div id="friends" class="section">
+<h2 class="section-title">👥 Друзья</h2>
+<div class="profile-card">
+<div class="music-search-wrapper">
+<input type="text" class="music-search-box" id="friendSearchInput" placeholder="🔍 Поиск пользователя по имени..." oninput="searchFriends(this.value)">
+</div>
+<h3 style="margin-bottom: 15px; color: var(--text-muted);">Мои друзья</h3>
+<div class="friends-grid" id="friendsListContainer"></div>
+</div>
+</div>
+
 <div id="games" class="section">
 <h2 class="section-title">🎮 Выбери миссию</h2>
 <div class="games-grid">
@@ -574,6 +608,15 @@ overflow: hidden; box-shadow: 0 0 60px rgba(0, 243, 255, 0.15);
 <div id="activeGame" class="game-container">
 <h3 id="gameTitle" style="text-align:center;margin-bottom:10px;color:var(--accent);"></h3>
 <canvas id="gameCanvas" class="game-canvas" width="800" height="500"></canvas>
+<div id="clickerGameArea" class="clicker-game-area">
+<div style="font-size: 24px; margin-bottom: 10px;">Монеты: <span id="clickerCoins" style="color: #ffd700; font-weight: bold;">0</span></div>
+<div style="font-size: 16px; margin-bottom: 20px;">Прибыль в секунду: <span id="clickerCPS" style="color: #00ff88;">0</span></div>
+<div id="clickerTarget" class="clicker-target" onclick="clickerClick()">⭐</div>
+<div class="clicker-stats">
+<button class="btn btn-primary" onclick="buyClickerUpgrade('click')">Усилить клик (Цена: <span id="clickCost">10</span>)</button>
+<button class="btn btn-primary" onclick="buyClickerUpgrade('auto')">Авто-клик (Цена: <span id="autoCost">50</span>)</button>
+</div>
+</div>
 <div class="mobile-controls" id="mobileControls">
 <div class="d-pad">
 <div class="d-btn up" data-dir="up">⬆️</div>
@@ -591,37 +634,20 @@ overflow: hidden; box-shadow: 0 0 60px rgba(0, 243, 255, 0.15);
 <div id="gameInfo" style="text-align:center;margin-top:10px;color:var(--accent); font-weight: bold; font-size:14px;"></div>
 </div>
 </div>
+
 <div id="quests" class="section">
 <h2 class="section-title">📜 Активные квесты</h2>
 <div class="quest-section">
 <h3 style="margin-bottom:12px;color:var(--accent);">🌌 Квест 1: Лабиринт сокровищ</h3>
 <div style="text-align:center;margin-bottom:8px; color: var(--text-muted);">Собери <b id="starsCollected" style="color:var(--accent)">0</b> из <b id="totalStars">5</b> ⭐</div>
-<div class="maze-container" id="mazeGrid"></div>
+<div class="maze-container" id="mazeGrid" tabindex="0"></div>
 <div style="text-align:center;margin-top:10px;">
 <button class="btn btn-primary" onclick="initMazeQuest()">🔄 Заново</button>
 </div>
 </div>
 <div id="questsList" style="max-width:600px;margin:20px auto 0;"></div>
 </div>
-<!-- НОВЫЙ РАЗДЕЛ: ЧАРТЫ С КРАСИВЫМИ ОБЛОЖКАМИ -->
-<div id="charts" class="section">
-    <h2 class="section-title">🔥 Горячие Чарты 2024</h2>
-    <div class="charts-grid" id="chartsContainer">
-        <div style="grid-column: 1/-1; text-align: center; color: var(--text-muted);">Загрузка хитов...</div>
-    </div>
-</div>
-<div id="music" class="section">
-<h2 class="section-title">🎵 Глобальный поиск музыки</h2>
-<div class="music-container">
-<div class="music-search-wrapper">
-<input type="text" class="music-search-box" id="musicSearchInput" placeholder="🔍 Введите исполнителя или название трека..." onkeypress="if(event.key==='Enter') searchMusic()">
-<button class="music-search-btn" onclick="searchMusic()">🔍</button>
-</div>
-<div id="trackList" class="track-list">
-<div style="text-align: center; padding: 40px; color: var(--text-muted);">Введите запрос, чтобы найти музыку и перейти к полной версии на YouTube</div>
-</div>
-</div>
-</div>
+
 <div id="profile" class="section">
 <h2 class="section-title">👤 Профиль пилота</h2>
 <div class="profile-card">
@@ -639,6 +665,7 @@ overflow: hidden; box-shadow: 0 0 60px rgba(0, 243, 255, 0.15);
 </div>
 </div>
 </div>
+
 <div id="chat" class="section">
 <h2 class="section-title">💬 Глобальный чат</h2>
 <div class="chat-card">
@@ -649,1147 +676,1394 @@ overflow: hidden; box-shadow: 0 0 60px rgba(0, 243, 255, 0.15);
 </div>
 </div>
 </div>
+
 </div>
+
+<audio id="globalAudioPlayer" style="display:none;"></audio>
+
 <script>
+/* ==========================================================================
+INDEXEDDB DATABASE SETUP
+========================================================================== */
+let db;
+const DB_NAME = 'SoundscapeDB';
+const DB_VERSION = 1;
+
+function initDB() {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open(DB_NAME, DB_VERSION);
+        request.onupgradeneeded = (event) => {
+            const database = event.target.result;
+            if (!database.objectStoreNames.contains('users')) {
+                const userStore = database.createObjectStore('users', { keyPath: 'username' });
+                // Добавляем тестовых пользователей для поиска
+                userStore.add({ username: 'DJ_Neon', xp: 1500, coins: 500, tracks: 12, bio: 'Люблю электронную музыку 🎧' });
+                userStore.add({ username: 'BeatMaster', xp: 3200, coins: 1200, tracks: 45, bio: 'Создаю биты 24/7 🎹' });
+                userStore.add({ username: 'MusicLover', xp: 800, coins: 200, tracks: 8, bio: 'Слушаю всё подряд 🎵' });
+            }
+            if (!database.objectStoreNames.contains('friends')) {
+                database.createObjectStore('friends', { keyPath: 'friendUsername' });
+            }
+            if (!database.objectStoreNames.contains('projects')) {
+                database.createObjectStore('projects', { keyPath: 'id' });
+            }
+            if (!database.objectStoreNames.contains('chat')) {
+                database.createObjectStore('chat', { keyPath: 'id', autoIncrement: true });
+            }
+        };
+        request.onsuccess = (event) => {
+            db = event.target.result;
+            resolve(db);
+        };
+        request.onerror = (event) => reject(event.target.error);
+    });
+}
+
+function dbGet(storeName, key) {
+    return new Promise((resolve) => {
+        const tx = db.transaction(storeName, 'readonly');
+        const store = tx.objectStore(storeName);
+        const req = store.get(key);
+        req.onsuccess = () => resolve(req.result);
+    });
+}
+
+function dbGetAll(storeName) {
+    return new Promise((resolve) => {
+        const tx = db.transaction(storeName, 'readonly');
+        const store = tx.objectStore(storeName);
+        const req = store.getAll();
+        req.onsuccess = () => resolve(req.result || []);
+    });
+}
+
+function dbPut(storeName, data) {
+    return new Promise((resolve) => {
+        const tx = db.transaction(storeName, 'readwrite');
+        const store = tx.objectStore(storeName);
+        store.put(data);
+        tx.oncomplete = () => resolve();
+    });
+}
+
+function dbDelete(storeName, key) {
+    return new Promise((resolve) => {
+        const tx = db.transaction(storeName, 'readwrite');
+        const store = tx.objectStore(storeName);
+        store.delete(key);
+        tx.oncomplete = () => resolve();
+    });
+}
+
 /* ==========================================================================
 GLOBAL STATE & VARIABLES
 ========================================================================== */
 let currentUser = null;
 let isGuest = false;
 let userData = {
-xp: 0, coins: 100, tracksCreated: 0, gamesPlayed: 0,
-clicker: { clickPower: 1, clickCost: 10, autoClick: 0, autoCost: 50 },
-projectsCreated: 0,
-projectLimit: 3,
-isVip: false
+    xp: 0, coins: 100, tracksCreated: 0, gamesPlayed: 0,
+    clicker: { clickPower: 1, clickCost: 10, autoClick: 0, autoCost: 50 },
+    projectsCreated: 0, projectLimit: 3, isVip: false
 };
-let mediaRecorder = null;
-let audioChunks = [];
-let isRecording = false;
-let audioCtx = null;
-let analyser = null;
-let recordedBlob = null;
-let detectedNotes = [];
+let mediaRecorder = null, audioChunks = [], isRecording = false;
+let audioCtx = null, analyser = null, recordedBlob = null, detectedNotes = [];
 let currentGame = null, gameInterval = null, gameScore = 0, canvas, ctx;
 let input = { left: false, right: false, up: false, down: false, fire: false };
+let clickerInterval = null;
 let questsData = [
-{ id: 'q1', title: 'Первая игра', desc: 'Сыграй в любую игру 1 раз', target: 1, current: 0, reward: 50, icon: '🎮', completed: false },
-{ id: 'q2', title: 'Мастер игры', desc: 'Набери 500 очков в любой игре', target: 500, current: 0, reward: 150, icon: '🏆', completed: false },
-{ id: 'q3', title: 'Коллекционер', desc: 'Собери 1000 XP', target: 1000, current: 0, reward: 200, icon: '💎', completed: false }
+    { id: 'q1', title: 'Первая игра', desc: 'Сыграй в любую игру 1 раз', target: 1, current: 0, reward: 50, icon: '🎮', completed: false },
+    { id: 'q2', title: 'Мастер игры', desc: 'Набери 500 очков в любой игре', target: 500, current: 0, reward: 150, icon: '🏆', completed: false },
+    { id: 'q3', title: 'Коллекционер', desc: 'Собери 1000 XP', target: 1000, current: 0, reward: 200, icon: '💎', completed: false }
 ];
-let chatData = JSON.parse(localStorage.getItem('soundscape_chat') || '[]');
+
+const chartsData = [
+    { title: 'GAZ', artist: 'Zivert', url: 'https://ru.hitmoz.org/get/music/20260424/Zivert_-_GAZ_81356469.mp3' },
+    { title: 'Матушка', artist: 'Татьяна Куртукова', url: 'https://ru.hitmoz.org/get/music/20221019/Tatyana_Kurtukova_-_Matushka_74861522.mp3' },
+    { title: 'Тону', artist: 'HOLLYFLAME', url: 'https://ru.hitmoz.org/get/music/20260206/HOLLYFLAME_-_Tonu_80790537.mp3' },
+    { title: 'Мальборо', artist: 'Саян', url: 'https://ru.hitmoz.org/get/music/20260411/Sayan_-_Malboro_81256724.mp3' },
+    { title: 'Шёлк', artist: 'Ваня Дмитриенко', url: 'https://ru.hitmoz.org/get/music/20250811/Vanya_Dmitrienko_-_SHjolk_79393420.mp3' },
+    { title: 'Базовый минимум', artist: 'Миа Бойка', url: 'https://ru.hitmoz.org/get/music/20250801/SABI_MIA_BOYKA_-_Bazovyjj_minimum_79356027.mp3' },
+    { title: 'Ты не бойся ночи', artist: 'ENZRO', url: 'https://ru.hitmoz.org/get/music/20260507/ENZRO_-_Ty_ne_bojjsya_nochi_81428177.mp3' },
+    { title: 'Феникс', artist: 'BEARWOLF', url: 'https://ru.hitmoz.org/get/music/20260220/BEARWOLF_-_eniks_80897876.mp3' },
+    { title: 'Шадэ', artist: 'Xcho, MOT', url: 'https://ru.hitmoz.org/get/music/20260508/By_Indiya_Xcho_MOT_-_SHadje_81430189.mp3' },
+    { title: 'Экспонат', artist: 'Миа Бойка', url: 'https://ru.hitmoz.org/get/music/20260522/Mia_Boyka_-_JEksponat_81528350.mp3' }
+];
+
 /* ==========================================================================
 INITIALIZATION
 ========================================================================== */
-window.onload = function() {
-const saved = localStorage.getItem('soundscape_user');
-if (saved) {
-const data = JSON.parse(saved);
-currentUser = data.username;
-isGuest = data.isGuest || false;
-userData = { ...userData, ...(data.userData || {}) };
-document.getElementById('authOverlay').classList.remove('active');
-updateStats();
-}
-initAudioContext();
-initSpaceBackground();
-renderQuests();
-renderChat();
-initBeatComposer();
-initCharts(); // Загружаем красивые чарты
+window.onload = async function() {
+    await initDB();
+    const saved = localStorage.getItem('soundscape_user');
+    if (saved) {
+        const data = JSON.parse(saved);
+        currentUser = data.username;
+        isGuest = data.isGuest || false;
+        userData = { ...userData, ...(data.userData || {}) };
+        document.getElementById('authOverlay').classList.remove('active');
+        updateStats();
+    }
+    initAudioContext();
+    initSpaceBackground();
+    renderQuests();
+    renderChat();
+    initBeatComposer();
+    renderCharts();
+    renderFriendsList();
+    setupEventListeners();
 };
+
+function setupEventListeners() {
+    document.querySelectorAll('.d-btn, .action-btn').forEach(btn => {
+        const dir = btn.dataset.dir;
+        btn.addEventListener('touchstart', (e) => { e.preventDefault(); input[dir] = true; });
+        btn.addEventListener('touchend', (e) => { e.preventDefault(); input[dir] = false; });
+        btn.addEventListener('mousedown', () => input[dir] = true);
+        btn.addEventListener('mouseup', () => input[dir] = false);
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+        if (e.code === 'ArrowLeft' || e.code === 'KeyA') input.left = true;
+        if (e.code === 'ArrowRight' || e.code === 'KeyD') input.right = true;
+        if (e.code === 'ArrowUp' || e.code === 'KeyW') input.up = true;
+        if (e.code === 'ArrowDown' || e.code === 'KeyS') input.down = true;
+        if (e.code === 'Space') input.fire = true;
+    });
+    document.addEventListener('keyup', (e) => {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+        if (e.code === 'ArrowLeft' || e.code === 'KeyA') input.left = false;
+        if (e.code === 'ArrowRight' || e.code === 'KeyD') input.right = false;
+        if (e.code === 'ArrowUp' || e.code === 'KeyW') input.up = false;
+        if (e.code === 'ArrowDown' || e.code === 'KeyS') input.down = false;
+        if (e.code === 'Space') input.fire = false;
+    });
+}
+
 function updateStats() {
-document.getElementById('userXP').textContent = userData.xp;
-document.getElementById('userCoins').textContent = userData.coins;
-document.getElementById('profileXP').textContent = userData.xp;
-document.getElementById('profileCoins').textContent = userData.coins;
-document.getElementById('profileTracks').textContent = userData.tracksCreated;
-document.getElementById('userName').textContent = currentUser;
-document.getElementById('profileName').textContent = currentUser;
-const projects = getProjects();
-document.getElementById('projCountDisplay').textContent = projects.length;
-document.getElementById('projLimitDisplay').textContent = userData.projectLimit;
-if (userData.isVip) {
-document.getElementById('vipBadgeProjects').style.display = 'block';
-document.getElementById('userBadge').textContent = 'VIP';
-document.getElementById('userBadge').style.background = 'linear-gradient(90deg, #ffd700, #ff8c00)';
-document.getElementById('userBadge').style.color = '#000';
+    document.getElementById('userXP').textContent = userData.xp;
+    document.getElementById('userCoins').textContent = userData.coins;
+    document.getElementById('profileXP').textContent = userData.xp;
+    document.getElementById('profileCoins').textContent = userData.coins;
+    document.getElementById('profileTracks').textContent = userData.tracksCreated;
+    document.getElementById('userName').textContent = currentUser || 'Гость';
+    document.getElementById('profileName').textContent = currentUser || 'Гость';
+    
+    dbGetAll('projects').then(projects => {
+        document.getElementById('projCountDisplay').textContent = projects.length;
+        document.getElementById('projLimitDisplay').textContent = userData.projectLimit;
+    });
+
+    const badge = document.getElementById('userBadge');
+    if (userData.isVip) {
+        document.getElementById('vipBadgeProjects').style.display = 'block';
+        badge.textContent = 'VIP';
+        badge.className = 'user-badge badge-vip';
+    } else if (isGuest) {
+        document.getElementById('vipBadgeProjects').style.display = 'none';
+        badge.textContent = 'ГОСТЬ';
+        badge.className = 'user-badge badge-guest';
+    } else {
+        document.getElementById('vipBadgeProjects').style.display = 'none';
+        badge.textContent = 'USER';
+        badge.className = 'user-badge badge-user';
+    }
 }
-}
+
 function showNotification(text) {
-const div = document.getElementById('notification');
-div.textContent = text;
-div.classList.add('show');
-setTimeout(() => div.classList.remove('show'), 3000);
+    const div = document.getElementById('notification');
+    div.textContent = text;
+    div.classList.add('show');
+    setTimeout(() => div.classList.remove('show'), 3000);
 }
+
 function showSection(id, event) {
-document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-document.getElementById(id).classList.add('active');
-if (event && event.target) event.target.classList.add('active');
-window.scrollTo(0, 0);
-if (id === 'projects') renderProjectsList();
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    if (event && event.target) {
+        const btn = event.target.closest('.nav-btn');
+        if (btn) btn.classList.add('active');
+    }
+    window.scrollTo(0, 0);
+    if (id === 'projects') {
+        dbGetAll('projects').then(renderProjectsListUI);
+    }
+    document.getElementById('mobileControls').classList.remove('active');
 }
+
 function registerUser() {
-const username = document.getElementById('authUsername').value.trim();
-if (username.length < 3) { showNotification('❌ Имя минимум 3 символа'); return; }
-currentUser = username;
-isGuest = false;
-document.getElementById('authOverlay').classList.remove('active');
-updateStats();
-showNotification('✅ Добро пожаловать, ' + username + '!');
-saveUserData();
+    const username = document.getElementById('authUsername').value.trim();
+    if (username.length < 3) { showNotification('❌ Имя минимум 3 символа'); return; }
+    currentUser = username;
+    isGuest = false;
+    dbPut('users', { username, xp: 0, coins: 100, tracks: 0, bio: 'Новый пользователь' });
+    document.getElementById('authOverlay').classList.remove('active');
+    updateStats();
+    showNotification('✅ Добро пожаловать, ' + username + '!');
+    localStorage.setItem('soundscape_user', JSON.stringify({ username, isGuest: false, userData }));
 }
+
 function guestLogin() {
-currentUser = 'Гость_' + Math.floor(Math.random() * 10000);
-isGuest = true;
-document.getElementById('authOverlay').classList.remove('active');
-updateStats();
-showNotification('👤 Гостевой режим');
+    currentUser = 'Гость_' + Math.floor(Math.random() * 10000);
+    isGuest = true;
+    document.getElementById('authOverlay').classList.remove('active');
+    updateStats();
+    showNotification('👤 Гостевой режим');
+    localStorage.setItem('soundscape_user', JSON.stringify({ username: currentUser, isGuest: true, userData }));
 }
+
 function logout() {
-localStorage.removeItem('soundscape_user');
-location.reload();
+    localStorage.removeItem('soundscape_user');
+    location.reload();
 }
-function saveUserData() {
-localStorage.setItem('soundscape_user', JSON.stringify({ username: currentUser, isGuest: isGuest, userData: userData }));
+
+/* ==========================================================================
+PROJECTS & VIP
+========================================================================== */
+function renderProjectsListUI(projects) {
+    const container = document.getElementById('projectsListContainer');
+    if (projects.length === 0) {
+        container.innerHTML = '<div style="text-align:center; color:var(--text-muted); padding:40px;">Пока нет сохраненных проектов. Создай свой первый бит в Beat Pro!</div>';
+        return;
+    }
+    container.innerHTML = projects.map(p => `
+        <div class="project-item">
+            <div class="project-info">
+                <h4>${p.name || 'Без названия'}</h4>
+                <p>BPM: ${p.bpm} | Длительность: ~${p.duration || 0}с | ${new Date(p.createdAt).toLocaleDateString()}</p>
+            </div>
+            <div class="project-actions">
+                <button class="btn btn-primary" onclick="loadProjectById('${p.id}')">Загрузить</button>
+                <button class="btn btn-danger" onclick="deleteProject('${p.id}')">Удалить</button>
+            </div>
+        </div>
+    `).join('');
 }
-function renderProjectsList() {
-const projects = getProjects();
-const container = document.getElementById('projectsListContainer');
-if (projects.length === 0) {
-container.innerHTML = '<div style="text-align:center; color:var(--text-muted); padding:40px;">Пока нет сохраненных проектов. Создай свой первый бит в Beat Pro!</div>';
-return;
-}
-container.innerHTML = projects.map(p => `
-<div class="project-item">
-<div class="project-info">
-<h4>${p.name || 'Без названия'}</h4>
-<p>BPM: ${p.bpm} | Длительность: ~${p.duration || 0}с | ${new Date(p.createdAt).toLocaleDateString()}</p>
-</div>
-<div class="project-actions">
-<button class="btn btn-primary" onclick="loadProjectFromList('${p.id}')">Загрузить</button>
-<button class="btn btn-danger" onclick="deleteProject('${p.id}')">Удалить</button>
-</div>
-</div>
-`).join('');
-}
-function loadProjectFromList(id) { loadProjectById(id); showSection('beatmaker'); showNotification('📂 Проект загружен!'); }
+
 function deleteProject(id) {
-if (!confirm('Удалить этот проект?')) return;
-let projects = getProjects().filter(p => p.id !== id);
-saveProjectsList(projects);
-if (!userData.isVip && userData.projectsCreated > 0) userData.projectsCreated--;
-saveUserData();
-renderProjectsList();
-updateStats();
-showNotification('🗑️ Проект удален');
+    if (!confirm('Удалить этот проект?')) return;
+    dbDelete('projects', id).then(() => {
+        if (!userData.isVip && userData.projectsCreated > 0) userData.projectsCreated--;
+        localStorage.setItem('soundscape_user', JSON.stringify({ username: currentUser, isGuest, userData }));
+        updateStats();
+        dbGetAll('projects').then(renderProjectsListUI);
+        showNotification('🗑️ Проект удален');
+    });
 }
+
 function buyVip() {
-if (userData.isVip) { showNotification('👑 У вас уже есть VIP!'); return; }
-if (userData.coins >= 1000) {
-userData.coins -= 1000;
-userData.isVip = true;
-userData.projectLimit = 50;
-saveUserData();
-updateStats();
-showNotification('🎉 Поздравляем! Вы получили VIP Producer!');
-} else {
-showNotification('❌ Недостаточно монет! Нужно 1000 🪙');
+    if (userData.isVip) { showNotification('👑 У вас уже есть VIP!'); return; }
+    if (userData.coins >= 1000) {
+        userData.coins -= 1000;
+        userData.isVip = true;
+        userData.projectLimit = 50;
+        localStorage.setItem('soundscape_user', JSON.stringify({ username: currentUser, isGuest, userData }));
+        updateStats();
+        showNotification('🎉 Поздравляем! Вы получили VIP Producer!');
+    } else {
+        showNotification('❌ Недостаточно монет! Нужно 1000 🪙');
+    }
 }
-}
+
+/* ==========================================================================
+AI STUDIO & RECORDING
+========================================================================== */
 async function initAudioContext() {
-if (!audioCtx) {
-audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-analyser = audioCtx.createAnalyser();
-analyser.fftSize = 256;
+    if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        analyser = audioCtx.createAnalyser();
+        analyser.fftSize = 256;
+    }
 }
-}
+
 async function toggleRecording() {
-const btn = document.getElementById('recordBtn');
-const status = document.getElementById('recordStatus');
-const audioEl = document.getElementById('recordedAudio');
-const genBtn = document.getElementById('generateBtn');
-if (!isRecording) {
-try {
-const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-mediaRecorder = new MediaRecorder(stream);
-audioChunks = [];
-mediaRecorder.ondataavailable = (event) => { audioChunks.push(event.data); };
-mediaRecorder.onstop = () => {
-recordedBlob = new Blob(audioChunks, { type: 'audio/wav' });
-audioEl.src = URL.createObjectURL(recordedBlob);
-audioEl.style.display = 'block';
-genBtn.disabled = false;
-status.textContent = '✅ Запись завершена. Можно генерировать бит!';
-status.style.color = 'var(--success)';
-analyzeAudioPitch(recordedBlob);
-};
-mediaRecorder.start();
-isRecording = true;
-btn.classList.add('recording');
-document.getElementById('recordIcon').textContent = '⏹';
-document.getElementById('recordText').textContent = 'STOP';
-status.textContent = '🔴 Идет запись...';
-status.style.color = 'var(--danger)';
-visualizeRecording(stream);
-} catch (err) { showNotification('❌ Ошибка доступа к микрофону'); }
-} else {
-mediaRecorder.stop();
-mediaRecorder.stream.getTracks().forEach(track => track.stop());
-isRecording = false;
-btn.classList.remove('recording');
-document.getElementById('recordIcon').textContent = '🎤';
-document.getElementById('recordText').textContent = 'REC';
+    const btn = document.getElementById('recordBtn');
+    const status = document.getElementById('recordStatus');
+    const audioEl = document.getElementById('recordedAudio');
+    const genBtn = document.getElementById('generateBtn');
+    if (!isRecording) {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(stream);
+            audioChunks = [];
+            mediaRecorder.ondataavailable = (event) => { audioChunks.push(event.data); };
+            mediaRecorder.onstop = () => {
+                recordedBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                audioEl.src = URL.createObjectURL(recordedBlob);
+                audioEl.style.display = 'block';
+                genBtn.disabled = false;
+                status.textContent = '✅ Запись завершена. Можно генерировать бит!';
+                status.style.color = 'var(--success)';
+                analyzeAudioPitch(recordedBlob);
+            };
+            mediaRecorder.start();
+            isRecording = true;
+            btn.classList.add('recording');
+            document.getElementById('recordIcon').textContent = '⏹';
+            document.getElementById('recordText').textContent = 'STOP';
+            status.textContent = '🔴 Идет запись...';
+            status.style.color = 'var(--danger)';
+            visualizeRecording(stream);
+        } catch (err) { showNotification('❌ Ошибка доступа к микрофону'); }
+    } else {
+        mediaRecorder.stop();
+        mediaRecorder.stream.getTracks().forEach(track => track.stop());
+        isRecording = false;
+        btn.classList.remove('recording');
+        document.getElementById('recordIcon').textContent = '🎤';
+        document.getElementById('recordText').textContent = 'REC';
+    }
 }
-}
+
 function visualizeRecording(stream) {
-const source = audioCtx.createMediaStreamSource(stream);
-source.connect(analyser);
-const canvas = document.getElementById('studioVisualizer');
-const ctx = canvas.getContext('2d');
-canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
-const bufferLength = analyser.frequencyBinCount;
-const dataArray = new Uint8Array(bufferLength);
-function draw() {
-if (!isRecording) { ctx.clearRect(0, 0, canvas.width, canvas.height); return; }
-requestAnimationFrame(draw);
-analyser.getByteFrequencyData(dataArray);
-ctx.fillStyle = 'rgba(0,0,0,0.2)';
-ctx.fillRect(0, 0, canvas.width, canvas.height);
-const barWidth = (canvas.width / bufferLength) * 2.5;
-let x = 0;
-for (let i = 0; i < bufferLength; i++) {
-const barHeight = (dataArray[i] / 255) * canvas.height;
-const gradient = ctx.createLinearGradient(0, canvas.height, 0, canvas.height - barHeight);
-gradient.addColorStop(0, '#b82cff'); gradient.addColorStop(1, '#00f3ff');
-ctx.fillStyle = gradient;
-ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
-x += barWidth + 1;
+    const source = audioCtx.createMediaStreamSource(stream);
+    source.connect(analyser);
+    const canvas = document.getElementById('studioVisualizer');
+    const ctx = canvas.getContext('2d');
+    canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
+    const bufferLength = analyser.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+    function draw() {
+        if (!isRecording) { ctx.clearRect(0, 0, canvas.width, canvas.height); return; }
+        requestAnimationFrame(draw);
+        analyser.getByteFrequencyData(dataArray);
+        ctx.fillStyle = 'rgba(0,0,0,0.2)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        const barWidth = (canvas.width / bufferLength) * 2.5;
+        let x = 0;
+        for (let i = 0; i < bufferLength; i++) {
+            const barHeight = (dataArray[i] / 255) * canvas.height;
+            const gradient = ctx.createLinearGradient(0, canvas.height, 0, canvas.height - barHeight);
+            gradient.addColorStop(0, '#b82cff'); gradient.addColorStop(1, '#00f3ff');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+            x += barWidth + 1;
+        }
+    }
+    draw();
 }
-}
-draw();
-}
+
 async function analyzeAudioPitch(blob) {
-showNotification('🤖 AI анализирует мелодию...');
-const audioBuffer = await audioCtx.decodeAudioData(await blob.arrayBuffer());
-const data = audioBuffer.getChannelData(0);
-detectedNotes = [];
-for (let i = 0; i < data.length - 2048; i += 512) {
-const freq = autoCorrelate(data.slice(i, i + 2048), audioBuffer.sampleRate);
-if (freq > 50 && freq < 1000) detectedNotes.push({ time: i / audioBuffer.sampleRate, note: freqToNote(freq) });
+    showNotification('🤖 AI анализирует мелодию...');
+    const audioBuffer = await audioCtx.decodeAudioData(await blob.arrayBuffer());
+    const data = audioBuffer.getChannelData(0);
+    detectedNotes = [];
+    for (let i = 0; i < data.length - 2048; i += 512) {
+        const freq = autoCorrelate(data.slice(i, i + 2048), audioBuffer.sampleRate);
+        if (freq > 50 && freq < 1000) detectedNotes.push({ time: i / audioBuffer.sampleRate, note: freqToNote(freq) });
+    }
+    showNotification('✅ Мелодия распознана!');
 }
-showNotification('✅ Мелодия распознана!');
-}
+
 function autoCorrelate(buf, sampleRate) {
-let rms = 0;
-for (let i = 0; i < buf.length; i++) rms += buf[i] * buf[i];
-rms = Math.sqrt(rms / buf.length);
-if (rms < 0.01) return 0;
-let r1 = 0, r2 = buf.length - 1, thres = 0.2;
-for (let i = 0; i < buf.length / 2; i++) { if (Math.abs(buf[i]) < thres) { r1 = i; break; } }
-for (let i = 1; i < buf.length / 2; i++) { if (Math.abs(buf[buf.length - i]) < thres) { r2 = buf.length - i; break; } }
-buf = buf.slice(r1, r2);
-const c = new Array(buf.length).fill(0);
-for (let i = 0; i < buf.length; i++) { for (let j = 0; j < buf.length - i; j++) { c[i] += buf[j] * buf[j + i]; } }
-let d = 0; while (d < buf.length / 2 && c[d] > c[d + 1]) d++;
-let maxval = -1, maxpos = -1;
-for (let i = d; i < buf.length; i++) { if (c[i] > maxval) { maxval = c[i]; maxpos = i; } }
-return sampleRate / maxpos;
+    let rms = 0;
+    for (let i = 0; i < buf.length; i++) rms += buf[i] * buf[i];
+    rms = Math.sqrt(rms / buf.length);
+    if (rms < 0.01) return 0;
+    let r1 = 0, r2 = buf.length - 1, thres = 0.2;
+    for (let i = 0; i < buf.length / 2; i++) { if (Math.abs(buf[i]) < thres) { r1 = i; break; } }
+    for (let i = 1; i < buf.length / 2; i++) { if (Math.abs(buf[buf.length - i]) < thres) { r2 = buf.length - i; break; } }
+    buf = buf.slice(r1, r2);
+    const c = new Array(buf.length).fill(0);
+    for (let i = 0; i < buf.length; i++) { for (let j = 0; j < buf.length - i; j++) { c[i] += buf[j] * buf[j + i]; } }
+    let d = 0; while (d < buf.length / 2 && c[d] > c[d + 1]) d++;
+    let maxval = -1, maxpos = -1;
+    for (let i = d; i < buf.length; i++) { if (c[i] > maxval) { maxval = c[i]; maxpos = i; } }
+    return sampleRate / maxpos;
 }
+
 function freqToNote(freq) {
-const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
-const halfSteps = Math.round(12 * Math.log2(freq / (440 * Math.pow(2, -4.75))));
-return notes[halfSteps % 12];
+    const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+    const halfSteps = Math.round(12 * Math.log2(freq / (440 * Math.pow(2, -4.75))));
+    return notes[halfSteps % 12];
 }
+
 function generateAIBeat() {
-if (detectedNotes.length === 0) { showNotification('❌ Сначала запишите мелодию!'); return; }
-showNotification('🤖 Генерация бита...');
-userData.tracksCreated++;
-updateStats();
-saveUserData();
-setTimeout(() => { showSection('beatmaker'); showNotification('✅ Бит сгенерирован!'); }, 1000);
+    if (detectedNotes.length === 0) { showNotification('❌ Сначала запишите мелодию!'); return; }
+    showNotification('🤖 Генерация бита...');
+    userData.tracksCreated++;
+    localStorage.setItem('soundscape_user', JSON.stringify({ username: currentUser, isGuest, userData }));
+    updateStats();
+    setTimeout(() => { showSection('beatmaker'); showNotification('✅ Бит сгенерирован!'); }, 1000);
 }
+
+/* ==========================================================================
+GAMES ENGINE
+========================================================================== */
 function startGame(type) {
-currentGame = type;
-gameScore = 0;
-document.getElementById('activeGame').classList.add('active');
-if (gameInterval) clearInterval(gameInterval);
-canvas = document.getElementById('gameCanvas');
-ctx = canvas.getContext('2d');
-canvas.width = 800; canvas.height = 500;
-const games = { 'shooter': { title: '🚀 Space Shooter' }, 'pacman': { title: '🟡 Pac-Man' }, 'invaders': { title: '👾 Space Invaders' }, 'snake': { title: '🐍 Змейка' }, 'clicker': { title: '🖱️ Кликер' } };
-document.getElementById('gameTitle').textContent = games[type].title;
-if (type === 'clicker') {
-document.getElementById('clickerGameArea').classList.add('active');
-document.getElementById('gameCanvas').style.display = 'none';
-startClicker();
-} else {
-document.getElementById('clickerGameArea').classList.remove('active');
-document.getElementById('gameCanvas').style.display = 'block';
-if (window.innerWidth <= 768) {
-document.getElementById('mobileControls').classList.add('active');
+    currentGame = type;
+    gameScore = 0;
+    document.getElementById('activeGame').classList.add('active');
+    if (gameInterval) clearInterval(gameInterval);
+    canvas = document.getElementById('gameCanvas');
+    ctx = canvas.getContext('2d');
+    canvas.width = 800; canvas.height = 500;
+    const games = { 'shooter': { title: '🚀 Space Shooter' }, 'pacman': { title: '🟡 Pac-Man' }, 'invaders': { title: '👾 Space Invaders' }, 'snake': { title: '🐍 Змейка' }, 'clicker': { title: '🖱️ Кликер' } };
+    document.getElementById('gameTitle').textContent = games[type].title;
+    if (type === 'clicker') {
+        document.getElementById('clickerGameArea').classList.add('active');
+        document.getElementById('gameCanvas').style.display = 'none';
+        startClicker();
+    } else {
+        document.getElementById('clickerGameArea').classList.remove('active');
+        document.getElementById('gameCanvas').style.display = 'block';
+        if (window.innerWidth <= 768 || 'ontouchstart' in window) {
+            document.getElementById('mobileControls').classList.add('active');
+        }
+        if (type === 'shooter') { player = { x: canvas.width/2 - 20, y: canvas.height - 60, w: 40, h: 40, cooldown: 0 }; bullets = []; enemies = []; startShooter(); }
+        else if (type === 'pacman') {
+            mazeData = ['####################','#........#.........#','#.####.#.#.#.####.#.#','#.#....#...#....#.#.#','#.#.##.#.#.#.##.#.#.#','#.#.#......#.#....#.#','#...#.####.#.####...#','#.#.#......#.#....#.#','#.#.##.####.##.#....#','#.#....#..#....#....#','#.####.#..#.####....#','#......#..#.........#','####################'];
+            pacman = { x: 1, y: 1, dir: { x: 0, y: 0 }, nextDir: { x: 0, y: 0 } };
+            ghosts = [ { x: 10, y: 6, color: '#ff0055' }, { x: 9, y: 6, color: '#ffb8ff' }, { x: 10, y: 7, color: '#00f3ff' } ];
+            dots = [];
+            for (let y = 0; y < mazeData.length; y++) for (let x = 0; x < mazeData[y].length; x++) if (mazeData[y][x] === '.') dots.push({ x, y });
+            startPacman();
+        }
+        else if (type === 'invaders') {
+            invaderPlayer = { x: canvas.width/2, y: canvas.height - 40, w: 30, h: 20 };
+            bullets = []; invaderBullets = []; invaderDirection = 1; enemies = [];
+            for (let row = 0; row < 4; row++) for (let col = 0; col < 8; col++) enemies.push({ x: 50 + col * 60, y: 50 + row * 40, w: 30, h: 25 });
+            startInvaders();
+        }
+        else if (type === 'snake') {
+            snake = [{ x: 15, y: 10 }]; dir = { x: 1, y: 0 }; nextDir = { x: 1, y: 0 }; food = { x: 20, y: 10 };
+            startSnake();
+        }
+    }
+    userData.gamesPlayed++;
+    localStorage.setItem('soundscape_user', JSON.stringify({ username: currentUser, isGuest, userData }));
+    updateStats();
+    updateQuestProgress('q1', 1);
 }
-if (type === 'shooter') { player = { x: canvas.width/2 - 20, y: canvas.height - 60, w: 40, h: 40, cooldown: 0 }; bullets = []; enemies = []; startShooter(); }
-else if (type === 'pacman') {
-mazeData = ['####################','#........#.........#','#.####.#.#.#.####.#.#','#.#....#...#....#.#.#','#.#.##.#.#.#.##.#.#.#','#.#.#......#.#....#.#','#...#.####.#.####...#','#.#.#......#.#....#.#','#.#.##.####.##.#....#','#.#....#..#....#....#','#.####.#..#.####....#','#......#..#.........#','####################'];
-pacman = { x: 1, y: 1, dir: { x: 0, y: 0 }, nextDir: { x: 0, y: 0 } };
-ghosts = [ { x: 10, y: 6, color: '#ff0055' }, { x: 9, y: 6, color: '#ffb8ff' }, { x: 10, y: 7, color: '#00f3ff' } ];
-dots = [];
-for (let y = 0; y < mazeData.length; y++) for (let x = 0; x < mazeData[y].length; x++) if (mazeData[y][x] === '.') dots.push({ x, y });
-startPacman();
-}
-else if (type === 'invaders') {
-invaderPlayer = { x: canvas.width/2, y: canvas.height - 40, w: 30, h: 20 };
-bullets = []; invaderBullets = []; invaderDirection = 1; enemies = [];
-for (let row = 0; row < 4; row++) for (let col = 0; col < 8; col++) enemies.push({ x: 50 + col * 60, y: 50 + row * 40, w: 30, h: 25 });
-startInvaders();
-}
-else if (type === 'snake') {
-snake = [{ x: 15, y: 10 }]; dir = { x: 1, y: 0 }; nextDir = { x: 1, y: 0 }; food = { x: 20, y: 10 };
-startSnake();
-}
-}
-userData.gamesPlayed++;
-updateStats();
-updateQuestProgress('q1', 1);
-}
+
 function launchGame() {
-if (currentGame === 'shooter') startShooter();
-else if (currentGame === 'pacman') startPacman();
-else if (currentGame === 'invaders') startInvaders();
-else if (currentGame === 'snake') startSnake();
+    if (currentGame === 'shooter') startShooter();
+    else if (currentGame === 'pacman') startPacman();
+    else if (currentGame === 'invaders') startInvaders();
+    else if (currentGame === 'snake') startSnake();
 }
+
 function pauseGame() { if (gameInterval) { clearInterval(gameInterval); gameInterval = null; } }
 function closeGame() {
-pauseGame();
-document.getElementById('activeGame').classList.remove('active');
-document.getElementById('mobileControls').classList.remove('active');
-input = { left: false, right: false, up: false, down: false, fire: false };
-if (clickerInterval) { clearInterval(clickerInterval); clickerInterval = null; }
+    pauseGame();
+    document.getElementById('activeGame').classList.remove('active');
+    document.getElementById('mobileControls').classList.remove('active');
+    input = { left: false, right: false, up: false, down: false, fire: false };
+    if (clickerInterval) { clearInterval(clickerInterval); clickerInterval = null; }
 }
-document.querySelectorAll('.d-btn, .action-btn').forEach(btn => {
-const dir = btn.dataset.dir;
-btn.addEventListener('touchstart', (e) => { e.preventDefault(); input[dir] = true; });
-btn.addEventListener('touchend', (e) => { e.preventDefault(); input[dir] = false; });
-btn.addEventListener('mousedown', () => input[dir] = true);
-btn.addEventListener('mouseup', () => input[dir] = false);
-});
-document.addEventListener('keydown', (e) => {
-if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-if (e.code === 'ArrowLeft' || e.code === 'KeyA') input.left = true;
-if (e.code === 'ArrowRight' || e.code === 'KeyD') input.right = true;
-if (e.code === 'ArrowUp' || e.code === 'KeyW') input.up = true;
-if (e.code === 'ArrowDown' || e.code === 'KeyS') input.down = true;
-if (e.code === 'Space') input.fire = true;
-});
-document.addEventListener('keyup', (e) => {
-if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-if (e.code === 'ArrowLeft' || e.code === 'KeyA') input.left = false;
-if (e.code === 'ArrowRight' || e.code === 'KeyD') input.right = false;
-if (e.code === 'ArrowUp' || e.code === 'KeyW') input.up = false;
-if (e.code === 'ArrowDown' || e.code === 'KeyS') input.down = false;
-if (e.code === 'Space') input.fire = false;
-});
+
 let player, bullets, enemies;
 function startShooter() {
-if (gameInterval) clearInterval(gameInterval);
-gameInterval = setInterval(() => {
-if (input.left) player.x -= 5; if (input.right) player.x += 5;
-player.x = Math.max(0, Math.min(canvas.width - player.w, player.x));
-if (input.fire && player.cooldown === 0) { bullets.push({ x: player.x + player.w/2 - 2, y: player.y }); player.cooldown = 10; }
-if (player.cooldown > 0) player.cooldown--;
-if (Math.random() < 0.03) enemies.push({ x: Math.random() * (canvas.width - 30), y: -30, w: 30, h: 30 });
-bullets = bullets.filter(b => { b.y -= 8; return b.y > 0; });
-for (let i = enemies.length - 1; i >= 0; i--) {
-let e = enemies[i]; e.y += 2;
-if (e.y + e.h > player.y && e.x < player.x + player.w && e.x + e.w > player.x) { clearInterval(gameInterval); showNotification('💥 Game Over!'); return; }
-for (let j = bullets.length - 1; j >= 0; j--) {
-let b = bullets[j];
-if (b.x > e.x && b.x < e.x + e.w && b.y > e.y && b.y < e.y + e.h) { enemies.splice(i, 1); bullets.splice(j, 1); gameScore += 10; break; }
+    if (gameInterval) clearInterval(gameInterval);
+    gameInterval = setInterval(() => {
+        if (input.left) player.x -= 5; if (input.right) player.x += 5;
+        player.x = Math.max(0, Math.min(canvas.width - player.w, player.x));
+        if (input.fire && player.cooldown === 0) { bullets.push({ x: player.x + player.w/2 - 2, y: player.y }); player.cooldown = 10; }
+        if (player.cooldown > 0) player.cooldown--;
+        if (Math.random() < 0.03) enemies.push({ x: Math.random() * (canvas.width - 30), y: -30, w: 30, h: 30 });
+        bullets = bullets.filter(b => { b.y -= 8; return b.y > 0; });
+        for (let i = enemies.length - 1; i >= 0; i--) {
+            let e = enemies[i]; e.y += 2;
+            if (e.y + e.h > player.y && e.x < player.x + player.w && e.x + e.w > player.x) { clearInterval(gameInterval); showNotification('💥 Game Over!'); return; }
+            for (let j = bullets.length - 1; j >= 0; j--) {
+                let b = bullets[j];
+                if (b.x > e.x && b.x < e.x + e.w && b.y > e.y && b.y < e.y + e.h) { enemies.splice(i, 1); bullets.splice(j, 1); gameScore += 10; break; }
+            }
+        }
+        enemies = enemies.filter(e => e.y < canvas.height);
+        ctx.fillStyle = '#000'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.font = '30px Arial';
+        ctx.fillText('🚀', player.x, player.y + 30);
+        bullets.forEach(b => ctx.fillText('✨', b.x, b.y + 10));
+        enemies.forEach(e => ctx.fillText('👾', e.x, e.y + 25));
+        document.getElementById('gameInfo').textContent = `Счёт: ${gameScore}`;
+    }, 16);
 }
-}
-enemies = enemies.filter(e => e.y < canvas.height);
-ctx.fillStyle = '#000'; ctx.fillRect(0, 0, canvas.width, canvas.height);
-ctx.font = '30px Arial';
-ctx.fillText('🚀', player.x, player.y + 30);
-bullets.forEach(b => ctx.fillText('✨', b.x, b.y + 10));
-enemies.forEach(e => ctx.fillText('👾', e.x, e.y + 25));
-document.getElementById('gameInfo').textContent = `Счёт: ${gameScore}`;
-}, 16);
-}
+
 let pacman, ghosts, dots, mazeData;
 function startPacman() {
-if (gameInterval) clearInterval(gameInterval);
-gameInterval = setInterval(() => {
-if (input.left) pacman.nextDir = { x: -1, y: 0 }; if (input.right) pacman.nextDir = { x: 1, y: 0 };
-if (input.up) pacman.nextDir = { x: 0, y: -1 }; if (input.down) pacman.nextDir = { x: 0, y: 1 };
-let newX = pacman.x + pacman.nextDir.x, newY = pacman.y + pacman.nextDir.y;
-if (mazeData[newY] && mazeData[newY][newX] !== '#') pacman.dir = pacman.nextDir;
-newX = pacman.x + pacman.dir.x; newY = pacman.y + pacman.dir.y;
-if (mazeData[newY] && mazeData[newY][newX] !== '#') { pacman.x = newX; pacman.y = newY; }
-for (let i = dots.length - 1; i >= 0; i--) { if (dots[i].x === pacman.x && dots[i].y === pacman.y) { dots.splice(i, 1); gameScore += 10; } }
-ghosts.forEach(ghost => {
-const dirs = [{ x: 0, y: -1 }, { x: 0, y: 1 }, { x: -1, y: 0 }, { x: 1, y: 0 }];
-const validDirs = dirs.filter(d => { let nx = ghost.x + d.x, ny = ghost.y + d.y; return mazeData[ny] && mazeData[ny][nx] !== '#'; });
-if (validDirs.length > 0) { const dir = validDirs[Math.floor(Math.random() * validDirs.length)]; ghost.x += dir.x; ghost.y += dir.y; }
-if (ghost.x === pacman.x && ghost.y === pacman.y) { clearInterval(gameInterval); showNotification('💀 Пойман!'); }
-});
-const cellSize = Math.floor(canvas.width / 20); const offsetX = (canvas.width - (mazeData[0].length * cellSize)) / 2; const offsetY = (canvas.height - (mazeData.length * cellSize)) / 2;
-ctx.fillStyle = '#000'; ctx.fillRect(0, 0, canvas.width, canvas.height);
-ctx.font = '20px Arial';
-for (let y = 0; y < mazeData.length; y++) {
-for (let x = 0; x < mazeData[y].length; x++) {
-if (mazeData[y][x] === '#') ctx.fillText('🧱', x * cellSize + offsetX, y * cellSize + offsetY + cellSize - 2);
+    if (gameInterval) clearInterval(gameInterval);
+    gameInterval = setInterval(() => {
+        if (input.left) pacman.nextDir = { x: -1, y: 0 }; if (input.right) pacman.nextDir = { x: 1, y: 0 };
+        if (input.up) pacman.nextDir = { x: 0, y: -1 }; if (input.down) pacman.nextDir = { x: 0, y: 1 };
+        let newX = pacman.x + pacman.nextDir.x, newY = pacman.y + pacman.nextDir.y;
+        if (mazeData[newY] && mazeData[newY][newX] !== '#') pacman.dir = pacman.nextDir;
+        newX = pacman.x + pacman.dir.x; newY = pacman.y + pacman.dir.y;
+        if (mazeData[newY] && mazeData[newY][newX] !== '#') { pacman.x = newX; pacman.y = newY; }
+        for (let i = dots.length - 1; i >= 0; i--) { if (dots[i].x === pacman.x && dots[i].y === pacman.y) { dots.splice(i, 1); gameScore += 10; } }
+        ghosts.forEach(ghost => {
+            const dirs = [{ x: 0, y: -1 }, { x: 0, y: 1 }, { x: -1, y: 0 }, { x: 1, y: 0 }];
+            const validDirs = dirs.filter(d => { let nx = ghost.x + d.x, ny = ghost.y + d.y; return mazeData[ny] && mazeData[ny][nx] !== '#'; });
+            if (validDirs.length > 0) { const dir = validDirs[Math.floor(Math.random() * validDirs.length)]; ghost.x += dir.x; ghost.y += dir.y; }
+            if (ghost.x === pacman.x && ghost.y === pacman.y) { clearInterval(gameInterval); showNotification('💀 Пойман!'); }
+        });
+        const cellSize = Math.floor(canvas.width / 20); const offsetX = (canvas.width - (mazeData[0].length * cellSize)) / 2; const offsetY = (canvas.height - (mazeData.length * cellSize)) / 2;
+        ctx.fillStyle = '#000'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.font = '20px Arial';
+        for (let y = 0; y < mazeData.length; y++) {
+            for (let x = 0; x < mazeData[y].length; x++) {
+                if (mazeData[y][x] === '#') ctx.fillText('🧱', x * cellSize + offsetX, y * cellSize + offsetY + cellSize - 2);
+            }
+        }
+        dots.forEach(dot => ctx.fillText('⭐', dot.x * cellSize + cellSize/2 + offsetX, dot.y * cellSize + cellSize/2 + offsetY + 8));
+        ctx.fillText('🟡', pacman.x * cellSize + offsetX, pacman.y * cellSize + offsetY + cellSize - 2);
+        ghosts.forEach(ghost => ctx.fillText('👻', ghost.x * cellSize + offsetX, ghost.y * cellSize + offsetY + cellSize - 2));
+        document.getElementById('gameInfo').textContent = `Счёт: ${gameScore}`;
+    }, 150);
 }
-}
-dots.forEach(dot => ctx.fillText('⭐', dot.x * cellSize + cellSize/2 + offsetX, dot.y * cellSize + cellSize/2 + offsetY + 8));
-ctx.fillText('🟡', pacman.x * cellSize + offsetX, pacman.y * cellSize + offsetY + cellSize - 2);
-ghosts.forEach(ghost => ctx.fillText('👻', ghost.x * cellSize + offsetX, ghost.y * cellSize + offsetY + cellSize - 2));
-document.getElementById('gameInfo').textContent = `Счёт: ${gameScore}`;
-}, 150);
-}
+
 let invaderPlayer, invaderBullets, invaderDirection;
 function startInvaders() {
-if (gameInterval) clearInterval(gameInterval);
-gameInterval = setInterval(() => {
-if (input.left) invaderPlayer.x -= 5; if (input.right) invaderPlayer.x += 5;
-invaderPlayer.x = Math.max(0, Math.min(canvas.width - invaderPlayer.w, invaderPlayer.x));
-if (input.fire && Math.random() < 0.1) bullets.push({ x: invaderPlayer.x + invaderPlayer.w/2, y: invaderPlayer.y });
-let hitEdge = false; enemies.forEach(e => { e.x += invaderDirection * 1; if (e.x <= 10 || e.x >= canvas.width - 40) hitEdge = true; });
-if (hitEdge) { invaderDirection *= -1; enemies.forEach(e => e.y += 20); }
-if (Math.random() < 0.02 && enemies.length > 0) { const shooter = enemies[Math.floor(Math.random() * enemies.length)]; invaderBullets.push({ x: shooter.x + shooter.w/2, y: shooter.y + shooter.h }); }
-bullets = bullets.filter(b => { b.y -= 8; return b.y > 0; });
-invaderBullets = invaderBullets.filter(b => {
-b.y += 4;
-if (b.y > canvas.height) return false;
-if (Math.abs(b.x - invaderPlayer.x) < 20 && Math.abs(b.y - invaderPlayer.y) < 20) { clearInterval(gameInterval); showNotification('💥 Подбили!'); return false; }
-return true;
-});
-for (let i = bullets.length - 1; i >= 0; i--) { let b = bullets[i]; for (let j = enemies.length - 1; j >= 0; j--) { let e = enemies[j]; if (b.x > e.x && b.x < e.x + e.w && b.y > e.y && b.y < e.y + e.h) { enemies.splice(j, 1); bullets.splice(i, 1); gameScore += 10; break; } } }
-if (enemies.length === 0) { clearInterval(gameInterval); showNotification('🏆 Победа!'); }
-ctx.fillStyle = '#000'; ctx.fillRect(0, 0, canvas.width, canvas.height);
-ctx.font = '30px Arial';
-ctx.fillText('🚀', invaderPlayer.x, invaderPlayer.y + 25);
-bullets.forEach(b => ctx.fillText('✨', b.x, b.y + 10));
-enemies.forEach(e => ctx.fillText('👾', e.x, e.y + 25));
-invaderBullets.forEach(b => ctx.fillText('🔥', b.x, b.y + 10));
-document.getElementById('gameInfo').textContent = `Счёт: ${gameScore}`;
-}, 16);
+    if (gameInterval) clearInterval(gameInterval);
+    gameInterval = setInterval(() => {
+        if (input.left) invaderPlayer.x -= 5; if (input.right) invaderPlayer.x += 5;
+        invaderPlayer.x = Math.max(0, Math.min(canvas.width - invaderPlayer.w, invaderPlayer.x));
+        if (input.fire && Math.random() < 0.1) bullets.push({ x: invaderPlayer.x + invaderPlayer.w/2, y: invaderPlayer.y });
+        let hitEdge = false; enemies.forEach(e => { e.x += invaderDirection * 1; if (e.x <= 10 || e.x >= canvas.width - 40) hitEdge = true; });
+        if (hitEdge) { invaderDirection *= -1; enemies.forEach(e => e.y += 20); }
+        if (Math.random() < 0.02 && enemies.length > 0) { const shooter = enemies[Math.floor(Math.random() * enemies.length)]; invaderBullets.push({ x: shooter.x + shooter.w/2, y: shooter.y + shooter.h }); }
+        bullets = bullets.filter(b => { b.y -= 8; return b.y > 0; });
+        invaderBullets = invaderBullets.filter(b => {
+            b.y += 4;
+            if (b.y > canvas.height) return false;
+            if (Math.abs(b.x - invaderPlayer.x) < 20 && Math.abs(b.y - invaderPlayer.y) < 20) { clearInterval(gameInterval); showNotification('💥 Подбили!'); return false; }
+            return true;
+        });
+        for (let i = bullets.length - 1; i >= 0; i--) { let b = bullets[i]; for (let j = enemies.length - 1; j >= 0; j--) { let e = enemies[j]; if (b.x > e.x && b.x < e.x + e.w && b.y > e.y && b.y < e.y + e.h) { enemies.splice(j, 1); bullets.splice(i, 1); gameScore += 10; break; } } }
+        if (enemies.length === 0) { clearInterval(gameInterval); showNotification('🏆 Победа!'); }
+        ctx.fillStyle = '#000'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.font = '30px Arial';
+        ctx.fillText('🚀', invaderPlayer.x, invaderPlayer.y + 25);
+        bullets.forEach(b => ctx.fillText('✨', b.x, b.y + 10));
+        enemies.forEach(e => ctx.fillText('👾', e.x, e.y + 25));
+        invaderBullets.forEach(b => ctx.fillText('🔥', b.x, b.y + 10));
+        document.getElementById('gameInfo').textContent = `Счёт: ${gameScore}`;
+    }, 16);
 }
+
 let snake, dir, nextDir, food;
 function startSnake() {
-if (gameInterval) clearInterval(gameInterval);
-gameInterval = setInterval(() => {
-if (input.left && dir.x !== 1) nextDir = { x: -1, y: 0 }; else if (input.right && dir.x !== -1) nextDir = { x: 1, y: 0 };
-else if (input.up && dir.y !== 1) nextDir = { x: 0, y: -1 }; else if (input.down && dir.y !== -1) nextDir = { x: 0, y: 1 };
-dir = nextDir; const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
-const cols = Math.floor(canvas.width / 20), rows = Math.floor(canvas.height / 20);
-if (head.x < 0 || head.x >= cols || head.y < 0 || head.y >= rows || snake.some(s => s.x === head.x && s.y === head.y)) { clearInterval(gameInterval); showNotification('💥 Game Over!'); return; }
-snake.unshift(head);
-if (head.x === food.x && head.y === food.y) { gameScore += 15; food = { x: Math.floor(Math.random() * (cols-2)) + 1, y: Math.floor(Math.random() * (rows-2)) + 1 }; } else snake.pop();
-const cellSize = 20; ctx.fillStyle = '#000'; ctx.fillRect(0, 0, canvas.width, canvas.height);
-ctx.font = '20px Arial';
-snake.forEach((s, i) => { ctx.fillText(i === 0 ? '🐍' : '🟩', s.x * cellSize, s.y * cellSize + cellSize - 2); });
-ctx.fillText('🍎', food.x * cellSize, food.y * cellSize + cellSize - 2);
-document.getElementById('gameInfo').textContent = `Счёт: ${gameScore}`;
-}, 120);
+    if (gameInterval) clearInterval(gameInterval);
+    gameInterval = setInterval(() => {
+        if (input.left && dir.x !== 1) nextDir = { x: -1, y: 0 }; else if (input.right && dir.x !== -1) nextDir = { x: 1, y: 0 };
+        else if (input.up && dir.y !== 1) nextDir = { x: 0, y: -1 }; else if (input.down && dir.y !== -1) nextDir = { x: 0, y: 1 };
+        dir = nextDir; const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
+        const cols = Math.floor(canvas.width / 20), rows = Math.floor(canvas.height / 20);
+        if (head.x < 0 || head.x >= cols || head.y < 0 || head.y >= rows || snake.some(s => s.x === head.x && s.y === head.y)) { clearInterval(gameInterval); showNotification('💥 Game Over!'); return; }
+        snake.unshift(head);
+        if (head.x === food.x && head.y === food.y) { gameScore += 15; food = { x: Math.floor(Math.random() * (cols-2)) + 1, y: Math.floor(Math.random() * (rows-2)) + 1 }; } else snake.pop();
+        const cellSize = 20; ctx.fillStyle = '#000'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.font = '20px Arial';
+        snake.forEach((s, i) => { ctx.fillText(i === 0 ? '🐍' : '🟩', s.x * cellSize, s.y * cellSize + cellSize - 2); });
+        ctx.fillText('🍎', food.x * cellSize, food.y * cellSize + cellSize - 2);
+        document.getElementById('gameInfo').textContent = `Счёт: ${gameScore}`;
+    }, 120);
 }
+
 function startClicker() {
-if (!userData.clicker) userData.clicker = { clickPower: 1, clickCost: 10, autoClick: 0, autoCost: 50 };
-updateClickerUI();
-if (clickerInterval) clearInterval(clickerInterval);
-clickerInterval = setInterval(() => {
-if (userData.clicker.autoClick > 0) {
-userData.coins += userData.clicker.autoClick;
-updateClickerUI();
-saveUserData();
+    if (!userData.clicker) userData.clicker = { clickPower: 1, clickCost: 10, autoClick: 0, autoCost: 50 };
+    updateClickerUI();
+    if (clickerInterval) clearInterval(clickerInterval);
+    clickerInterval = setInterval(() => {
+        if (userData.clicker.autoClick > 0) {
+            userData.coins += userData.clicker.autoClick;
+            updateClickerUI();
+            localStorage.setItem('soundscape_user', JSON.stringify({ username: currentUser, isGuest, userData }));
+        }
+    }, 1000);
 }
-}, 1000);
-}
+
 function clickerClick() {
-userData.coins += userData.clicker.clickPower;
-updateClickerUI();
-saveUserData();
+    userData.coins += userData.clicker.clickPower;
+    updateClickerUI();
+    localStorage.setItem('soundscape_user', JSON.stringify({ username: currentUser, isGuest, userData }));
 }
+
 function buyClickerUpgrade(type) {
-if (type === 'click' && userData.coins >= userData.clicker.clickCost) {
-userData.coins -= userData.clicker.clickCost;
-userData.clicker.clickPower += 1;
-userData.clicker.clickCost = Math.floor(userData.clicker.clickCost * 1.5);
-} else if (type === 'auto' && userData.coins >= userData.clicker.autoCost) {
-userData.coins -= userData.clicker.autoCost;
-userData.clicker.autoClick += 1;
-userData.clicker.autoCost = Math.floor(userData.clicker.autoCost * 1.5);
-} else {
-showNotification('❌ Недостаточно монет!');
-return;
-}
-updateClickerUI();
-saveUserData();
-}
-function updateClickerUI() {
-document.getElementById('clickerCoins').textContent = Math.floor(userData.coins);
-document.getElementById('clickerCPS').textContent = userData.clicker.autoClick;
-document.getElementById('clickCost').textContent = userData.clicker.clickCost;
-document.getElementById('autoCost').textContent = userData.clicker.autoCost;
-}
-function initMazeQuest() {
-const maze = [[1,0,1,1,1,1,1,1,1,1],[1,0,0,0,0,0,1,0,0,1],[1,1,1,0,1,0,1,0,1,1],[1,0,0,0,1,0,0,0,0,1],[1,0,1,1,1,1,1,1,0,1],[1,0,0,0,0,0,0,1,0,1],[1,1,1,1,1,0,0,1,0,1],[1,0,0,0,1,0,0,0,0,1],[1,0,1,0,0,0,1,1,0,1],[1,1,1,1,1,1,1,1,1,1]];
-let playerPos = { x: 1, y: 1 }; let stars = [{ x: 3, y: 1, c: false },{ x: 8, y: 1, c: false },{ x: 5, y: 5, c: false },{ x: 1, y: 8, c: false },{ x: 8, y: 8, c: false }];
-let completed = false;
-function render() {
-const grid = document.getElementById('mazeGrid'); grid.innerHTML = '';
-for (let y = 0; y < 10; y++) {
-for (let x = 0; x < 10; x++) {
-const cell = document.createElement('div'); cell.className = 'maze-cell';
-if (maze[y][x] === 1) { cell.classList.add('wall'); cell.textContent = '🌑'; }
-else if (playerPos.x === x && playerPos.y === y) { cell.classList.add('player'); cell.textContent = '🚀'; }
-else { const star = stars.find(s => s.x === x && s.y === y && !s.collected); if (star) { cell.classList.add('star'); cell.textContent = '⭐'; } }
-grid.appendChild(cell);
-}
-}
-}
-function move(dx, dy) {
-if (completed) return;
-const newX = playerPos.x + dx, newY = playerPos.y + dy;
-if (newX >= 0 && newX < 10 && newY >= 0 && newY < 10 && maze[newY][newX] === 0) {
-playerPos.x = newX; playerPos.y = newY;
-stars.forEach(star => { if (!star.collected && star.x === newX && star.y === newY) { star.collected = true; userData.xp += 20; updateStats(); } });
-if (stars.every(s => s.collected) && !completed) { completed = true; userData.xp += 100; updateStats(); showNotification('🎉 Лабиринт пройден! +100 XP'); }
-render();
-}
-}
-document.getElementById('mazeGrid').onkeydown = (e) => {
-if (e.key === 'ArrowUp' || e.key === 'w') move(0, -1);
-if (e.key === 'ArrowDown' || e.key === 's') move(0, 1);
-if (e.key === 'ArrowLeft' || e.key === 'a') move(-1, 0);
-if (e.key === 'ArrowRight' || e.key === 'd') move(1, 0);
-};
-render();
-}
-function renderQuests() {
-const container = document.getElementById('questsList');
-container.innerHTML = questsData.map(q => `<div class="quest-card"><div class="quest-header"><div class="quest-icon">${q.icon}</div><div><div class="quest-title">${q.title}</div><div class="quest-desc">${q.desc}</div></div></div><div class="quest-progress-bar"><div class="quest-progress-fill" style="width: ${Math.min(100, (q.current / q.target) * 100)}%"></div></div><div class="quest-reward">+${q.reward} XP</div></div>`).join('');
-}
-function updateQuestProgress(questId, amount) {
-const quest = questsData.find(q => q.id === questId);
-if (quest && !quest.completed) {
-quest.current += amount;
-if (quest.current >= quest.target) {
-quest.completed = true;
-userData.xp += quest.reward;
-updateStats();
-renderQuests();
-showNotification(`🏆 Квест "${quest.title}" выполнен!`);
-}
-}
-}
-/* ==========================================================================
-MUSIC SEARCH ENGINE & CHARTS
-========================================================================== */
-async function initCharts() {
-    const container = document.getElementById('chartsContainer');
-    container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted);">Загрузка хитов...</div>';
-    const queries = [
-        'Macan ASPHALT 8', 'JONY Кометы', 'ENZRO Ты не бойся ночи', 'Саян Мальборо',
-        'Ваня Дмитриенко Щёлк', 'MIA BOYKA Базовый минимум', 'Zivert GAZ',
-        'Татьяна Куртукова Матушка', 'HOLLYFLAME Тону', 'Xcho MOT Шадэ'
-    ];
-    let html = '';
-    for (const q of queries) {
-        try {
-            const res = await fetch(`https://api.deezer.com/search?q=${encodeURIComponent(q)}&limit=1`);
-            const data = await res.json();
-            if (data.data && data.data.length > 0) {
-                const track = data.data[0];
-                html += `
-                <div class="chart-card" style="cursor: pointer; text-align: left;" onclick="playTrackFromChart('${encodeURIComponent(track.title)}', '${encodeURIComponent(track.artist.name)}')">
-                    <img src="${track.album.cover_medium}" style="width: 100%; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);" alt="${track.title}">
-                    <h3 class="chart-title" style="font-size: 18px; margin-bottom: 5px;">${track.title}</h3>
-                    <div class="p-stat-val" style="color: var(--text-muted); font-size: 14px; font-weight: normal;">${track.artist.name}</div>
-                    <button class="tier-btn" style="margin-top: 15px; font-size: 14px;">▶ Слушать</button>
-                </div>`;
-            }
-        } catch(e) { console.error('Ошибка загрузки чарта:', e); }
+    if (type === 'click' && userData.coins >= userData.clicker.clickCost) {
+        userData.coins -= userData.clicker.clickCost;
+        userData.clicker.clickPower += 1;
+        userData.clicker.clickCost = Math.floor(userData.clicker.clickCost * 1.5);
+    } else if (type === 'auto' && userData.coins >= userData.clicker.autoCost) {
+        userData.coins -= userData.clicker.autoCost;
+        userData.clicker.autoClick += 1;
+        userData.clicker.autoCost = Math.floor(userData.clicker.autoCost * 1.5);
+    } else {
+        showNotification('❌ Недостаточно монет!');
+        return;
     }
-    container.innerHTML = html || '<div style="grid-column: 1/-1; text-align: center; color: var(--danger);">Не удалось загрузить чарты. Проверьте интернет.</div>';
+    updateClickerUI();
+    localStorage.setItem('soundscape_user', JSON.stringify({ username: currentUser, isGuest, userData }));
 }
 
-function playTrackFromChart(title, artist) {
-    showSection('music');
-    document.getElementById('musicSearchInput').value = decodeURIComponent(title) + ' ' + decodeURIComponent(artist);
-    searchMusic();
+function updateClickerUI() {
+    document.getElementById('clickerCoins').textContent = Math.floor(userData.coins);
+    document.getElementById('clickerCPS').textContent = userData.clicker.autoClick;
+    document.getElementById('clickCost').textContent = userData.clicker.clickCost;
+    document.getElementById('autoCost').textContent = userData.clicker.autoCost;
 }
 
-async function searchMusic() {
-const query = document.getElementById('musicSearchInput').value.trim();
-const list = document.getElementById('trackList');
-if (!query) { list.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--text-muted);">Введите запрос</div>'; return; }
-list.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--text-muted);">🔍 Ищу...</div>';
-try {
-const response = await fetch(`https://api.deezer.com/search?q=${encodeURIComponent(query)}&limit=10`);
-const data = await response.json();
-if (data.data && data.data.length > 0) {
-list.innerHTML = data.data.map(track => {
-const ytUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(track.artist.name + ' - ' + track.title + ' official audio')}`;
-return `<div class="track-item">
-<img src="${track.album.cover_medium}" class="track-cover" alt="">
-<div class="track-info"><div class="track-title">${track.title}</div><div class="track-artist">${track.artist.name}</div></div>
-<a href="${ytUrl}" target="_blank" class="yt-link"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg> YouTube</a>
-</div>`}).join('');
-} else {
-const ytUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
-list.innerHTML = `<div class="track-item" style="flex-direction:column; gap:15px; background:rgba(255,0,85,0.1); border-color:#ff0055;"><div style="color:var(--text-muted);">Ничего не найдено, попробуйте YouTube:</div><a href="${ytUrl}" target="_blank" class="btn btn-primary" style="text-align:center;">Искать на YouTube</a></div>`;
+/* ==========================================================================
+QUESTS ENGINE
+========================================================================== */
+let mazePlayerPos = { x: 1, y: 1 };
+let mazeCompleted = false;
+function initMazeQuest() {
+    const maze = [[1,0,1,1,1,1,1,1,1,1],[1,0,0,0,0,0,1,0,0,1],[1,1,1,0,1,0,1,0,1,1],[1,0,0,0,1,0,0,0,0,1],[1,0,1,1,1,1,1,1,0,1],[1,0,0,0,0,0,0,1,0,1],[1,1,1,1,1,0,0,1,0,1],[1,0,0,0,1,0,0,0,0,1],[1,0,1,0,0,0,1,1,0,1],[1,1,1,1,1,1,1,1,1,1]];
+    mazePlayerPos = { x: 1, y: 1 };
+    let stars = [{ x: 3, y: 1, c: false },{ x: 8, y: 1, c: false },{ x: 5, y: 5, c: false },{ x: 1, y: 8, c: false },{ x: 8, y: 8, c: false }];
+    mazeCompleted = false;
+    function render() {
+        const grid = document.getElementById('mazeGrid'); grid.innerHTML = '';
+        for (let y = 0; y < 10; y++) {
+            for (let x = 0; x < 10; x++) {
+                const cell = document.createElement('div'); cell.className = 'maze-cell';
+                if (maze[y][x] === 1) { cell.classList.add('wall'); cell.textContent = '🌑'; }
+                else if (mazePlayerPos.x === x && mazePlayerPos.y === y) { cell.classList.add('player'); cell.textContent = '🚀'; }
+                else { const star = stars.find(s => s.x === x && s.y === y && !s.collected); if (star) { cell.classList.add('star'); cell.textContent = '⭐'; } }
+                grid.appendChild(cell);
+            }
+        }
+    }
+    window.handleMazeInput = function(e) {
+        if (mazeCompleted) return;
+        let dx = 0, dy = 0;
+        if (e.key === 'ArrowUp' || e.key === 'w') dy = -1;
+        else if (e.key === 'ArrowDown' || e.key === 's') dy = 1;
+        else if (e.key === 'ArrowLeft' || e.key === 'a') dx = -1;
+        else if (e.key === 'ArrowRight' || e.key === 'd') dx = 1;
+        else return;
+        e.preventDefault();
+        const newX = mazePlayerPos.x + dx, newY = mazePlayerPos.y + dy;
+        if (newX >= 0 && newX < 10 && newY >= 0 && newY < 10 && maze[newY][newX] === 0) {
+            mazePlayerPos.x = newX; mazePlayerPos.y = newY;
+            stars.forEach(star => {
+                if (!star.collected && star.x === newX && star.y === newY) {
+                    star.collected = true; userData.xp += 20; 
+                    localStorage.setItem('soundscape_user', JSON.stringify({ username: currentUser, isGuest, userData }));
+                    updateStats();
+                }
+            });
+            if (stars.every(s => s.collected) && !mazeCompleted) {
+                mazeCompleted = true; userData.xp += 100; 
+                localStorage.setItem('soundscape_user', JSON.stringify({ username: currentUser, isGuest, userData }));
+                updateStats(); showNotification('🎉 Лабиринт пройден! +100 XP');
+            }
+            render();
+        }
+    };
+    render();
+    document.getElementById('mazeGrid').focus();
 }
-} catch (error) {
-const ytUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
-list.innerHTML = `<div class="track-item" style="flex-direction:column; gap:15px; background:rgba(255,0,85,0.1); border-color:#ff0055;"><div style="color:var(--text-muted);">Сеть недоступна:</div><a href="${ytUrl}" target="_blank" class="btn btn-primary" style="text-align:center;">Искать на YouTube</a></div>`;
+
+function renderQuests() {
+    const container = document.getElementById('questsList');
+    container.innerHTML = questsData.map(q => `<div class="quest-card"><div class="quest-header"><div class="quest-icon">${q.icon}</div><div><div class="quest-title">${q.title}</div><div class="quest-desc">${q.desc}</div></div></div><div class="quest-progress-bar"><div class="quest-progress-fill" style="width: ${Math.min(100, (q.current / q.target) * 100)}%"></div></div><div class="quest-reward">+${q.reward} XP</div></div>`).join('');
 }
+
+function updateQuestProgress(questId, amount) {
+    const quest = questsData.find(q => q.id === questId);
+    if (quest && !quest.completed) {
+        quest.current += amount;
+        if (quest.current >= quest.target) {
+            quest.completed = true;
+            userData.xp += quest.reward;
+            localStorage.setItem('soundscape_user', JSON.stringify({ username: currentUser, isGuest, userData }));
+            updateStats();
+            renderQuests();
+            showNotification(`🏆 Квест "${quest.title}" выполнен!`);
+        }
+    }
 }
+
+/* ==========================================================================
+CHARTS & AUDIO
+========================================================================== */
+function renderCharts() {
+    const grid = document.getElementById('chartsGrid');
+    grid.innerHTML = chartsData.map((track, i) => `
+        <div class="chart-card">
+            <div class="friend-avatar-lg" style="background: linear-gradient(135deg, #b82cff, #00f3ff); font-size: 24px;">🎵</div>
+            <div class="chart-title">${track.title}</div>
+            <div class="friend-bio">${track.artist}</div>
+            <button class="btn btn-primary" style="margin-top: 10px;" onclick="playChartTrack('${track.url}', '${track.title}', '${track.artist}')">▶ Слушать</button>
+        </div>
+    `).join('');
+}
+
+function playChartTrack(url, title, artist) {
+    const player = document.getElementById('globalAudioPlayer');
+    player.src = url;
+    player.play().catch(e => showNotification('⚠️ Ошибка воспроизведения (возможно, CORS)'));
+    showNotification(`▶ Играет: ${title} - ${artist}`);
+}
+
+/* ==========================================================================
+FRIENDS SYSTEM
+========================================================================== */
+async function searchFriends(query) {
+    if (!query.trim()) {
+        renderFriendsList();
+        return;
+    }
+    const users = await dbGetAll('users');
+    const friends = await dbGetAll('friends');
+    const friendUsernames = friends.map(f => f.friendUsername);
+    
+    const filtered = users.filter(u => 
+        u.username.toLowerCase().includes(query.toLowerCase()) && 
+        u.username !== currentUser &&
+        !friendUsernames.includes(u.username)
+    );
+    
+    const container = document.getElementById('friendsListContainer');
+    if (filtered.length === 0) {
+        container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted);">Никого не найдено</div>';
+        return;
+    }
+    container.innerHTML = filtered.map(u => `
+        <div class="friend-card">
+            <div class="friend-avatar-lg">${u.username[0].toUpperCase()}</div>
+            <div class="friend-name">${u.username}</div>
+            <div class="friend-bio">${u.bio || 'Нет описания'}</div>
+            <button class="btn btn-primary" style="margin-top: 10px;" onclick="addFriend('${u.username}')">➕ Добавить</button>
+        </div>
+    `).join('');
+}
+
+async function renderFriendsList() {
+    const friends = await dbGetAll('friends');
+    const container = document.getElementById('friendsListContainer');
+    if (friends.length === 0) {
+        container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted);">Список друзей пуст. Найди кого-нибудь через поиск!</div>';
+        return;
+    }
+    
+    let html = '';
+    for (const f of friends) {
+        const user = await dbGet('users', f.friendUsername);
+        if (user) {
+            html += `
+                <div class="friend-card">
+                    <div class="friend-avatar-lg">${user.username[0].toUpperCase()}</div>
+                    <div class="friend-name">${user.username}</div>
+                    <div class="friend-bio">${user.bio || 'Нет описания'}</div>
+                    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 10px;">
+                        <button class="btn btn-primary" onclick="viewFriendProfile('${user.username}')">👁 Профиль</button>
+                        <button class="btn btn-danger" onclick="removeFriend('${user.username}')">❌ Удалить</button>
+                    </div>
+                </div>
+            `;
+        }
+    }
+    container.innerHTML = html;
+}
+
+async function addFriend(username) {
+    await dbPut('friends', { friendUsername: username, addedAt: Date.now() });
+    showNotification(`✅ ${username} добавлен в друзья!`);
+    renderFriendsList();
+    document.getElementById('friendSearchInput').value = '';
+}
+
+async function removeFriend(username) {
+    await dbDelete('friends', username);
+    showNotification(`🗑️ ${username} удален из друзей`);
+    renderFriendsList();
+}
+
+async function viewFriendProfile(username) {
+    const user = await dbGet('users', username);
+    if (!user) return;
+    document.getElementById('profileName').textContent = user.username;
+    document.getElementById('profileXP').textContent = user.xp || 0;
+    document.getElementById('profileCoins').textContent = user.coins || 0;
+    document.getElementById('profileTracks').textContent = user.tracks || 0;
+    document.querySelector('.profile-avatar').textContent = user.username[0].toUpperCase();
+    showSection('profile');
+}
+
 /* ==========================================================================
 CHAT & SPACE BACKGROUND
 ========================================================================== */
-function renderChat() {
-const container = document.getElementById('chatMessages');
-container.innerHTML = chatData.map(m => `<div class="chat-message"><div class="chat-author">👤 ${m.author}</div><div class="chat-text">${m.text}</div></div>`).join('');
-container.scrollTop = container.scrollHeight;
+async function renderChat() {
+    const messages = await dbGetAll('chat');
+    const container = document.getElementById('chatMessages');
+    container.innerHTML = messages.map(m => `<div class="chat-message"><div class="chat-author">👤 ${m.author}</div><div class="chat-text">${m.text}</div></div>`).join('');
+    container.scrollTop = container.scrollHeight;
 }
-function sendMessage() {
-const inputEl = document.getElementById('chatInput'); const text = inputEl.value.trim();
-if (text && currentUser) {
-chatData.push({ author: currentUser, text: text });
-if (chatData.length > 50) chatData.shift();
-localStorage.setItem('soundscape_chat', JSON.stringify(chatData));
-inputEl.value = ''; renderChat();
+
+async function sendMessage() {
+    const inputEl = document.getElementById('chatInput');
+    const text = inputEl.value.trim();
+    if (text && currentUser) {
+        await dbPut('chat', { author: currentUser, text: text, time: Date.now() });
+        inputEl.value = '';
+        renderChat();
+    }
 }
-}
+
 function initSpaceBackground() {
-const canvas = document.getElementById('spaceCanvas');
-const ctx = canvas.getContext('2d');
-let stars = [];
-function resize() {
-canvas.width = window.innerWidth; canvas.height = window.innerHeight; stars = [];
-for (let i = 0; i < 200; i++) stars.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, r: Math.random() * 1.5 + 0.3, alpha: Math.random(), speed: Math.random() * 0.02 + 0.005 });
+    const canvas = document.getElementById('spaceCanvas');
+    const ctx = canvas.getContext('2d');
+    let stars = [];
+    function resize() {
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight; stars = [];
+        for (let i = 0; i < 200; i++) stars.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, r: Math.random() * 1.5 + 0.3, alpha: Math.random(), speed: Math.random() * 0.02 + 0.005 });
+    }
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        stars.forEach(s => {
+            s.alpha += s.speed;
+            ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255, 255, 255, ${(Math.sin(s.alpha) + 1) / 2 * 0.9})`; ctx.fill();
+        });
+        requestAnimationFrame(draw);
+    }
+    window.addEventListener('resize', resize); resize(); draw();
 }
-function draw() {
-ctx.clearRect(0, 0, canvas.width, canvas.height);
-stars.forEach(s => {
-s.alpha += s.speed;
-ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-ctx.fillStyle = `rgba(255, 255, 255, ${(Math.sin(s.alpha) + 1) / 2 * 0.9})`; ctx.fill();
-});
-requestAnimationFrame(draw);
-}
-window.addEventListener('resize', resize); resize(); draw();
-}
+
 /* ==========================================================================
 BEAT COMPOSER PRO ENGINE
 ========================================================================== */
 function initBeatComposer() {
-const TRACKS = 15, STEPS = 512, CELL_WIDTH = 30;
-let currentSoundName = null, currentSoundFile = null, currentFolderPath = '';
-let grid = Array(TRACKS).fill().map(() => Array(STEPS).fill(null));
-let selectedNote = null, division = 1, clipboard = null;
-let projectName = 'My Beat', bpm = 120, stepDurationMs = (60 / bpm) / 4 * 1000;
-let enableSumming = true, isPlaying = false, currentStep = 0, playInterval = null, previewSource = null;
-const container = document.getElementById('cpGridContainer');
-const soundsList = document.getElementById('cpSoundsList');
-const contextMenu = document.getElementById('cpContextMenu');
-const playBtn = document.getElementById('cpPlayBtn');
-const resetBtn = document.getElementById('cpResetBtn');
-const downloadBtn = document.getElementById('cpDownloadBtn');
-const divisionSelect = document.getElementById('cpDivisionSelect');
-const summingToggle = document.getElementById('cpSummingToggle');
-const notification = document.getElementById('cpNotification');
-const propertiesModal = document.getElementById('cpPropertiesModal');
-const playbackCursor = document.getElementById('cpPlaybackCursor');
-const projectNameInput = document.getElementById('cpProjectNameInput');
-const bpmInput = document.getElementById('cpBpmInput');
-const customScrollbar = document.getElementById('cpCustomScrollbar');
-const scrollbarThumb = document.getElementById('cpScrollbarThumb');
-const scrollbarPlayhead = document.getElementById('cpScrollbarPlayhead');
-const cpAudioContext = new (window.AudioContext || window.webkitAudioContext)();
-const audioBuffers = new Map();
-const cpAnalyser = cpAudioContext.createAnalyser(); cpAnalyser.fftSize = 256;
-const masterGain = cpAudioContext.createGain();
-const masterLimiter = cpAudioContext.createDynamicsCompressor();
-masterLimiter.threshold.value = -0.5; masterLimiter.knee.value = 0;
-masterLimiter.ratio.value = 20; masterLimiter.attack.value = 0.001; masterLimiter.release.value = 0.1;
-function updateMasterRouting() {
-masterGain.disconnect(); cpAnalyser.disconnect();
-if (enableSumming) { masterGain.connect(cpAnalyser); }
-else { masterGain.connect(masterLimiter); masterLimiter.connect(cpAnalyser); }
-cpAnalyser.connect(cpAudioContext.destination);
-}
-updateMasterRouting();
-function makeDistortionCurve(amount) {
-const k = amount, n = 44100, curve = new Float32Array(n), deg = Math.PI / 180;
-for (let i = 0; i < n; ++i) { const x = (i * 2) / n - 1; curve[i] = (3 + k) * x * 20 * deg / (Math.PI + k * Math.abs(x)); }
-return curve;
-}
-function createImpulseResponse(duration, decay, ctx) {
-const rate = ctx.sampleRate, length = rate * duration;
-const impulse = ctx.createBuffer(2, length, rate);
-const L = impulse.getChannelData(0), R = impulse.getChannelData(1);
-for (let i = 0; i < length; i++) { const v = (Math.random() * 2 - 1) * Math.pow(1 - i / length, decay); L[i] = v; R[i] = v * (0.8 + Math.random() * 0.2); }
-return impulse;
-}
-function buildFxChain(ctx, source, fx, destination) {
-let node = source;
-if (fx.eq && (fx.eq.active || fx.eq.low !== 0 || fx.eq.mid !== 0 || fx.eq.high !== 0)) {
-const eqLow = ctx.createBiquadFilter(); eqLow.type = 'lowshelf'; eqLow.frequency.value = 100; eqLow.gain.value = fx.eq.low || 0;
-const eqMid = ctx.createBiquadFilter(); eqMid.type = 'peaking'; eqMid.frequency.value = 1000; eqMid.gain.value = fx.eq.mid || 0;
-const eqHigh = ctx.createBiquadFilter(); eqHigh.type = 'highshelf'; eqHigh.frequency.value = 5000; eqHigh.gain.value = fx.eq.high || 0;
-node.connect(eqLow); eqLow.connect(eqMid); eqMid.connect(eqHigh); node = eqHigh;
-}
-if (fx.distortion && fx.distortion.active) {
-const shaper = ctx.createWaveShaper(); shaper.curve = makeDistortionCurve(fx.distortion.drive || 20); shaper.oversample = '4x';
-const tone = ctx.createBiquadFilter(); tone.type = 'lowpass'; tone.frequency.value = fx.distortion.tone || 2000;
-node.connect(shaper); shaper.connect(tone); node = tone;
-}
-if (fx.bitcrusher && fx.bitcrusher.active) {
-try {
-const crusher = ctx.createScriptProcessor(4096, 2, 2);
-const stepVal = Math.pow(0.5, fx.bitcrusher.bits || 8);
-const freqRed = fx.bitcrusher.freqReduction || 1;
-let phaser = 0, lastValue = 0;
-crusher.onaudioprocess = function(e) {
-const inL = e.inputBuffer.getChannelData(0), inR = e.inputBuffer.getChannelData(1);
-const outL = e.outputBuffer.getChannelData(0), outR = e.outputBuffer.getChannelData(1);
-for (let i = 0; i < inL.length; i++) {
-phaser += freqRed;
-if (phaser >= 1.0) { phaser = 0.0; lastValue = (inL[i] > 0 ? 1 : -1) * Math.floor(Math.abs(inL[i]) / stepVal + 0.5) * stepVal; }
-outL[i] = lastValue; outR[i] = (inR[i] > 0 ? 1 : -1) * Math.floor(Math.abs(inR[i]) / stepVal + 0.5) * stepVal;
-}
-};
-node.connect(crusher); node = crusher;
-} catch(e) {}
-}
-if (fx.compressor && fx.compressor.active) {
-const comp = ctx.createDynamicsCompressor();
-comp.threshold.value = fx.compressor.threshold || -24; comp.ratio.value = fx.compressor.ratio || 4;
-comp.knee.value = 10; comp.attack.value = 0.003; comp.release.value = 0.25;
-node.connect(comp); node = comp;
-}
-if (fx.delay && fx.delay.active) {
-const delay = ctx.createDelay(2.0); delay.delayTime.value = fx.delay.time || 0.3;
-const fb = ctx.createGain(); fb.gain.value = (fx.delay.feedback || 40) / 100;
-const wet = ctx.createGain(); wet.gain.value = (fx.delay.mix || 30) / 100;
-node.connect(delay); delay.connect(fb); fb.connect(delay); delay.connect(wet); wet.connect(destination);
-}
-if (fx.killer && fx.killer.active) {
-const hpf = ctx.createBiquadFilter(); hpf.type = 'highpass'; hpf.frequency.value = fx.killer.freq || 200; hpf.Q.value = fx.killer.q || 1;
-node.connect(hpf); node = hpf;
-}
-if (fx.reverb && fx.reverb.active) {
-const conv = ctx.createConvolver(); conv.buffer = createImpulseResponse(fx.reverb.decay || 1.5, 2.0, ctx);
-const wet = ctx.createGain(); wet.gain.value = (fx.reverb.mix || 30) / 100;
-node.connect(conv); conv.connect(wet); wet.connect(destination);
-}
-const panner = ctx.createStereoPanner(); panner.pan.value = (fx.panner ? fx.panner.pan : 0) / 100;
-node.connect(panner); node = panner;
-const gain = ctx.createGain(); gain.gain.value = 1.0;
-node.connect(gain); gain.connect(destination);
-return gain;
-}
-let isDraggingThumb = false, dragStartX = 0, dragStartLeft = 0;
-function updateScrollbarThumb() {
-const trackWidth = customScrollbar.clientWidth - 4;
-const contentWidth = container.scrollWidth;
-const visibleWidth = container.clientWidth;
-if (contentWidth <= visibleWidth) { scrollbarThumb.style.display = 'none'; return; }
-scrollbarThumb.style.display = 'block';
-let thumbWidth = Math.max(30, (visibleWidth / contentWidth) * trackWidth);
-scrollbarThumb.style.width = thumbWidth + 'px';
-const maxScroll = contentWidth - visibleWidth;
-const maxThumbLeft = trackWidth - thumbWidth;
-scrollbarThumb.style.left = ((container.scrollLeft / maxScroll) * maxThumbLeft) + 'px';
-}
-scrollbarThumb.addEventListener('mousedown', (e) => { isDraggingThumb = true; dragStartX = e.clientX; dragStartLeft = scrollbarThumb.offsetLeft; e.preventDefault(); });
-document.addEventListener('mousemove', (e) => {
-if (!isDraggingThumb) return;
-const deltaX = e.clientX - dragStartX;
-const trackWidth = customScrollbar.clientWidth - 4;
-const thumbWidth = scrollbarThumb.offsetWidth;
-const maxThumbLeft = trackWidth - thumbWidth;
-let newLeft = Math.max(0, Math.min(maxThumbLeft, dragStartLeft + deltaX));
-scrollbarThumb.style.left = newLeft + 'px';
-const maxScroll = container.scrollWidth - container.clientWidth;
-container.scrollLeft = maxScroll > 0 ? (newLeft / maxThumbLeft) * maxScroll : 0;
-});
-document.addEventListener('mouseup', () => { isDraggingThumb = false; });
-container.addEventListener('scroll', updateScrollbarThumb);
-window.addEventListener('resize', updateScrollbarThumb);
-function updateScrollbarPlayhead() {
-const totalWidth = container.scrollWidth;
-scrollbarPlayhead.style.left = (((100 + currentStep * CELL_WIDTH) / totalWidth) * customScrollbar.clientWidth) + 'px';
-}
-async function scanDirectory(path) {
-soundsList.innerHTML = '<div class="cp-sound-item" style="color:var(--text-muted);">Загрузка...</div>';
-try {
-const response = await fetch(path);
-if (!response.ok) throw new Error("Directory listing not enabled");
-const text = await response.text();
-const parser = new DOMParser();
-const doc = parser.parseFromString(text, 'text/html');
-const items = new Map();
-Array.from(doc.querySelectorAll('a')).forEach(a => {
-const href = a.getAttribute('href'), name = a.textContent.trim();
-if (name === '../' || name === '..' || name === 'Parent Directory') return;
-if (href.endsWith('/') || href.match(/\.(mp3|wav|ogg)$/i))
-items.set(name, { name, isFolder: href.endsWith('/'), href, fullPath: path + href });
-});
-renderSoundsPanel(Array.from(items.values()));
-} catch (e) {
-soundsList.innerHTML = '<div class="cp-sound-item" style="color:#ff8888; flex-direction:column; text-align:center; padding:15px;">⚠️ Для загрузки звуков нужен локальный сервер с папкой sounds/</div>';
-}
-}
-function renderSoundsPanel(items) {
-soundsList.innerHTML = '';
-if (currentFolderPath !== '') {
-const b = document.createElement('div'); b.className = 'cp-sound-item back-btn'; b.textContent = '⬅️ Назад';
-b.onclick = () => { const p = currentFolderPath.split('/').filter(x=>x); p.pop(); currentFolderPath = p.join('/') + (p.length ? '/' : ''); scanDirectory('sounds/' + currentFolderPath); };
-soundsList.appendChild(b);
-}
-if (!items.length) { soundsList.innerHTML = '<div class="cp-sound-item" style="color:var(--text-muted); justify-content:center;">(Папка пуста)</div>'; return; }
-items.sort((a, b) => a.isFolder === b.isFolder ? a.name.localeCompare(b.name) : (a.isFolder ? -1 : 1));
-items.forEach(item => {
-const el = document.createElement('div'); el.className = 'cp-sound-item';
-if (item.isFolder) {
-el.textContent = '📁 ' + item.name;
-el.onclick = () => { currentFolderPath += item.name + '/'; scanDirectory('sounds/' + currentFolderPath); };
-} else {
-el.textContent = '🎵 ' + item.name;
-if (currentSoundName === item.name) el.classList.add('active');
-el.onclick = async () => {
-currentSoundName = item.name; currentSoundFile = item.fullPath;
-document.querySelectorAll('.cp-sound-item').forEach(s => s.classList.remove('active'));
-el.classList.add('active');
-if (previewSource) try { previewSource.stop(); } catch(e){}
-const buf = await loadAudioBuffer(item.fullPath);
-if (buf) { previewSource = cpAudioContext.createBufferSource(); previewSource.buffer = buf; const g = cpAudioContext.createGain(); g.gain.value = 0.2; previewSource.connect(g); g.connect(cpAudioContext.destination); previewSource.start(); }
-};
-}
-soundsList.appendChild(el);
-});
-}
-async function loadAudioBuffer(url) {
-if (audioBuffers.has(url)) return audioBuffers.get(url);
-try { const r = await fetch(url); const b = await cpAudioContext.decodeAudioData(await r.arrayBuffer()); audioBuffers.set(url, b); return b; }
-catch(e) { return null; }
-}
-function startPlayback() { if (cpAudioContext.state === 'suspended') cpAudioContext.resume(); isPlaying = true; playBtn.textContent = '⏸️ Pause'; playStep(); }
-function stopPlayback() { isPlaying = false; playBtn.textContent = '▶️ Play'; if (playInterval) { clearTimeout(playInterval); playInterval = null; } }
-function resetPlayback() { stopPlayback(); currentStep = 0; updateCursorVisuals(); }
-function playStep() {
-if (!isPlaying) return;
-for (let t = 0; t < TRACKS; t++) {
-const note = grid[t][currentStep];
-if (note && note !== 'occupied') {
-loadAudioBuffer(note.file).then(buffer => {
-if (!buffer) return;
-const source = cpAudioContext.createBufferSource();
-source.buffer = buffer;
-source.playbackRate.value = (note.speed || 1.0) * Math.pow(2, (note.pitch || 0) / 12);
-const gainNode = buildFxChain(cpAudioContext, source, note.fx || {}, masterGain);
-gainNode.gain.value = note.volume || 1.0;
-const trimStart = Math.max(0, note.fx?.trim?.start || 0);
-const trimEnd = Math.max(0, note.fx?.trim?.end || 0);
-const maxDur = Math.max(0.01, buffer.duration - trimStart - trimEnd);
-source.start(cpAudioContext.currentTime, trimStart, maxDur);
-});
-}
-}
-updateCursorVisuals();
-currentStep = (currentStep + 1) % STEPS;
-playInterval = setTimeout(playStep, stepDurationMs);
-}
-function updateCursorVisuals() {
-const leftPos = 100 + currentStep * CELL_WIDTH;
-playbackCursor.style.left = `${leftPos}px`;
-const cl = container.scrollLeft, cr = cl + container.clientWidth;
-if (leftPos > cr - 50) container.scrollLeft = leftPos - 50;
-else if (leftPos < cl) container.scrollLeft = leftPos;
-updateScrollbarPlayhead();
-}
-function createGrid() {
-container.querySelectorAll('.cp-track-row').forEach(r => r.remove());
-for (let t = 0; t < TRACKS; t++) {
-const row = document.createElement('div'); row.className = 'cp-track-row';
-const label = document.createElement('div'); label.className = 'cp-track-label'; label.textContent = `Track ${t + 1}`; row.appendChild(label);
-for (let s = 0; s < STEPS; s++) {
-const cell = document.createElement('div');
-cell.className = `cp-grid-cell ${(s + 1) % 16 === 0 ? 'bar-line' : ''}`;
-cell.dataset.track = t; cell.dataset.step = s;
-cell.addEventListener('click', (e) => { setCurrentStep(s); handleCellClick(e); });
-cell.addEventListener('contextmenu', e => showContextMenu(e, t, s));
-row.appendChild(cell);
-}
-container.appendChild(row);
-}
-setTimeout(updateScrollbarThumb, 100); renderNotes();
-}
-function renderNotes() {
-document.querySelectorAll('.cp-note').forEach(n => n.remove());
-for (let t = 0; t < TRACKS; t++)
-for (let s = 0; s < STEPS; s++) {
-const note = grid[t][s];
-if (note && note !== 'occupied') {
-const cell = document.querySelector(`.cp-grid-cell[data-track="${t}"][data-step="${s}"]`);
-const el = document.createElement('div'); el.className = 'cp-note';
-el.dataset.name = note.soundName.replace(/\.[^/.]+$/, '');
-el.style.width = `${(note.duration || 1) * CELL_WIDTH - 2}px`;
-el.addEventListener('contextmenu', e => showContextMenu(e, t, s));
-cell.appendChild(el);
-}
-}
-}
-function handleCellClick(e) {
-const t = +e.target.dataset.track, s = +e.target.dataset.step;
-if (!currentSoundFile) { showCpNotification('Сначала выберите звук!'); return; }
-if (!canPlaceNote(t, s, 1)) { showCpNotification('Наложение!'); return; }
-placeNote(t, s, currentSoundName, currentSoundFile, 1, 1.0, 1.0, 0, {
-trim: { start: 0, end: 0 }, distortion: { active: false, drive: 20, tone: 2000 },
-bitcrusher: { active: false, bits: 8, freqReduction: 1 }, compressor: { active: false, threshold: -24, ratio: 4 },
-reverb: { active: false, mix: 30, decay: 1.5 }, delay: { active: false, time: 0.3, feedback: 40, mix: 30 },
-killer: { active: false, freq: 200, q: 1 }, eq: { active: false, low: 0, mid: 0, high: 0 }, panner: { pan: 0 }
-});
-renderNotes(); showCpNotification('Note placed!');
-}
-function canPlaceNote(t, s, d) { for (let i = s; i < s + d; i++) { if (i >= STEPS || grid[t][Math.floor(i)] !== null) return false; } return true; }
-function placeNote(t, s, name, file, dur, vol, spd, pit, fx) { const n = { soundName: name, file, duration: dur, volume: vol, speed: spd, pitch: pit, fx }; for (let i = s; i < s + dur && i < STEPS; i++) grid[t][Math.floor(i)] = i === s ? n : 'occupied'; }
-function clearNoteAt(t, s) { if (!grid[t][s] || grid[t][s] === 'occupied') return; const e = s + (grid[t][s].duration || 1); for (let i = s; i < e && i < STEPS; i++) grid[t][i] = null; }
-function showContextMenu(e, t, s) {
-e.preventDefault();
-const note = grid[t][s];
-contextMenu.style.display = 'flex'; contextMenu.style.left = `${e.pageX}px`; contextMenu.style.top = `${e.pageY}px`; contextMenu.innerHTML = '';
-if (note && note !== 'occupied') {
-const del = document.createElement('div'); del.textContent = '🗑️ Delete'; del.onclick = () => { clearNoteAt(t, s); renderNotes(); contextMenu.style.display = 'none'; };
-const prop = document.createElement('div'); prop.textContent = '⚙️ Properties & FX';
-prop.onclick = () => {
-selectedNote = { track: t, step: s, note };
-document.getElementById('cpVolumeInput').value = note.volume;
-document.getElementById('cpSpeedInput').value = note.speed || 1;
-document.getElementById('cpPitchInput').value = note.pitch || 0;
-const fx = note.fx || {};
-document.getElementById('cp-fx-trim-start').value = fx.trim?.start || 0; document.getElementById('cp-val-trim-start').textContent = (fx.trim?.start || 0).toFixed(2);
-document.getElementById('cp-fx-trim-end').value = fx.trim?.end || 0; document.getElementById('cp-val-trim-end').textContent = (fx.trim?.end || 0).toFixed(2);
-document.getElementById('cp-fx-dist-active').checked = !!(fx.distortion?.active); document.getElementById('cp-fx-dist-drive').value = fx.distortion?.drive || 20; document.getElementById('cp-val-dist-drive').textContent = fx.distortion?.drive || 20; document.getElementById('cp-fx-dist-tone').value = fx.distortion?.tone || 2000; document.getElementById('cp-val-dist-tone').textContent = fx.distortion?.tone || 2000;
-document.getElementById('cp-fx-bc-active').checked = !!(fx.bitcrusher?.active); document.getElementById('cp-fx-bc-bits').value = fx.bitcrusher?.bits || 8; document.getElementById('cp-val-bc-bits').textContent = fx.bitcrusher?.bits || 8; document.getElementById('cp-fx-bc-freq').value = fx.bitcrusher?.freqReduction || 1; document.getElementById('cp-val-bc-freq').textContent = fx.bitcrusher?.freqReduction || 1;
-document.getElementById('cp-fx-comp-active').checked = !!(fx.compressor?.active); document.getElementById('cp-fx-comp-thresh').value = fx.compressor?.threshold || -24; document.getElementById('cp-val-comp-thresh').textContent = fx.compressor?.threshold || -24; document.getElementById('cp-fx-comp-ratio').value = fx.compressor?.ratio || 4; document.getElementById('cp-val-comp-ratio').textContent = fx.compressor?.ratio || 4;
-document.getElementById('cp-fx-rev-active').checked = !!(fx.reverb?.active); document.getElementById('cp-fx-rev-mix').value = fx.reverb?.mix || 30; document.getElementById('cp-val-rev-mix').textContent = fx.reverb?.mix || 30; document.getElementById('cp-fx-rev-decay').value = fx.reverb?.decay || 1.5; document.getElementById('cp-val-rev-decay').textContent = fx.reverb?.decay || 1.5;
-document.getElementById('cp-fx-del-active').checked = !!(fx.delay?.active); document.getElementById('cp-fx-del-time').value = fx.delay?.time || 0.3; document.getElementById('cp-val-del-time').textContent = fx.delay?.time || 0.3; document.getElementById('cp-fx-del-fb').value = fx.delay?.feedback || 40; document.getElementById('cp-val-del-fb').textContent = fx.delay?.feedback || 40; document.getElementById('cp-fx-del-mix').value = fx.delay?.mix || 30; document.getElementById('cp-val-del-mix').textContent = fx.delay?.mix || 30;
-document.getElementById('cp-fx-kill-active').checked = !!(fx.killer?.active); document.getElementById('cp-fx-kill-freq').value = fx.killer?.freq || 200; document.getElementById('cp-val-kill-freq').textContent = fx.killer?.freq || 200; document.getElementById('cp-fx-kill-q').value = fx.killer?.q || 1; document.getElementById('cp-val-kill-q').textContent = (fx.killer?.q || 1).toFixed(1);
-document.getElementById('cp-fx-eq-low').value = fx.eq?.low || 0; document.getElementById('cp-val-eq-low').textContent = fx.eq?.low || 0;
-document.getElementById('cp-fx-eq-mid').value = fx.eq?.mid || 0; document.getElementById('cp-val-eq-mid').textContent = fx.eq?.mid || 0;
-document.getElementById('cp-fx-eq-high').value = fx.eq?.high || 0; document.getElementById('cp-val-eq-high').textContent = fx.eq?.high || 0;
-document.getElementById('cp-fx-pan').value = fx.panner?.pan || 0; document.getElementById('cp-fx-pan-val').textContent = fx.panner?.pan || 0;
-updateFxGroupsVisual(); cpSwitchTab('basic'); propertiesModal.style.display = 'flex'; contextMenu.style.display = 'none';
-};
-const copy = document.createElement('div'); copy.textContent = '📋 Copy'; copy.onclick = () => { clipboard = { ...note }; showCpNotification('Copied!'); contextMenu.style.display = 'none'; };
-contextMenu.append(del, prop, copy);
-} else {
-const paste = document.createElement('div'); paste.textContent = '📋 Paste';
-paste.onclick = () => { if (clipboard && canPlaceNote(t, s, clipboard.duration || 1)) { placeNote(t, s, clipboard.soundName, clipboard.file, clipboard.duration || 1, clipboard.volume || 1.0, clipboard.speed || 1.0, clipboard.pitch || 0, clipboard.fx || {}); renderNotes(); showCpNotification('Pasted!'); } else showCpNotification('Cannot paste!'); contextMenu.style.display = 'none'; };
-contextMenu.appendChild(paste);
-}
-document.addEventListener('click', () => contextMenu.style.display = 'none', { once: true });
-}
-window.cpSwitchTab = (n) => { document.querySelectorAll('.cp-tab').forEach(t => t.classList.remove('active')); document.querySelectorAll('.cp-tab-content').forEach(t => t.classList.remove('active')); event.target.classList.add('active'); document.getElementById(`cpTab-${n}`).classList.add('active'); };
-function updateFxGroupsVisual() {
-[['cp-fx-dist-active','cp-grp-distortion'],['cp-fx-bc-active','cp-grp-bitcrusher'],['cp-fx-comp-active','cp-grp-compressor'],['cp-fx-rev-active','cp-grp-reverb'],['cp-fx-del-active','cp-grp-delay'],['cp-fx-kill-active','cp-grp-killer']].forEach(([id, grp]) => {
-const g = document.getElementById(grp), c = document.getElementById(id).checked;
-g.classList.toggle('enabled', c); g.classList.toggle('disabled', !c);
-});
-}
-['cp-fx-dist-active','cp-fx-bc-active','cp-fx-comp-active','cp-fx-rev-active','cp-fx-del-active','cp-fx-kill-active'].forEach(id => document.getElementById(id).addEventListener('change', updateFxGroupsVisual));
-['cp-fx-trim-start','cp-fx-trim-end','cp-fx-dist-drive','cp-fx-dist-tone','cp-fx-bc-bits','cp-fx-bc-freq','cp-fx-comp-thresh','cp-fx-comp-ratio','cp-fx-rev-mix','cp-fx-rev-decay','cp-fx-del-time','cp-fx-del-fb','cp-fx-del-mix','cp-fx-kill-freq','cp-fx-kill-q','cp-fx-eq-low','cp-fx-eq-mid','cp-fx-eq-high','cp-fx-pan'].forEach(id => {
-document.getElementById(id).addEventListener('input', (e) => {
-const valId = id === 'cp-fx-pan' ? 'cp-fx-pan-val' : id.replace('cp-fx-', 'cp-val-');
-const d = document.getElementById(valId); if (d) d.textContent = id.includes('trim') ? parseFloat(e.target.value).toFixed(2) : (id === 'cp-fx-kill-q' ? parseFloat(e.target.value).toFixed(1) : e.target.value);
-});
-});
-document.getElementById('cpSaveNoteBtn').addEventListener('click', () => {
-const { track, step, note } = selectedNote; clearNoteAt(track, step);
-if (canPlaceNote(track, step, 1)) {
-const fx = {
-trim: { start: +document.getElementById('cp-fx-trim-start').value, end: +document.getElementById('cp-fx-trim-end').value },
-distortion: { active: document.getElementById('cp-fx-dist-active').checked, drive: +document.getElementById('cp-fx-dist-drive').value, tone: +document.getElementById('cp-fx-dist-tone').value },
-bitcrusher: { active: document.getElementById('cp-fx-bc-active').checked, bits: +document.getElementById('cp-fx-bc-bits').value, freqReduction: +document.getElementById('cp-fx-bc-freq').value },
-compressor: { active: document.getElementById('cp-fx-comp-active').checked, threshold: +document.getElementById('cp-fx-comp-thresh').value, ratio: +document.getElementById('cp-fx-comp-ratio').value },
-reverb: { active: document.getElementById('cp-fx-rev-active').checked, mix: +document.getElementById('cp-fx-rev-mix').value, decay: +document.getElementById('cp-fx-rev-decay').value },
-delay: { active: document.getElementById('cp-fx-del-active').checked, time: +document.getElementById('cp-fx-del-time').value, feedback: +document.getElementById('cp-fx-del-fb').value, mix: +document.getElementById('cp-fx-del-mix').value },
-killer: { active: document.getElementById('cp-fx-kill-active').checked, freq: +document.getElementById('cp-fx-kill-freq').value, q: +document.getElementById('cp-fx-kill-q').value },
-eq: { active: true, low: +document.getElementById('cp-fx-eq-low').value, mid: +document.getElementById('cp-fx-eq-mid').value, high: +document.getElementById('cp-fx-eq-high').value },
-panner: { pan: +document.getElementById('cp-fx-pan').value }
-};
-placeNote(track, step, note.soundName, note.file, 1, +document.getElementById('cpVolumeInput').value, +document.getElementById('cpSpeedInput').value, +document.getElementById('cpPitchInput').value, fx);
-renderNotes(); showCpNotification('Updated!');
-} else { placeNote(track, step, note.soundName, note.file, note.duration || 1, note.volume || 1.0, note.speed || 1.0, note.pitch || 0, note.fx || {}); showCpNotification('Overlaps!'); }
-propertiesModal.style.display = 'none';
-});
-document.getElementById('cpCancelNoteBtn').addEventListener('click', () => propertiesModal.style.display = 'none');
-const cpCanvas = document.getElementById('cpVisualizerCanvas'), cpCanvasCtx = cpCanvas.getContext('2d');
-function resizeCpCanvas() { cpCanvas.width = cpCanvas.offsetWidth; cpCanvas.height = cpCanvas.offsetHeight; }
-window.addEventListener('resize', resizeCpCanvas); resizeCpCanvas();
-function drawCpVisualizer() {
-requestAnimationFrame(drawCpVisualizer);
-const bl = cpAnalyser.frequencyBinCount, da = new Uint8Array(bl); cpAnalyser.getByteFrequencyData(da);
-cpCanvasCtx.fillStyle = 'rgba(10, 14, 39, 0.3)'; cpCanvasCtx.fillRect(0, 0, cpCanvas.width, cpCanvas.height);
-const bw = (cpCanvas.width / bl) * 2.5; let x = 0;
-for (let i = 0; i < bl; i++) {
-const bh = (da[i] / 255) * cpCanvas.height;
-const g = cpCanvasCtx.createLinearGradient(0, cpCanvas.height, 0, cpCanvas.height - bh);
-g.addColorStop(0, '#00f3ff'); g.addColorStop(0.5, '#bc13fe'); g.addColorStop(1, '#ff0055');
-cpCanvasCtx.fillStyle = g; cpCanvasCtx.fillRect(x, cpCanvas.height - bh, bw, bh); x += bw + 1;
-}
-}
-drawCpVisualizer();
-function showCpNotification(msg) { notification.textContent = msg; notification.classList.add('show'); setTimeout(() => notification.classList.remove('show'), 2000); }
-function setCurrentStep(s) { currentStep = Math.max(0, Math.min(STEPS - 1, s)); updateCursorVisuals(); }
-let isDraggingCursor = false;
-playbackCursor.addEventListener('mousedown', (e) => { isDraggingCursor = true; e.preventDefault(); });
-document.addEventListener('mousemove', (e) => { if (!isDraggingCursor) return; const r = container.getBoundingClientRect(); setCurrentStep(Math.round((e.clientX - r.left + container.scrollLeft - 100) / CELL_WIDTH)); });
-document.addEventListener('mouseup', () => { isDraggingCursor = false; });
-playBtn.addEventListener('click', () => isPlaying ? stopPlayback() : startPlayback());
-resetBtn.addEventListener('click', resetPlayback);
-projectNameInput.addEventListener('input', (e) => projectName = e.target.value || 'My Beat');
-bpmInput.addEventListener('input', (e) => { const v = parseInt(e.target.value); if (v >= 40 && v <= 300) { bpm = v; stepDurationMs = (60 / bpm) / 4 * 1000; } });
-summingToggle.addEventListener('change', (e) => { enableSumming = e.target.checked; updateMasterRouting(); showCpNotification(enableSumming ? 'Суммирование вкл' : 'Суммирование выкл'); });
-document.addEventListener('keydown', (e) => { if (e.code === 'Space' && e.target.tagName !== 'INPUT' && document.getElementById('beatmaker').classList.contains('active')) { e.preventDefault(); isPlaying ? stopPlayback() : startPlayback(); } });
-divisionSelect.addEventListener('change', e => division = parseFloat(e.target.value));
-downloadBtn.addEventListener('click', async () => {
-showCpNotification('Анализ и рендеринг...');
-let maxStep = 0; const needed = new Set(); let has = false;
-for (let t = 0; t < TRACKS; t++)
-for (let s = 0; s < STEPS; s++) {
-const n = grid[t][s];
-if (n && n !== 'occupied') { needed.add(n.file); has = true; const e = s + (n.duration || 1); if (e > maxStep) maxStep = e; }
-}
-if (!has) { showCpNotification('Нет нот!'); return; }
-const renderSteps = Math.max(16, maxStep + 64);
-await Promise.all(Array.from(needed).map(f => loadAudioBuffer(f)));
-const sr = 44100, dur = renderSteps * stepDurationMs / 1000;
-const offCtx = new OfflineAudioContext(2, Math.ceil(dur * sr), sr);
-const expMaster = offCtx.createGain();
-const expLimiter = offCtx.createDynamicsCompressor();
-expLimiter.threshold.value = -0.5; expLimiter.knee.value = 0; expLimiter.ratio.value = 20; expLimiter.attack.value = 0.001; expLimiter.release.value = 0.1;
-if (enableSumming) expMaster.connect(offCtx.destination);
-else { expMaster.connect(expLimiter); expLimiter.connect(offCtx.destination); }
-for (let step = 0; step < renderSteps; step++) {
-const time = step * stepDurationMs / 1000;
-for (let t = 0; t < TRACKS; t++) {
-const note = grid[t][step];
-if (note && note !== 'occupied') {
-const buffer = audioBuffers.get(note.file);
-if (!buffer) continue;
-const source = offCtx.createBufferSource();
-source.buffer = buffer;
-source.playbackRate.value = (note.speed || 1.0) * Math.pow(2, (note.pitch || 0) / 12);
-const gainNode = buildFxChain(offCtx, source, note.fx || {}, expMaster);
-gainNode.gain.value = note.volume || 1.0;
-const trimStart = Math.max(0, note.fx?.trim?.start || 0);
-const trimEnd = Math.max(0, note.fx?.trim?.end || 0);
-const maxDur = Math.max(0.01, buffer.duration - trimStart - trimEnd);
-source.start(time, trimStart, maxDur);
-}
-}
-}
-showCpNotification('Кодирование 320 kbps...');
-const rendered = await offCtx.startRendering();
-const enc = new lamejs.Mp3Encoder(2, sr, 320);
-const mp3 = [], bsz = 1152;
-const L = rendered.getChannelData(0), R = rendered.getChannelData(1);
-for (let i = 0; i < L.length; i += bsz) {
-const lc = L.subarray(i, i + bsz), rc = R.subarray(i, i + bsz);
-const li = new Int16Array(lc.length), ri = new Int16Array(rc.length);
-for (let j = 0; j < lc.length; j++) { li[j] = Math.max(-1, Math.min(1, lc[j])) * 0x7FFF; ri[j] = Math.max(-1, Math.min(1, rc[j])) * 0x7FFF; }
-const buf = enc.encodeBuffer(li, ri); if (buf.length) mp3.push(buf);
-}
-const end = enc.flush(); if (end.length) mp3.push(end);
-const blob = new Blob(mp3, { type: 'audio/mp3' });
-const url = URL.createObjectURL(blob);
-const a = document.createElement('a'); a.href = url; a.download = `${projectName}_320kbps.mp3`;
-document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
-showCpNotification('MP3 (320kbps) сохранен!');
-});
-const PROJECTS_KEY = 'beatmaker_pro_projects';
-function generateId() { return 'proj_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9); }
-function getProjects() { try { return JSON.parse(localStorage.getItem(PROJECTS_KEY) || '[]'); } catch(e) { return []; } }
-function saveProjectsList(list) { try { localStorage.setItem(PROJECTS_KEY, JSON.stringify(list)); } catch(e) { showCpNotification('⚠️ Хранилище переполнено'); } }
-function saveCurrentProject() {
-let maxStep = 0;
-for (let t = 0; t < TRACKS; t++) {
-for (let s = 0; s < STEPS; s++) {
-const n = grid[t][s];
-if (n && n !== 'occupied') {
-const end = s + (n.duration || 1);
-if (end > maxStep) maxStep = end;
-}
-}
-}
-const durationSec = Math.round(maxStep * stepDurationMs / 1000);
-const urlParams = new URLSearchParams(window.location.search);
-const urlEditId = urlParams.get('edit');
-let projects = getProjects();
-let isEditing = false;
-if (urlEditId) {
-const idx = projects.findIndex(p => p.id === urlEditId);
-if (idx !== -1) {
-projects[idx].name = projectName;
-projects[idx].bpm = bpm;
-projects[idx].grid = grid;
-projects[idx].duration = durationSec;
-projects[idx].updatedAt = Date.now();
-saveProjectsList(projects);
-isEditing = true;
-showCpNotification('✅ Проект обновлён!');
-}
-}
-if (!isEditing) {
-if (projects.length >= userData.projectLimit) {
-showCpNotification(`⚠️ Лимит проектов (${userData.projectLimit}) достигнут! Оформите VIP.`);
-return;
-}
-const newProj = { id: generateId(), name: projectName, bpm: bpm, grid: grid, duration: durationSec, createdAt: Date.now(), updatedAt: Date.now() };
-projects.push(newProj);
-saveProjectsList(projects);
-userData.projectsCreated++;
-saveUserData();
-updateStats();
-showCpNotification('✅ Новый проект сохранён!');
-}
-}
-function loadProjectById(id) {
-const projects = getProjects();
-const proj = projects.find(p => p.id === id);
-if (!proj) { showCpNotification('⚠️ Проект не найден'); return; }
-projectName = proj.name || 'My Beat';
-projectNameInput.value = projectName;
-bpm = proj.bpm || 120;
-bpmInput.value = bpm;
-stepDurationMs = (60 / bpm) / 4 * 1000;
-if (proj.grid && Array.isArray(proj.grid)) {
-for (let t = 0; t < TRACKS; t++) {
-for (let s = 0; s < STEPS; s++) {
-grid[t][s] = (proj.grid[t] && proj.grid[t][s]) || null;
-}
-}
-}
-renderNotes();
-showCpNotification(`📂 Загружен: ${projectName}`);
-}
-document.getElementById('cpSaveProjectBtn').addEventListener('click', saveCurrentProject);
-(function checkEditParam() {
-const params = new URLSearchParams(window.location.search);
-const editId = params.get('edit');
-if (editId) setTimeout(() => loadProjectById(editId), 300);
-})();
-createGrid();
-scanDirectory('sounds/');
-updateFxGroupsVisual();
-new ResizeObserver(updateScrollbarThumb).observe(container);
+    const TRACKS = 15, STEPS = 512, CELL_WIDTH = 30;
+    let currentSoundName = null, currentSoundFile = null, currentFolderPath = '';
+    let grid = Array(TRACKS).fill().map(() => Array(STEPS).fill(null));
+    let selectedNote = null, division = 1, clipboard = null;
+    let projectName = 'My Beat', bpm = 120, stepDurationMs = (60 / bpm) / 4 * 1000;
+    let enableSumming = true, isPlaying = false, currentStep = 0, playInterval = null, previewSource = null;
+    const container = document.getElementById('cpGridContainer');
+    const soundsList = document.getElementById('cpSoundsList');
+    const contextMenu = document.getElementById('cpContextMenu');
+    const playBtn = document.getElementById('cpPlayBtn');
+    const resetBtn = document.getElementById('cpResetBtn');
+    const downloadBtn = document.getElementById('cpDownloadBtn');
+    const divisionSelect = document.getElementById('cpDivisionSelect');
+    const summingToggle = document.getElementById('cpSummingToggle');
+    const cpNotification = document.getElementById('cpNotification');
+    const propertiesModal = document.getElementById('cpPropertiesModal');
+    const playbackCursor = document.getElementById('cpPlaybackCursor');
+    const projectNameInput = document.getElementById('cpProjectNameInput');
+    const bpmInput = document.getElementById('cpBpmInput');
+    const customScrollbar = document.getElementById('cpCustomScrollbar');
+    const scrollbarThumb = document.getElementById('cpScrollbarThumb');
+    const scrollbarPlayhead = document.getElementById('cpScrollbarPlayhead');
+    const cpAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const audioBuffers = new Map();
+    const cpAnalyser = cpAudioContext.createAnalyser(); cpAnalyser.fftSize = 256;
+    const masterGain = cpAudioContext.createGain();
+    const masterLimiter = cpAudioContext.createDynamicsCompressor();
+    masterLimiter.threshold.value = -0.5; masterLimiter.knee.value = 0;
+    masterLimiter.ratio.value = 20; masterLimiter.attack.value = 0.001; masterLimiter.release.value = 0.1;
+    
+    function updateMasterRouting() {
+        masterGain.disconnect(); cpAnalyser.disconnect();
+        if (enableSumming) { masterGain.connect(cpAnalyser); }
+        else { masterGain.connect(masterLimiter); masterLimiter.connect(cpAnalyser); }
+        cpAnalyser.connect(cpAudioContext.destination);
+    }
+    updateMasterRouting();
+    
+    function makeDistortionCurve(amount) {
+        const k = amount, n = 44100, curve = new Float32Array(n), deg = Math.PI / 180;
+        for (let i = 0; i < n; ++i) { const x = (i * 2) / n - 1; curve[i] = (3 + k) * x * 20 * deg / (Math.PI + k * Math.abs(x)); }
+        return curve;
+    }
+    function createImpulseResponse(duration, decay, ctx) {
+        const rate = ctx.sampleRate, length = rate * duration;
+        const impulse = ctx.createBuffer(2, length, rate);
+        const L = impulse.getChannelData(0), R = impulse.getChannelData(1);
+        for (let i = 0; i < length; i++) { const v = (Math.random() * 2 - 1) * Math.pow(1 - i / length, decay); L[i] = v; R[i] = v * (0.8 + Math.random() * 0.2); }
+        return impulse;
+    }
+    function buildFxChain(ctx, source, fx, destination) {
+        let node = source;
+        if (fx.eq && (fx.eq.active || fx.eq.low !== 0 || fx.eq.mid !== 0 || fx.eq.high !== 0)) {
+            const eqLow = ctx.createBiquadFilter(); eqLow.type = 'lowshelf'; eqLow.frequency.value = 100; eqLow.gain.value = fx.eq.low || 0;
+            const eqMid = ctx.createBiquadFilter(); eqMid.type = 'peaking'; eqMid.frequency.value = 1000; eqMid.gain.value = fx.eq.mid || 0;
+            const eqHigh = ctx.createBiquadFilter(); eqHigh.type = 'highshelf'; eqHigh.frequency.value = 5000; eqHigh.gain.value = fx.eq.high || 0;
+            node.connect(eqLow); eqLow.connect(eqMid); eqMid.connect(eqHigh); node = eqHigh;
+        }
+        if (fx.distortion && fx.distortion.active) {
+            const shaper = ctx.createWaveShaper(); shaper.curve = makeDistortionCurve(fx.distortion.drive || 20); shaper.oversample = '4x';
+            const tone = ctx.createBiquadFilter(); tone.type = 'lowpass'; tone.frequency.value = fx.distortion.tone || 2000;
+            node.connect(shaper); shaper.connect(tone); node = tone;
+        }
+        if (fx.bitcrusher && fx.bitcrusher.active) {
+            try {
+                const crusher = ctx.createScriptProcessor(4096, 2, 2);
+                const stepVal = Math.pow(0.5, fx.bitcrusher.bits || 8);
+                const freqRed = fx.bitcrusher.freqReduction || 1;
+                let phaser = 0, lastValue = 0;
+                crusher.onaudioprocess = function(e) {
+                    const inL = e.inputBuffer.getChannelData(0), inR = e.inputBuffer.getChannelData(1);
+                    const outL = e.outputBuffer.getChannelData(0), outR = e.outputBuffer.getChannelData(1);
+                    for (let i = 0; i < inL.length; i++) {
+                        phaser += freqRed;
+                        if (phaser >= 1.0) { phaser = 0.0; lastValue = (inL[i] > 0 ? 1 : -1) * Math.floor(Math.abs(inL[i]) / stepVal + 0.5) * stepVal; }
+                        outL[i] = lastValue; outR[i] = (inR[i] > 0 ? 1 : -1) * Math.floor(Math.abs(inR[i]) / stepVal + 0.5) * stepVal;
+                    }
+                };
+                node.connect(crusher); node = crusher;
+            } catch(e) {}
+        }
+        if (fx.compressor && fx.compressor.active) {
+            const comp = ctx.createDynamicsCompressor();
+            comp.threshold.value = fx.compressor.threshold || -24; comp.ratio.value = fx.compressor.ratio || 4;
+            comp.knee.value = 10; comp.attack.value = 0.003; comp.release.value = 0.25;
+            node.connect(comp); node = comp;
+        }
+        if (fx.delay && fx.delay.active) {
+            const delay = ctx.createDelay(2.0); delay.delayTime.value = fx.delay.time || 0.3;
+            const fb = ctx.createGain(); fb.gain.value = (fx.delay.feedback || 40) / 100;
+            const wet = ctx.createGain(); wet.gain.value = (fx.delay.mix || 30) / 100;
+            node.connect(delay); delay.connect(fb); fb.connect(delay); delay.connect(wet); wet.connect(destination);
+        }
+        if (fx.killer && fx.killer.active) {
+            const hpf = ctx.createBiquadFilter(); hpf.type = 'highpass'; hpf.frequency.value = fx.killer.freq || 200; hpf.Q.value = fx.killer.q || 1;
+            node.connect(hpf); node = hpf;
+        }
+        if (fx.reverb && fx.reverb.active) {
+            const conv = ctx.createConvolver(); conv.buffer = createImpulseResponse(fx.reverb.decay || 1.5, 2.0, ctx);
+            const wet = ctx.createGain(); wet.gain.value = (fx.reverb.mix || 30) / 100;
+            node.connect(conv); conv.connect(wet); wet.connect(destination);
+        }
+        const panner = ctx.createStereoPanner(); panner.pan.value = (fx.panner ? fx.panner.pan : 0) / 100;
+        node.connect(panner); node = panner;
+        const gain = ctx.createGain(); gain.gain.value = 1.0;
+        node.connect(gain); gain.connect(destination);
+        return gain;
+    }
+    
+    let isDraggingThumb = false, dragStartX = 0, dragStartLeft = 0;
+    function updateScrollbarThumb() {
+        const trackWidth = customScrollbar.clientWidth - 4;
+        const contentWidth = container.scrollWidth;
+        const visibleWidth = container.clientWidth;
+        if (contentWidth <= visibleWidth) { scrollbarThumb.style.display = 'none'; return; }
+        scrollbarThumb.style.display = 'block';
+        let thumbWidth = Math.max(30, (visibleWidth / contentWidth) * trackWidth);
+        scrollbarThumb.style.width = thumbWidth + 'px';
+        const maxScroll = contentWidth - visibleWidth;
+        const maxThumbLeft = trackWidth - thumbWidth;
+        scrollbarThumb.style.left = ((container.scrollLeft / maxScroll) * maxThumbLeft) + 'px';
+    }
+    scrollbarThumb.addEventListener('mousedown', (e) => { isDraggingThumb = true; dragStartX = e.clientX; dragStartLeft = scrollbarThumb.offsetLeft; e.preventDefault(); });
+    document.addEventListener('mousemove', (e) => {
+        if (!isDraggingThumb) return;
+        const deltaX = e.clientX - dragStartX;
+        const trackWidth = customScrollbar.clientWidth - 4;
+        const thumbWidth = scrollbarThumb.offsetWidth;
+        const maxThumbLeft = trackWidth - thumbWidth;
+        let newLeft = Math.max(0, Math.min(maxThumbLeft, dragStartLeft + deltaX));
+        scrollbarThumb.style.left = newLeft + 'px';
+        const maxScroll = container.scrollWidth - container.clientWidth;
+        container.scrollLeft = maxScroll > 0 ? (newLeft / maxThumbLeft) * maxScroll : 0;
+    });
+    document.addEventListener('mouseup', () => { isDraggingThumb = false; });
+    container.addEventListener('scroll', updateScrollbarThumb);
+    window.addEventListener('resize', updateScrollbarThumb);
+    
+    function updateScrollbarPlayhead() {
+        const totalWidth = container.scrollWidth;
+        scrollbarPlayhead.style.left = (((100 + currentStep * CELL_WIDTH) / totalWidth) * customScrollbar.clientWidth) + 'px';
+    }
+    
+    async function scanDirectory(path) {
+        soundsList.innerHTML = '<div class="cp-sound-item" style="color:var(--text-muted);">Загрузка...</div>';
+        try {
+            const response = await fetch(path);
+            if (!response.ok) throw new Error("Directory listing not enabled");
+            const text = await response.text();
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(text, 'text/html');
+            const items = new Map();
+            Array.from(doc.querySelectorAll('a')).forEach(a => {
+                const href = a.getAttribute('href'), name = a.textContent.trim();
+                if (name === '../' || name === '..' || name === 'Parent Directory') return;
+                if (href.endsWith('/') || href.match(/\.(mp3|wav|ogg)$/i))
+                    items.set(name, { name, isFolder: href.endsWith('/'), href, fullPath: path + href });
+            });
+            renderSoundsPanel(Array.from(items.values()));
+        } catch (e) {
+            soundsList.innerHTML = '<div class="cp-sound-item" style="color:#ff8888; flex-direction:column; text-align:center; padding:15px;">⚠️ Для загрузки звуков нужен локальный сервер с папкой sounds/</div>';
+        }
+    }
+    
+    function renderSoundsPanel(items) {
+        soundsList.innerHTML = '';
+        if (currentFolderPath !== '') {
+            const b = document.createElement('div'); b.className = 'cp-sound-item back-btn'; b.textContent = '⬅️ Назад';
+            b.onclick = () => { const p = currentFolderPath.split('/').filter(x=>x); p.pop(); currentFolderPath = p.join('/') + (p.length ? '/' : ''); scanDirectory('sounds/' + currentFolderPath); };
+            soundsList.appendChild(b);
+        }
+        if (!items.length) { soundsList.innerHTML = '<div class="cp-sound-item" style="color:var(--text-muted); justify-content:center;">(Папка пуста)</div>'; return; }
+        items.sort((a, b) => a.isFolder === b.isFolder ? a.name.localeCompare(b.name) : (a.isFolder ? -1 : 1));
+        items.forEach(item => {
+            const el = document.createElement('div'); el.className = 'cp-sound-item';
+            if (item.isFolder) {
+                el.textContent = '📁 ' + item.name;
+                el.onclick = () => { currentFolderPath += item.name + '/'; scanDirectory('sounds/' + currentFolderPath); };
+            } else {
+                el.textContent = '🎵 ' + item.name;
+                if (currentSoundName === item.name) el.classList.add('active');
+                el.onclick = async () => {
+                    currentSoundName = item.name; currentSoundFile = item.fullPath;
+                    document.querySelectorAll('.cp-sound-item').forEach(s => s.classList.remove('active'));
+                    el.classList.add('active');
+                    if (previewSource) try { previewSource.stop(); } catch(e){}
+                    const buf = await loadAudioBuffer(item.fullPath);
+                    if (buf) { previewSource = cpAudioContext.createBufferSource(); previewSource.buffer = buf; const g = cpAudioContext.createGain(); g.gain.value = 0.2; previewSource.connect(g); g.connect(cpAudioContext.destination); previewSource.start(); }
+                };
+            }
+            soundsList.appendChild(el);
+        });
+    }
+    
+    async function loadAudioBuffer(url) {
+        if (audioBuffers.has(url)) return audioBuffers.get(url);
+        try { const r = await fetch(url); const b = await cpAudioContext.decodeAudioData(await r.arrayBuffer()); audioBuffers.set(url, b); return b; }
+        catch(e) { return null; }
+    }
+    
+    function startPlayback() { if (cpAudioContext.state === 'suspended') cpAudioContext.resume(); isPlaying = true; playBtn.textContent = '⏸️ Pause'; playStep(); }
+    function stopPlayback() { isPlaying = false; playBtn.textContent = '▶️ Play'; if (playInterval) { clearTimeout(playInterval); playInterval = null; } }
+    function resetPlayback() { stopPlayback(); currentStep = 0; updateCursorVisuals(); }
+    
+    function playStep() {
+        if (!isPlaying) return;
+        for (let t = 0; t < TRACKS; t++) {
+            const note = grid[t][currentStep];
+            if (note && note !== 'occupied') {
+                loadAudioBuffer(note.file).then(buffer => {
+                    if (!buffer) return;
+                    const source = cpAudioContext.createBufferSource();
+                    source.buffer = buffer;
+                    source.playbackRate.value = (note.speed || 1.0) * Math.pow(2, (note.pitch || 0) / 12);
+                    const gainNode = buildFxChain(cpAudioContext, source, note.fx || {}, masterGain);
+                    gainNode.gain.value = note.volume || 1.0;
+                    const trimStart = Math.max(0, note.fx?.trim?.start || 0);
+                    const trimEnd = Math.max(0, note.fx?.trim?.end || 0);
+                    const maxDur = Math.max(0.01, buffer.duration - trimStart - trimEnd);
+                    source.start(cpAudioContext.currentTime, trimStart, maxDur);
+                });
+            }
+        }
+        updateCursorVisuals();
+        currentStep = (currentStep + 1) % STEPS;
+        playInterval = setTimeout(playStep, stepDurationMs);
+    }
+    
+    function updateCursorVisuals() {
+        const leftPos = 100 + currentStep * CELL_WIDTH;
+        playbackCursor.style.left = `${leftPos}px`;
+        const cl = container.scrollLeft, cr = cl + container.clientWidth;
+        if (leftPos > cr - 50) container.scrollLeft = leftPos - 50;
+        else if (leftPos < cl) container.scrollLeft = leftPos;
+        updateScrollbarPlayhead();
+    }
+    
+    function createGrid() {
+        container.querySelectorAll('.cp-track-row').forEach(r => r.remove());
+        for (let t = 0; t < TRACKS; t++) {
+            const row = document.createElement('div'); row.className = 'cp-track-row';
+            const label = document.createElement('div'); label.className = 'cp-track-label'; label.textContent = `Track ${t + 1}`; row.appendChild(label);
+            for (let s = 0; s < STEPS; s++) {
+                const cell = document.createElement('div');
+                cell.className = `cp-grid-cell ${(s + 1) % 16 === 0 ? 'bar-line' : ''}`;
+                cell.dataset.track = t; cell.dataset.step = s;
+                cell.addEventListener('click', (e) => { setCurrentStep(s); handleCellClick(e); });
+                cell.addEventListener('contextmenu', e => showContextMenu(e, t, s));
+                row.appendChild(cell);
+            }
+            container.appendChild(row);
+        }
+        setTimeout(updateScrollbarThumb, 100); renderNotes();
+    }
+    
+    function renderNotes() {
+        document.querySelectorAll('.cp-note').forEach(n => n.remove());
+        for (let t = 0; t < TRACKS; t++)
+            for (let s = 0; s < STEPS; s++) {
+                const note = grid[t][s];
+                if (note && note !== 'occupied') {
+                    const cell = document.querySelector(`.cp-grid-cell[data-track="${t}"][data-step="${s}"]`);
+                    const el = document.createElement('div'); el.className = 'cp-note';
+                    el.dataset.name = note.soundName.replace(/\.[^/.]+$/, '');
+                    el.style.width = `${(note.duration || 1) * CELL_WIDTH - 2}px`;
+                    el.addEventListener('contextmenu', e => showContextMenu(e, t, s));
+                    cell.appendChild(el);
+                }
+            }
+    }
+    
+    function handleCellClick(e) {
+        const t = +e.target.dataset.track, s = +e.target.dataset.step;
+        if (!currentSoundFile) { showCpNotification('Сначала выберите звук!'); return; }
+        if (!canPlaceNote(t, s, 1)) { showCpNotification('Наложение!'); return; }
+        placeNote(t, s, currentSoundName, currentSoundFile, 1, 1.0, 1.0, 0, {
+            trim: { start: 0, end: 0 }, distortion: { active: false, drive: 20, tone: 2000 },
+            bitcrusher: { active: false, bits: 8, freqReduction: 1 }, compressor: { active: false, threshold: -24, ratio: 4 },
+            reverb: { active: false, mix: 30, decay: 1.5 }, delay: { active: false, time: 0.3, feedback: 40, mix: 30 },
+            killer: { active: false, freq: 200, q: 1 }, eq: { active: false, low: 0, mid: 0, high: 0 }, panner: { pan: 0 }
+        });
+        renderNotes(); showCpNotification('Note placed!');
+    }
+    
+    function canPlaceNote(t, s, d) { for (let i = s; i < s + d; i++) { if (i >= STEPS || grid[t][Math.floor(i)] !== null) return false; } return true; }
+    function placeNote(t, s, name, file, dur, vol, spd, pit, fx) { const n = { soundName: name, file, duration: dur, volume: vol, speed: spd, pitch: pit, fx }; for (let i = s; i < s + dur && i < STEPS; i++) grid[t][Math.floor(i)] = i === s ? n : 'occupied'; }
+    function clearNoteAt(t, s) { if (!grid[t][s] || grid[t][s] === 'occupied') return; const e = s + (grid[t][s].duration || 1); for (let i = s; i < e && i < STEPS; i++) grid[t][i] = null; }
+    
+    function showContextMenu(e, t, s) {
+        e.preventDefault();
+        const note = grid[t][s];
+        contextMenu.style.display = 'flex'; contextMenu.style.left = `${e.pageX}px`; contextMenu.style.top = `${e.pageY}px`; contextMenu.innerHTML = '';
+        if (note && note !== 'occupied') {
+            const del = document.createElement('div'); del.textContent = '🗑️ Delete'; del.onclick = () => { clearNoteAt(t, s); renderNotes(); contextMenu.style.display = 'none'; };
+            const prop = document.createElement('div'); prop.textContent = '⚙️ Properties & FX';
+            prop.onclick = () => {
+                selectedNote = { track: t, step: s, note };
+                document.getElementById('cpVolumeInput').value = note.volume;
+                document.getElementById('cpSpeedInput').value = note.speed || 1;
+                document.getElementById('cpPitchInput').value = note.pitch || 0;
+                const fx = note.fx || {};
+                document.getElementById('cp-fx-trim-start').value = fx.trim?.start || 0; document.getElementById('cp-val-trim-start').textContent = (fx.trim?.start || 0).toFixed(2);
+                document.getElementById('cp-fx-trim-end').value = fx.trim?.end || 0; document.getElementById('cp-val-trim-end').textContent = (fx.trim?.end || 0).toFixed(2);
+                document.getElementById('cp-fx-dist-active').checked = !!(fx.distortion?.active); document.getElementById('cp-fx-dist-drive').value = fx.distortion?.drive || 20; document.getElementById('cp-val-dist-drive').textContent = fx.distortion?.drive || 20; document.getElementById('cp-fx-dist-tone').value = fx.distortion?.tone || 2000; document.getElementById('cp-val-dist-tone').textContent = fx.distortion?.tone || 2000;
+                document.getElementById('cp-fx-bc-active').checked = !!(fx.bitcrusher?.active); document.getElementById('cp-fx-bc-bits').value = fx.bitcrusher?.bits || 8; document.getElementById('cp-val-bc-bits').textContent = fx.bitcrusher?.bits || 8; document.getElementById('cp-fx-bc-freq').value = fx.bitcrusher?.freqReduction || 1; document.getElementById('cp-val-bc-freq').textContent = fx.bitcrusher?.freqReduction || 1;
+                document.getElementById('cp-fx-comp-active').checked = !!(fx.compressor?.active); document.getElementById('cp-fx-comp-thresh').value = fx.compressor?.threshold || -24; document.getElementById('cp-val-comp-thresh').textContent = fx.compressor?.threshold || -24; document.getElementById('cp-fx-comp-ratio').value = fx.compressor?.ratio || 4; document.getElementById('cp-val-comp-ratio').textContent = fx.compressor?.ratio || 4;
+                document.getElementById('cp-fx-rev-active').checked = !!(fx.reverb?.active); document.getElementById('cp-fx-rev-mix').value = fx.reverb?.mix || 30; document.getElementById('cp-val-rev-mix').textContent = fx.reverb?.mix || 30; document.getElementById('cp-fx-rev-decay').value = fx.reverb?.decay || 1.5; document.getElementById('cp-val-rev-decay').textContent = fx.reverb?.decay || 1.5;
+                document.getElementById('cp-fx-del-active').checked = !!(fx.delay?.active); document.getElementById('cp-fx-del-time').value = fx.delay?.time || 0.3; document.getElementById('cp-val-del-time').textContent = fx.delay?.time || 0.3; document.getElementById('cp-fx-del-fb').value = fx.delay?.feedback || 40; document.getElementById('cp-val-del-fb').textContent = fx.delay?.feedback || 40; document.getElementById('cp-fx-del-mix').value = fx.delay?.mix || 30; document.getElementById('cp-val-del-mix').textContent = fx.delay?.mix || 30;
+                document.getElementById('cp-fx-kill-active').checked = !!(fx.killer?.active); document.getElementById('cp-fx-kill-freq').value = fx.killer?.freq || 200; document.getElementById('cp-val-kill-freq').textContent = fx.killer?.freq || 200; document.getElementById('cp-fx-kill-q').value = fx.killer?.q || 1; document.getElementById('cp-val-kill-q').textContent = (fx.killer?.q || 1).toFixed(1);
+                document.getElementById('cp-fx-eq-low').value = fx.eq?.low || 0; document.getElementById('cp-val-eq-low').textContent = fx.eq?.low || 0;
+                document.getElementById('cp-fx-eq-mid').value = fx.eq?.mid || 0; document.getElementById('cp-val-eq-mid').textContent = fx.eq?.mid || 0;
+                document.getElementById('cp-fx-eq-high').value = fx.eq?.high || 0; document.getElementById('cp-val-eq-high').textContent = fx.eq?.high || 0;
+                document.getElementById('cp-fx-pan').value = fx.panner?.pan || 0; document.getElementById('cp-fx-pan-val').textContent = fx.panner?.pan || 0;
+                updateFxGroupsVisual(); cpSwitchTab('basic'); propertiesModal.style.display = 'flex'; contextMenu.style.display = 'none';
+            };
+            const copy = document.createElement('div'); copy.textContent = '📋 Copy'; copy.onclick = () => { clipboard = { ...note }; showCpNotification('Copied!'); contextMenu.style.display = 'none'; };
+            contextMenu.append(del, prop, copy);
+        } else {
+            const paste = document.createElement('div'); paste.textContent = '📋 Paste';
+            paste.onclick = () => { if (clipboard && canPlaceNote(t, s, clipboard.duration || 1)) { placeNote(t, s, clipboard.soundName, clipboard.file, clipboard.duration || 1, clipboard.volume || 1.0, clipboard.speed || 1.0, clipboard.pitch || 0, clipboard.fx || {}); renderNotes(); showCpNotification('Pasted!'); } else showCpNotification('Cannot paste!'); contextMenu.style.display = 'none'; };
+            contextMenu.appendChild(paste);
+        }
+        document.addEventListener('click', () => contextMenu.style.display = 'none', { once: true });
+    }
+    
+    window.cpSwitchTab = (n) => { 
+        document.querySelectorAll('.cp-tab').forEach(t => t.classList.remove('active')); 
+        document.querySelectorAll('.cp-tab-content').forEach(t => t.classList.remove('active')); 
+        event.target.classList.add('active'); 
+        document.getElementById(`cpTab-${n}`).classList.add('active'); 
+    };
+    
+    function updateFxGroupsVisual() {
+        [['cp-fx-dist-active','cp-grp-distortion'],['cp-fx-bc-active','cp-grp-bitcrusher'],['cp-fx-comp-active','cp-grp-compressor'],['cp-fx-rev-active','cp-grp-reverb'],['cp-fx-del-active','cp-grp-delay'],['cp-fx-kill-active','cp-grp-killer']].forEach(([id, grp]) => {
+            const g = document.getElementById(grp), c = document.getElementById(id).checked;
+            g.classList.toggle('enabled', c); g.classList.toggle('disabled', !c);
+        });
+    }
+    
+    ['cp-fx-dist-active','cp-fx-bc-active','cp-fx-comp-active','cp-fx-rev-active','cp-fx-del-active','cp-fx-kill-active'].forEach(id => document.getElementById(id).addEventListener('change', updateFxGroupsVisual));
+    ['cp-fx-trim-start','cp-fx-trim-end','cp-fx-dist-drive','cp-fx-dist-tone','cp-fx-bc-bits','cp-fx-bc-freq','cp-fx-comp-thresh','cp-fx-comp-ratio','cp-fx-rev-mix','cp-fx-rev-decay','cp-fx-del-time','cp-fx-del-fb','cp-fx-del-mix','cp-fx-kill-freq','cp-fx-kill-q','cp-fx-eq-low','cp-fx-eq-mid','cp-fx-eq-high','cp-fx-pan'].forEach(id => {
+        document.getElementById(id).addEventListener('input', (e) => {
+            const valId = id === 'cp-fx-pan' ? 'cp-fx-pan-val' : id.replace('cp-fx-', 'cp-val-');
+            const d = document.getElementById(valId); if (d) d.textContent = id.includes('trim') ? parseFloat(e.target.value).toFixed(2) : (id === 'cp-fx-kill-q' ? parseFloat(e.target.value).toFixed(1) : e.target.value);
+        });
+    });
+    
+    document.getElementById('cpSaveNoteBtn').addEventListener('click', () => {
+        const { track, step, note } = selectedNote; clearNoteAt(track, step);
+        if (canPlaceNote(track, step, 1)) {
+            const fx = {
+                trim: { start: +document.getElementById('cp-fx-trim-start').value, end: +document.getElementById('cp-fx-trim-end').value },
+                distortion: { active: document.getElementById('cp-fx-dist-active').checked, drive: +document.getElementById('cp-fx-dist-drive').value, tone: +document.getElementById('cp-fx-dist-tone').value },
+                bitcrusher: { active: document.getElementById('cp-fx-bc-active').checked, bits: +document.getElementById('cp-fx-bc-bits').value, freqReduction: +document.getElementById('cp-fx-bc-freq').value },
+                compressor: { active: document.getElementById('cp-fx-comp-active').checked, threshold: +document.getElementById('cp-fx-comp-thresh').value, ratio: +document.getElementById('cp-fx-comp-ratio').value },
+                reverb: { active: document.getElementById('cp-fx-rev-active').checked, mix: +document.getElementById('cp-fx-rev-mix').value, decay: +document.getElementById('cp-fx-rev-decay').value },
+                delay: { active: document.getElementById('cp-fx-del-active').checked, time: +document.getElementById('cp-fx-del-time').value, feedback: +document.getElementById('cp-fx-del-fb').value, mix: +document.getElementById('cp-fx-del-mix').value },
+                killer: { active: document.getElementById('cp-fx-kill-active').checked, freq: +document.getElementById('cp-fx-kill-freq').value, q: +document.getElementById('cp-fx-kill-q').value },
+                eq: { active: true, low: +document.getElementById('cp-fx-eq-low').value, mid: +document.getElementById('cp-fx-eq-mid').value, high: +document.getElementById('cp-fx-eq-high').value },
+                panner: { pan: +document.getElementById('cp-fx-pan').value }
+            };
+            placeNote(track, step, note.soundName, note.file, 1, +document.getElementById('cpVolumeInput').value, +document.getElementById('cpSpeedInput').value, +document.getElementById('cpPitchInput').value, fx);
+            renderNotes(); showCpNotification('Updated!');
+        } else { placeNote(track, step, note.soundName, note.file, note.duration || 1, note.volume || 1.0, note.speed || 1.0, note.pitch || 0, note.fx || {}); showCpNotification('Overlaps!'); }
+        propertiesModal.style.display = 'none';
+    });
+    
+    document.getElementById('cpCancelNoteBtn').addEventListener('click', () => propertiesModal.style.display = 'none');
+    document.querySelectorAll('.cp-tab').forEach(tab => { tab.addEventListener('click', () => cpSwitchTab(tab.dataset.tab)); });
+    
+    const cpCanvas = document.getElementById('cpVisualizerCanvas'), cpCanvasCtx = cpCanvas.getContext('2d');
+    function resizeCpCanvas() { cpCanvas.width = cpCanvas.offsetWidth; cpCanvas.height = cpCanvas.offsetHeight; }
+    window.addEventListener('resize', resizeCpCanvas); resizeCpCanvas();
+    
+    function drawCpVisualizer() {
+        requestAnimationFrame(drawCpVisualizer);
+        const bl = cpAnalyser.frequencyBinCount, da = new Uint8Array(bl); cpAnalyser.getByteFrequencyData(da);
+        cpCanvasCtx.fillStyle = 'rgba(10, 14, 39, 0.3)'; cpCanvasCtx.fillRect(0, 0, cpCanvas.width, cpCanvas.height);
+        const bw = (cpCanvas.width / bl) * 2.5; let x = 0;
+        for (let i = 0; i < bl; i++) {
+            const bh = (da[i] / 255) * cpCanvas.height;
+            const g = cpCanvasCtx.createLinearGradient(0, cpCanvas.height, 0, cpCanvas.height - bh);
+            g.addColorStop(0, '#00f3ff'); g.addColorStop(0.5, '#bc13fe'); g.addColorStop(1, '#ff0055');
+            cpCanvasCtx.fillStyle = g; cpCanvasCtx.fillRect(x, cpCanvas.height - bh, bw, bh); x += bw + 1;
+        }
+    }
+    drawCpVisualizer();
+    
+    function showCpNotification(msg) { cpNotification.textContent = msg; cpNotification.classList.add('show'); setTimeout(() => cpNotification.classList.remove('show'), 2000); }
+    function setCurrentStep(s) { currentStep = Math.max(0, Math.min(STEPS - 1, s)); updateCursorVisuals(); }
+    
+    let isDraggingCursor = false;
+    playbackCursor.addEventListener('mousedown', (e) => { isDraggingCursor = true; e.preventDefault(); });
+    document.addEventListener('mousemove', (e) => { if (!isDraggingCursor) return; const r = container.getBoundingClientRect(); setCurrentStep(Math.round((e.clientX - r.left + container.scrollLeft - 100) / CELL_WIDTH)); });
+    document.addEventListener('mouseup', () => { isDraggingCursor = false; });
+    
+    playBtn.addEventListener('click', () => isPlaying ? stopPlayback() : startPlayback());
+    resetBtn.addEventListener('click', resetPlayback);
+    projectNameInput.addEventListener('input', (e) => projectName = e.target.value || 'My Beat');
+    bpmInput.addEventListener('input', (e) => { const v = parseInt(e.target.value); if (v >= 40 && v <= 300) { bpm = v; stepDurationMs = (60 / bpm) / 4 * 1000; } });
+    summingToggle.addEventListener('change', (e) => { enableSumming = e.target.checked; updateMasterRouting(); showCpNotification(enableSumming ? 'Суммирование вкл' : 'Суммирование выкл'); });
+    document.addEventListener('keydown', (e) => { if (e.code === 'Space' && e.target.tagName !== 'INPUT' && document.getElementById('beatmaker').classList.contains('active')) { e.preventDefault(); isPlaying ? stopPlayback() : startPlayback(); } });
+    divisionSelect.addEventListener('change', e => division = parseFloat(e.target.value));
+    
+    downloadBtn.addEventListener('click', async () => {
+        showCpNotification('Анализ и рендеринг...');
+        let maxStep = 0; const needed = new Set(); let has = false;
+        for (let t = 0; t < TRACKS; t++)
+            for (let s = 0; s < STEPS; s++) {
+                const n = grid[t][s];
+                if (n && n !== 'occupied') { needed.add(n.file); has = true; const e = s + (n.duration || 1); if (e > maxStep) maxStep = e; }
+            }
+        if (!has) { showCpNotification('Нет нот!'); return; }
+        const renderSteps = Math.max(16, maxStep + 64);
+        await Promise.all(Array.from(needed).map(f => loadAudioBuffer(f)));
+        const sr = 44100, dur = renderSteps * stepDurationMs / 1000;
+        const offCtx = new OfflineAudioContext(2, Math.ceil(dur * sr), sr);
+        const expMaster = offCtx.createGain();
+        const expLimiter = offCtx.createDynamicsCompressor();
+        expLimiter.threshold.value = -0.5; expLimiter.knee.value = 0; expLimiter.ratio.value = 20; expLimiter.attack.value = 0.001; expLimiter.release.value = 0.1;
+        if (enableSumming) expMaster.connect(offCtx.destination);
+        else { expMaster.connect(expLimiter); expLimiter.connect(offCtx.destination); }
+        for (let step = 0; step < renderSteps; step++) {
+            const time = step * stepDurationMs / 1000;
+            for (let t = 0; t < TRACKS; t++) {
+                const note = grid[t][step];
+                if (note && note !== 'occupied') {
+                    const buffer = audioBuffers.get(note.file);
+                    if (!buffer) continue;
+                    const source = offCtx.createBufferSource();
+                    source.buffer = buffer;
+                    source.playbackRate.value = (note.speed || 1.0) * Math.pow(2, (note.pitch || 0) / 12);
+                    const gainNode = buildFxChain(offCtx, source, note.fx || {}, expMaster);
+                    gainNode.gain.value = note.volume || 1.0;
+                    const trimStart = Math.max(0, note.fx?.trim?.start || 0);
+                    const trimEnd = Math.max(0, note.fx?.trim?.end || 0);
+                    const maxDur = Math.max(0.01, buffer.duration - trimStart - trimEnd);
+                    source.start(time, trimStart, maxDur);
+                }
+            }
+        }
+        showCpNotification('Кодирование 320 kbps...');
+        const rendered = await offCtx.startRendering();
+        const enc = new lamejs.Mp3Encoder(2, sr, 320);
+        const mp3 = [], bsz = 1152;
+        const L = rendered.getChannelData(0), R = rendered.getChannelData(1);
+        for (let i = 0; i < L.length; i += bsz) {
+            const lc = L.subarray(i, i + bsz), rc = R.subarray(i, i + bsz);
+            const li = new Int16Array(lc.length), ri = new Int16Array(rc.length);
+            for (let j = 0; j < lc.length; j++) { li[j] = Math.max(-1, Math.min(1, lc[j])) * 0x7FFF; ri[j] = Math.max(-1, Math.min(1, rc[j])) * 0x7FFF; }
+            const buf = enc.encodeBuffer(li, ri); if (buf.length) mp3.push(buf);
+        }
+        const end = enc.flush(); if (end.length) mp3.push(end);
+        const blob = new Blob(mp3, { type: 'audio/mp3' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href = url; a.download = `${projectName}_320kbps.mp3`;
+        document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+        showCpNotification('MP3 (320kbps) сохранен!');
+    });
+    
+    function generateId() { return 'proj_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9); }
+    
+    async function saveCurrentProject() {
+        let maxStep = 0;
+        for (let t = 0; t < TRACKS; t++) {
+            for (let s = 0; s < STEPS; s++) {
+                const n = grid[t][s];
+                if (n && n !== 'occupied') {
+                    const end = s + (n.duration || 1);
+                    if (end > maxStep) maxStep = end;
+                }
+            }
+        }
+        const durationSec = Math.round(maxStep * stepDurationMs / 1000);
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlEditId = urlParams.get('edit');
+        let projects = await dbGetAll('projects');
+        let isEditing = false;
+        if (urlEditId) {
+            const idx = projects.findIndex(p => p.id === urlEditId);
+            if (idx !== -1) {
+                projects[idx].name = projectName;
+                projects[idx].bpm = bpm;
+                projects[idx].grid = grid;
+                projects[idx].duration = durationSec;
+                projects[idx].updatedAt = Date.now();
+                await dbPut('projects', projects[idx]);
+                isEditing = true;
+                showCpNotification('✅ Проект обновлён!');
+            }
+        }
+        if (!isEditing) {
+            if (projects.length >= userData.projectLimit) {
+                showCpNotification(`⚠️ Лимит проектов (${userData.projectLimit}) достигнут! Оформите VIP.`);
+                return;
+            }
+            const newProj = { id: generateId(), name: projectName, bpm: bpm, grid: grid, duration: durationSec, createdAt: Date.now(), updatedAt: Date.now() };
+            projects.push(newProj);
+            await dbPut('projects', newProj);
+            userData.projectsCreated++;
+            localStorage.setItem('soundscape_user', JSON.stringify({ username: currentUser, isGuest, userData }));
+            updateStats();
+            showCpNotification('✅ Новый проект сохранён!');
+        }
+    }
+    
+    async function loadProjectById(id) {
+        const projects = await dbGetAll('projects');
+        const proj = projects.find(p => p.id === id);
+        if (!proj) { showCpNotification('⚠️ Проект не найден'); return; }
+        projectName = proj.name || 'My Beat';
+        projectNameInput.value = projectName;
+        bpm = proj.bpm || 120;
+        bpmInput.value = bpm;
+        stepDurationMs = (60 / bpm) / 4 * 1000;
+        if (proj.grid && Array.isArray(proj.grid)) {
+            for (let t = 0; t < TRACKS; t++) {
+                for (let s = 0; s < STEPS; s++) {
+                    grid[t][s] = (proj.grid[t] && proj.grid[t][s]) || null;
+                }
+            }
+        }
+        renderNotes();
+        showCpNotification(`📂 Загружен: ${projectName}`);
+    }
+    
+    document.getElementById('cpSaveProjectBtn').addEventListener('click', saveCurrentProject);
+    (function checkEditParam() {
+        const params = new URLSearchParams(window.location.search);
+        const editId = params.get('edit');
+        if (editId) setTimeout(() => loadProjectById(editId), 300);
+    })();
+    
+    createGrid();
+    scanDirectory('sounds/');
+    updateFxGroupsVisual();
+    new ResizeObserver(updateScrollbarThumb).observe(container);
 }
 </script>
 </body>
