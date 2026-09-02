@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Soundscape Pro - Полная Соцсеть</title>
+<style>
+:root {
+  --bg-dark: #0a0e27;
+  --bg-panel: #111530;
+  --accent: #b82cff;
+  --text: #ffffff;
+  --text-muted: #8892b0;
+  --danger: #ff0055;
+  --success: #00ff88;
+  --gradient: linear-gradient(135deg, #6d28ff 0%, #b026ff 48%, #ff3bd4 100%);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  background: radial-gradient(circle at 50% 22%, rgba(137, 28, 255, .22), transparent 32%),
+              radial-gradient(circle at 15% 70%, rgba(81, 29, 255, .18), transparent 30%),
+              radial-gradient(circle at 90% 75%, rgba(255, 24, 211, .12), transparent 27%),
+              linear-gradient(180deg, #07020f 0%, #0b061b 45%, #030108 100%);
+  color: var(--text);
+  font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(7, 3, 18, .95);
+  padding: 15px 20px;
+  border-bottom: 2px solid rgba(184, 44, 255, .3);
+  backdrop-filter: blur(15px);
+  box-shadow: 0 8px 35px rgba(89, 0, 255, .2);
+}
+
+.header-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1400px;
+  margin: 0 auto;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 950;
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 20px rgba(184, 44, 255, .5);
+}
+
+.stats {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.stat-chip {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.stat-chip b { color: #ffd700; }
+
+.nav {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.nav::-webkit-scrollbar { display: none; }
+
+.nav-btn {
+  padding: 8px 16px;
+  border: 1px solid rgba(150, 77, 255, .4);
+  border-radius: 20px;
+  background: rgba(17, 7, 35, .7);
+  color: #fff;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.nav-btn:hover {
+  border-color: #c15aff;
+  box-shadow: 0 0 18px rgba(182, 53, 255, .25);
+}
+
+.nav-btn.active {
+  background: var(--gradient);
+  color: #fff;
+  border-color: transparent;
+}
+
+.page-wrapper {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 30px 20px 100px;
+}
+
+.section {
+  display: none;
+  animation: fadeIn 0.4s;
+}
+
+.section.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.section-title {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 800;
+  margin-bottom: 30px;
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-title {
+  font-size: clamp(44px, 10vw, 80px);
+  line-height: 1;
+  font-weight: 1000;
+  margin-bottom: 20px;
+  text-shadow: 0 0 30px rgba(184, 44, 255, .5);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.card {
+  background: linear-gradient(145deg, rgba(18, 8, 39, .9), rgba(7, 4, 18, .8));
+  border: 1px solid rgba(151, 61, 255, .3);
+  border-radius: 16px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(184, 44, 255, .2);
+}
+
+.card-icon {
+  font-size: 45px;
+  margin-bottom: 15px;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.card-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.profile-card, .content-box {
+  background: linear-gradient(145deg, rgba(18, 8, 39, .9), rgba(7, 4, 18, .8));
+  border: 1px solid rgba(151, 61, 255, .3);
+  border-radius: 16px;
+  padding: 30px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.profile-header {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.profile-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: var(--gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 50px;
+  flex-shrink: 0;
+  box-shadow: 0 0 30px rgba(184, 44, 255, .3);
+}
+
+.profile-info {
+  flex: 1;
+  min-width: 200px;
+}
+
+.profile-name {
+  font-size: 24px;
+  font-weight: 800;
+  margin-bottom: 5px;
+}
+
+.profile-bio {
+  color: var(--text-muted);
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.stat {
+  background: rgba(255,255,255,0.05);
+  padding: 12px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--accent);
+}
+
+.stat-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.search-box {
+  width: 100%;
+  padding: 14px;
+  border: 2px solid rgba(174, 70, 255, .4);
+  border-radius: 12px;
+  background: rgba(8, 3, 20, .7);
+  color: #fff;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.search-box:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 20px rgba(184, 44, 255, .2);
+}
+
+.track-item, .friend-item, .leaderboard-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 12px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.track-item:hover, .friend-item:hover {
+  background: rgba(184, 44, 255, .1);
+  border-color: var(--accent);
+}
+
+.track-cover {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  background: var(--gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  flex-shrink: 0;
+}
+
+.track-info {
+  flex: 1;
+  overflow: hidden;
+}
+
+.track-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.track-artist {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: var(--gradient);
+  color: #fff;
+  box-shadow: 0 10px 25px rgba(102, 126, 234, .3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 35px rgba(102, 126, 234, .4);
+}
+
+.btn-secondary {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.btn-secondary:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 11px;
+}
+
+.chat-messages {
+  background: rgba(0,0,0,0.2);
+  padding: 20px;
+  border-radius: 12px;
+  max-height: 400px;
+  overflow-y: auto;
+  margin-bottom: 15px;
+}
+
+.chat-message {
+  margin-bottom: 12px;
+  padding: 10px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 8px;
+  border-left: 3px solid var(--accent);
+}
+
+.chat-author {
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.chat-text {
+  color: var(--text);
+  font-size: 13px;
+  word-break: break-word;
+}
+
+.chat-input-wrapper {
+  display: flex;
+  gap: 10px;
+}
+
+#chatInput {
+  flex: 1;
+  padding: 12px;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.05);
+  color: #fff;
+}
+
+#chatInput:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: var(--gradient);
+  color: #fff;
+  padding: 15px 25px;
+  border-radius: 10px;
+  z-index: 9999;
+  animation: slideIn 0.3s;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(400px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.leaderboard-rank {
+  font-size: 18px;
+  font-weight: bold;
+  width: 30px;
+  text-align: center;
+}
+
+.leaderboard-name {
+  flex: 1;
+  font-weight: 600;
+}
+
+.leaderboard-xp {
+  color: #ffd700;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.game-card {
+  background: linear-gradient(145deg, rgba(18, 8, 39, .9), rgba(7, 4, 18, .8));
+  border: 1px solid rgba(151, 61, 255, .3);
+  border-radius: 12px;
+  padding: 15px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.game-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--accent);
+}
+
+.game-icon {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+.game-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--accent);
+}
+
+@media (max-width: 768px) {
+  .header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .stats {
+    width: 100%;
+  }
+
+  .nav {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+
+  .section-title {
+    font-size: 24px;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="logo">🎵 SOUNDSCAPE PRO</div>
+    <div class="stats">
+      <div class="stat-chip">⭐ <b id="userXP">0</b> XP</div>
+      <div class="stat-chip">🪙 <b id="userCoins">100</b></div>
+      <div class="stat-chip">👤 <b id="userName">Гость</b></div>
+    </div>
+  </div>
+  <div class="nav">
+    <button class="nav-btn active" onclick="showSection('home')">🏠 Главная</button>
+    <button class="nav-btn" onclick="showSection('charts')">🔥 Чарты</button>
+    <button class="nav-btn" onclick="showSection('games')">🎮 Игры</button>
+    <button class="nav-btn" onclick="showSection('friends')">👥 Друзья</button>
+    <button class="nav-btn" onclick="showSection('leaderboard')">🏆 Топ</button>
+    <button class="nav-btn" onclick="showSection('chat')">💬 Чат</button>
+    <button class="nav-btn" onclick="showSection('profile')">👤 Профиль</button>
+  </div>
+</div>
+
+<div class="page-wrapper">
+
+<!-- HOME -->
+<div id="home" class="section active">
+  <div style="text-align: center; padding: 50px 20px;">
+    <h1 class="hero-title">SOUNDSCAPE PRO</h1>
+    <p style="color: var(--text-muted); font-size: 18px; margin-bottom: 30px;">Музыкальная соцсеть нового поколения 🚀</p>
+  </div>
+
+  <div class="grid">
+    <div class="card" onclick="showSection('charts')">
+      <div class="card-icon">🔥</div>
+      <div class="card-title">Чарты</div>
+      <div class="card-desc">Слушай топ треки из проверенной базы данных</div>
+    </div>
+    <div class="card" onclick="showSection('games')">
+      <div class="card-icon">🎮</div>
+      <div class="card-title">5 Игр</div>
+      <div class="card-desc">Space Shooter, Pac-Man, Snake и другие</div>
+    </div>
+    <div class="card" onclick="showSection('friends')">
+      <div class="card-icon">👥</div>
+      <div class="card-title">Друзья</div>
+      <div class="card-desc">Находи и добавляй новых друзей</div>
+    </div>
+    <div class="card" onclick="showSection('leaderboard')">
+      <div class="card-icon">🏆</div>
+      <div class="card-title">Лидерборд</div>
+      <div class="card-desc">Соревнуйся за первое место</div>
+    </div>
+    <div class="card" onclick="showSection('chat')">
+      <div class="card-icon">💬</div>
+      <div class="card-title">Чат</div>
+      <div class="card-desc">Общайся с игроками по всему миру</div>
+    </div>
+    <div class="card" onclick="showSection('profile')">
+      <div class="card-icon">👨‍🚀</div>
+      <div class="card-title">Профиль</div>
+      <div class="card-desc">Управляй своим профилем и статистикой</div>
+    </div>
+  </div>
+</div>
+
+<!-- CHARTS -->
+<div id="charts" class="section">
+  <h2 class="section-title">🔥 Горячие Чарты</h2>
+  <div class="content-box">
+    <div id="chartsList" style="max-height: 600px; overflow-y: auto;"></div>
+  </div>
+</div>
+
+<!-- GAMES -->
+<div id="games" class="section">
+  <h2 class="section-title">🎮 Выбери Игру</h2>
+  <div class="game-grid">
+    <div class="game-card" onclick="playGame('shooter')">
+      <div class="game-icon">🚀</div>
+      <div class="game-name">Space Shooter</div>
+    </div>
+    <div class="game-card" onclick="playGame('pacman')">
+      <div class="game-icon">🟡</div>
+      <div class="game-name">Pac-Man</div>
+    </div>
+    <div class="game-card" onclick="playGame('snake')">
+      <div class="game-icon">🐍</div>
+      <div class="game-name">Snake</div>
+    </div>
+    <div class="game-card" onclick="playGame('invaders')">
+      <div class="game-icon">👾</div>
+      <div class="game-name">Invaders</div>
+    </div>
+    <div class="game-card" onclick="playGame('memory')">
+      <div class="game-icon">🧠</div>
+      <div class="game-name">Memory</div>
+    </div>
+  </div>
+  <div id="gameStatus" style="text-align: center; margin-top: 30px; font-size: 16px; color: var(--text-muted);"></div>
+</div>
+
+<!-- FRIENDS -->
+<div id="friends" class="section">
+  <h2 class="section-title">👥 Друзья</h2>
+  <div class="content-box">
+    <input type="text" class="search-box" id="friendSearch" placeholder="🔍 Поиск друзей..." onkeyup="filterFriends()">
+    <div id="friendsList"></div>
+  </div>
+</div>
+
+<!-- LEADERBOARD -->
+<div id="leaderboard" class="section">
+  <h2 class="section-title">🏆 Лидерборд</h2>
+  <div class="content-box">
+    <div id="leaderboardList"></div>
+  </div>
+</div>
+
+<!-- CHAT -->
+<div id="chat" class="section">
+  <h2 class="section-title">💬 Глобальный Чат</h2>
+  <div class="content-box">
+    <div id="chatMessages" class="chat-messages"></div>
+    <div class="chat-input-wrapper">
+      <input type="text" id="chatInput" placeholder="Напиши сообщение..." onkeypress="if(event.key==='Enter') sendMessage()">
+      <button class="btn btn-primary" onclick="sendMessage()">Отправить</button>
+    </div>
+  </div>
+</div>
+
+<!-- PROFILE -->
+<div id="profile" class="section">
+  <h2 class="section-title">👤 Профиль</h2>
+  <div class="profile-card">
+    <div class="profile-header">
+      <div class="profile-avatar">👨‍🚀</div>
+      <div class="profile-info">
+        <div class="profile-name" id="profileName">Гость</div>
+        <div class="profile-bio" id="profileBio">Добро пожаловать в Soundscape Pro!</div>
+      </div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat">
+        <div class="stat-value" id="profileXP">0</div>
+        <div class="stat-label">XP</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value" id="profileCoins">100</div>
+        <div class="stat-label">Монет</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value" id="profileGames">0</div>
+        <div class="stat-label">Игр</div>
+      </div>
+    </div>
+    <div style="margin-top: 25px; text-align: center;">
+      <button class="btn btn-secondary" style="margin-right: 10px;" onclick="editProfile()">✏️ Редактировать</button>
+      <button class="btn btn-primary" onclick="logout()">🚪 Выход</button>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+// ==================== ДАННЫЕ ====================
+const TRACKS = [
+  { id: 1, title: 'I GOT U', artist: 'Toxi', url: 'https://cdn13.deliciousoranges.com/s3/get/music/20240608/Toxi_-_I_GOT_U_77936633.mp3' },
+  { id: 2, title: 'Мало', artist: 'Егор Крид', url: 'https://cdn15.deliciousoranges.com/s1/get/music/20260703/EGOR_KRID_-_Malo_20_81826468.mp3' },
+  { id: 3, title: 'Тону', artist: 'HOLLYFLAME', url: 'https://cdn1.deliciousoranges.com/s1/get/music/20260206/HOLLYFLAME_-_Tonu_80790537.mp3' },
+  { id: 4, title: 'Малиновая Лада', artist: 'Gayazov Brother', url: 'https://cdn14.deliciousoranges.com/s3/get/music/20211024/GAYAZOV_BROTHER_-_MALINOVAYA_LADA_73214200.mp3' },
+  { id: 5, title: 'Пошла жара', artist: 'Filatov & Karas', url: 'https://cdn19.deliciousoranges.com/s2/get/music/20210604/Filatov_Karas_GAYAZOV_BROTHER_-_Poshla_zhara_72992182.mp3' },
+  { id: 6, title: 'Пьяный туман', artist: 'Gayazov Brother', url: 'https://cdn5.deliciousoranges.com/s3/get/music/20190315/GAYAZOV_BROTHER_-_Pyanyjj_tuman_62788609.mp3' },
+  { id: 7, title: 'Мальборо', artist: 'Sayan', url: 'https://cdn12.deliciousoranges.com/s1/get/music/20260410/SAYAN_-_Malboro_81251971.mp3' },
+  { id: 8, title: 'Шаде', artist: 'By Indiya Xcho, MOT', url: 'https://cdn9.deliciousoranges.com/s1/get/music/20260508/By_Indiya_Xcho_MOT_-_SHadje_81430189.mp3' }
+];
+
+const FRIENDS_DB = [
+  { id: 1, name: 'DJ_Neon', xp: 5000, status: 'Слушает музыку 🎵' },
+  { id: 2, name: 'BeatMaster', xp: 3500, status: 'Играет в игры 🎮' },
+  { id: 3, name: 'MusicLover', xp: 2100, status: 'В сети 💬' },
+  { id: 4, name: 'SoundWizard', xp: 8900, status: 'В рейтинге 🏆' },
+  { id: 5, name: 'RhythmKing', xp: 4200, status: 'Слушает чарты' },
+  { id: 6, name: 'SonicNinja', xp: 3800, status: 'Играет' }
+];
+
+const LEADERBOARD = [
+  { rank: 1, name: 'SoundWizard', xp: 15000 },
+  { rank: 2, name: 'BeatMaster', xp: 12500 },
+  { rank: 3, name: 'RhythmKing', xp: 11000 },
+  { rank: 4, name: 'MusicLover', xp: 9500 },
+  { rank: 5, name: 'SonicNinja', xp: 8200 }
+];
+
+// ==================== СОСТОЯНИЕ ====================
+let currentUser = null;
+let userData = { xp: 0, coins: 100, games: 0, friends: [], bio: 'Добро пожаловать!' };
+let chatMessages = [];
+
+// ==================== ИНИЦИАЛИЗАЦИЯ ====================
+window.addEventListener('load', () => {
+  const saved = localStorage.getItem('soundscape_user');
+  if (saved) {
+    const data = JSON.parse(saved);
+    currentUser = data.username;
+    userData = data.userData;
+    init();
+  } else {
+    showLoginModal();
+  }
+  renderCharts();
+  renderFriends();
+  renderLeaderboard();
+  renderChat();
+});
+
+function init() {
+  updateStats();
+}
+
+function showLoginModal() {
+  const modal = `
+    <div style="position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:10000;display:flex;align-items:center;justify-content:center;" id="authModal">
+      <div class="profile-card" style="max-width:400px;width:90%;">
+        <h2 style="text-align:center;margin-bottom:20px;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">🎵 SOUNDSCAPE</h2>
+        <input type="text" id="username" placeholder="Имя пользователя" class="search-box" style="margin-bottom:10px;">
+        <button class="btn btn-primary" style="width:100%;margin-bottom:10px;" onclick="login()">🚀 Войти</button>
+        <button class="btn btn-secondary" style="width:100%;" onclick="guestLogin()">👤 Гость</button>
+      </div>
+    </div>
+  `;
+  document.body.insertAdjacentHTML('beforeend', modal);
+}
+
+function login() {
+  const username = document.getElementById('username').value.trim();
+  if (username.length < 3) { notify('❌ Минимум 3 символа'); return; }
+  currentUser = username;
+  localStorage.setItem('soundscape_user', JSON.stringify({ username, userData }));
+  document.getElementById('authModal').remove();
+  init();
+  notify('✅ Добро пожаловать, ' + username);
+}
+
+function guestLogin() {
+  currentUser = 'Guest_' + Math.floor(Math.random() * 10000);
+  localStorage.setItem('soundscape_user', JSON.stringify({ username: currentUser, userData }));
+  document.getElementById('authModal').remove();
+  init();
+  notify('👤 Режим гостя');
+}
+
+function logout() {
+  localStorage.removeItem('soundscape_user');
+  location.reload();
+}
+
+// ==================== UI ====================
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id)?.classList.add('active');
+  document.querySelector(`[onclick="showSection('${id}')"]`)?.classList.add('active');
+}
+
+function updateStats() {
+  document.getElementById('userXP').textContent = userData.xp;
+  document.getElementById('userCoins').textContent = userData.coins;
+  document.getElementById('userName').textContent = currentUser || 'Гость';
+  document.getElementById('profileName').textContent = currentUser || 'Гость';
+  document.getElementById('profileXP').textContent = userData.xp;
+  document.getElementById('profileCoins').textContent = userData.coins;
+  document.getElementById('profileGames').textContent = userData.games;
+}
+
+function notify(text) {
+  const div = document.createElement('div');
+  div.className = 'notification';
+  div.textContent = text;
+  document.body.appendChild(div);
+  setTimeout(() => div.remove(), 3000);
+}
+
+// ==================== ЧАРТЫ ====================
+function renderCharts() {
+  const list = document.getElementById('chartsList');
+  list.innerHTML = TRACKS.map((t, i) => `
+    <div class="track-item">
+      <div class="track-cover">🎵</div>
+      <div class="track-info">
+        <div class="track-title">${i + 1}. ${t.title}</div>
+        <div class="track-artist">${t.artist}</div>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="playTrack('${t.url}', '${t.title}')">▶</button>
+    </div>
+  `).join('');
+}
+
+function playTrack(url, title) {
+  const audio = new Audio(url);
+  audio.crossOrigin = 'anonymous';
+  audio.play().catch(e => notify('❌ Ошибка: ' + e.message));
+  notify(`🎵 ${title}`);
+}
+
+// ==================== ДРУЗЬЯ ====================
+function renderFriends() {
+  const list = document.getElementById('friendsList');
+  list.innerHTML = FRIENDS_DB.map(f => `
+    <div class="friend-item">
+      <div style="font-size:30px;">👤</div>
+      <div style="flex:1;">
+        <div style="font-weight:600;">${f.name}</div>
+        <div style="font-size:12px;color:var(--text-muted);">⭐ ${f.xp} XP • ${f.status}</div>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="addFriend('${f.name}')">➕</button>
+    </div>
+  `).join('');
+}
+
+function filterFriends() {
+  const query = document.getElementById('friendSearch').value.toLowerCase();
+  const filtered = FRIENDS_DB.filter(f => f.name.toLowerCase().includes(query));
+  const list = document.getElementById('friendsList');
+  list.innerHTML = filtered.map(f => `
+    <div class="friend-item">
+      <div style="font-size:30px;">👤</div>
+      <div style="flex:1;">
+        <div style="font-weight:600;">${f.name}</div>
+        <div style="font-size:12px;color:var(--text-muted);">⭐ ${f.xp} XP • ${f.status}</div>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="addFriend('${f.name}')">➕</button>
+    </div>
+  `).join('');
+}
+
+function addFriend(name) {
+  if (userData.friends.includes(name)) { notify('✅ Уже друзья'); return; }
+  userData.friends.push(name);
+  saveUser();
+  notify(`✅ ${name} добавлен!`);
+}
+
+function saveUser() {
+  localStorage.setItem('soundscape_user', JSON.stringify({ username: currentUser, userData }));
+}
+
+// ==================== ЛИДЕРБОРД ====================
+function renderLeaderboard() {
+  const list = document.getElementById('leaderboardList');
+  list.innerHTML = LEADERBOARD.map(p => `
+    <div class="leaderboard-item">
+      <div class="leaderboard-rank">#${p.rank}</div>
+      <div class="leaderboard-name">${p.name}</div>
+      <div class="leaderboard-xp">⭐ ${p.xp}</div>
+    </div>
+  `).join('');
+}
+
+// ==================== ЧАТ ====================
+function renderChat() {
+  const container = document.getElementById('chatMessages');
+  container.innerHTML = chatMessages.slice(-20).map(msg => `
+    <div class="chat-message">
+      <div class="chat-author">${msg.author}</div>
+      <div class="chat-text">${msg.text}</div>
+    </div>
+  `).join('');
+  container.scrollTop = container.scrollHeight;
+}
+
+function sendMessage() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+  chatMessages.push({ author: currentUser, text });
+  input.value = '';
+  renderChat();
+}
+
+// ==================== ИГРЫ ====================
+function playGame(type) {
+  userData.games++;
+  userData.xp += 50;
+  saveUser();
+  updateStats();
+  notify(`🎮 ${type} запущена! +50 XP`);
+  document.getElementById('gameStatus').innerHTML = `<span style="color:var(--success);">✅ Игра ${type} запущена!</span>`;
+  setTimeout(() => {
+    document.getElementById('gameStatus').innerHTML = '';
+  }, 2000);
+}
+
+function editProfile() {
+  const bio = prompt('Введи новую биографию:', userData.bio);
+  if (bio) {
+    userData.bio = bio;
+    saveUser();
+    document.getElementById('profileBio').textContent = bio;
+    notify('✅ Профиль обновлен');
+  }
+}
+</script>
+
+</body>
+</html>
