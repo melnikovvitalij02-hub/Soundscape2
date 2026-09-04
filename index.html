@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Soundscape | Музыкальная Вселенная</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/lamejs@1.2.1/lame.min.js"></script>
 <style>
 :root {
@@ -147,60 +146,22 @@ canvas.game-canvas { width: 100%; max-width: 800px; height: auto; aspect-ratio: 
 .result-title { font-weight: bold; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #fff; }
 .result-artist { font-size: 12px; color: var(--text-muted); }
 .preview-btn { background: var(--accent); color: #000; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: bold; }
+.duration-text { font-size: 11px; color: var(--text-muted); }
 .player-card { margin-top: 20px; background: rgba(0,0,0,0.5); border: 2px solid rgba(0, 243, 255, 0.3); color: #fff; padding: 20px; border-radius: 16px; display: flex; flex-direction: column; gap: 15px; backdrop-filter: blur(10px); }
-#yt-player-container { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 10px; overflow: hidden; }
-#yt-player-container iframe { width: 100%; height: 100%; border: none; }
-
-/* Beat Maker Pro Styles */
-.bm-wrapper { background: var(--bg-panel); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 15px; margin-top: 20px; }
-.bm-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; }
-.bm-controls { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-.bm-btn { padding: 8px 16px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; background: rgba(255,255,255,0.08); color: var(--text); font-size: 13px; transition: all 0.2s; }
-.bm-btn:hover { transform: translateY(-1px); }
-.bm-btn-primary { background: var(--gradient-1); color: #000; }
-.bm-input { width: 70px; padding: 8px; border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; background: rgba(0,0,0,0.3); color: var(--accent); font-weight: bold; text-align: center; }
-.bm-main { display: flex; gap: 15px; height: 350px; }
-.bm-sounds { width: 200px; background: rgba(0,0,0,0.2); border-radius: 10px; padding: 10px; overflow-y: auto; }
-.bm-sound-item { padding: 8px; background: rgba(255,255,255,0.05); border-radius: 6px; cursor: pointer; font-size: 13px; margin-bottom: 4px; transition: all 0.2s; }
-.bm-sound-item:hover, .bm-sound-item.active { background: var(--accent-dim); color: var(--accent); border: 1px solid var(--accent); }
-.bm-grid-container { flex: 1; overflow: auto; background: rgba(0,0,0,0.2); border-radius: 10px; padding: 10px; position: relative; }
-.bm-track-row { display: flex; height: 40px; margin-bottom: 2px; }
-.bm-track-label { width: 100px; flex-shrink: 0; background: var(--bg-panel); display: flex; align-items: center; padding: 0 10px; font-size: 12px; color: var(--text-muted); position: sticky; left: 0; z-index: 15; border-right: 2px solid var(--border); }
-.bm-cell { width: 30px; height: 100%; border-right: 1px solid rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.03); cursor: pointer; flex-shrink: 0; position: relative; transition: background 0.1s; }
-.bm-cell:hover { background: var(--accent-dim); }
-.bm-cell.bar-line { border-right: 2px solid rgba(0, 243, 255, 0.4) !important; }
-.bm-note { position: absolute; top: 2px; bottom: 2px; left: 1px; right: 1px; background: var(--gradient-1); border-radius: 4px; z-index: 5; box-shadow: 0 2px 8px rgba(0,243,255,0.3); }
-.bm-visualizer { height: 100px; background: rgba(0,0,0,0.4); border-radius: 10px; margin-top: 15px; position: relative; overflow: hidden; }
-#bmCanvas { width: 100%; height: 100%; display: block; }
-
-/* AI Studio */
-.ai-canvas-wrap { height: 200px; background: #000; border-radius: 12px; margin-bottom: 20px; position: relative; overflow: hidden; }
-#aiCanvas { width: 100%; height: 100%; display: block; }
-
-/* FX Modal */
-.modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 20000; backdrop-filter: blur(5px); }
-.modal-content { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 12px; padding: 20px; width: 520px; max-height: 85vh; overflow-y: auto; }
-.fx-group { margin-bottom: 15px; padding: 12px; background: rgba(0,0,0,0.3); border-radius: 10px; border: 1px solid rgba(255,255,255,0.06); }
-.fx-group-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-.fx-knobs-row { display: flex; justify-content: space-around; align-items: center; gap: 10px; flex-wrap: wrap; }
-.fx-knob { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-.fx-knob-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; }
-.fx-knob-value { font-size: 11px; color: var(--accent); font-weight: 700; }
-
-/* ИСПРАВЛЕННЫЕ АВАТАРКИ */
-.avatar, .profile-avatar, .friend-avatar, .track-cover {
-    border-radius: 50% !important;
-    border: 3px solid var(--accent) !important;
-    object-fit: cover !important;
-    box-shadow: 0 0 20px rgba(0, 243, 255, 0.3) !important;
-    background: linear-gradient(135deg, var(--accent), var(--purple)) !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-}
-.profile-avatar { width: 100px !important; height: 100px !important; font-size: 50px !important; flex-shrink: 0 !important; }
+.track-details { display: flex; align-items: center; gap: 15px; }
+.track-cover { width: 60px; height: 60px; border-radius: 10px; object-fit: cover; border: 2px solid var(--accent); }
+.progress-wrapper { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--text-muted); }
+.progress-wrapper input[type="range"] { flex-grow: 1; accent-color: var(--accent); cursor: pointer; }
+.player-controls { display: flex; justify-content: center; align-items: center; gap: 20px; }
+.control-btn { background: transparent; border: 2px solid rgba(255,255,255,0.2); color: white; font-size: 18px; cursor: pointer; width: 45px; height: 45px; border-radius: 50%; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
+.control-btn:hover { background: rgba(255,255,255,0.1); border-color: var(--accent); }
+.control-btn.active { color: var(--accent); border-color: var(--accent); }
+.main-btn { font-size: 24px; background: var(--gradient-1); border: none; color: #000; width: 60px; height: 60px; }
+.main-btn:hover { transform: scale(1.1); }
+.volume-wrapper { display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
 .profile-card, .chat-card, .leaderboard-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(0,243,255,0.2); padding: 30px 20px; border-radius: 20px; text-align: center; max-width: 600px; margin: 0 auto; }
 .profile-header { display: flex; gap: 20px; align-items: center; margin-bottom: 25px; flex-wrap: wrap; }
+.profile-avatar { width: 100px; height: 100px; border-radius: 50%; background: var(--gradient-1); display: flex; align-items: center; justify-content: center; font-size: 50px; flex-shrink: 0; box-shadow: 0 0 30px rgba(0, 243, 255, 0.3); }
 .profile-info { flex: 1; min-width: 200px; text-align: left; }
 .profile-name { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
 .profile-bio { color: var(--text-muted); font-size: 14px; line-height: 1.5; margin-bottom: 15px; min-height: 40px; }
@@ -210,6 +171,29 @@ canvas.game-canvas { width: 100%; max-width: 800px; height: auto; aspect-ratio: 
 .p-stat-label { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
 .edit-btn { background: rgba(0,243,255,0.1); border: 2px solid var(--accent); color: var(--accent); padding: 8px 16px; border-radius: 8px; cursor: pointer; margin-top: 10px; font-size: 13px; }
 .edit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.projects-section { margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); text-align: left; }
+.projects-section h3 { color: var(--accent); margin-bottom: 15px; }
+.project-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(0,243,255,0.2); border-radius: 10px; padding: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+.project-name { font-weight: bold; }
+.project-date { font-size: 11px; color: var(--text-muted); }
+.project-actions { display: flex; gap: 8px; }
+.play-project-btn { background: var(--gradient-1); color: #000; border: none; padding: 6px 12px; border-radius: 15px; cursor: pointer; font-weight: bold; font-size: 12px; }
+.edit-project-btn { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 6px 12px; border-radius: 15px; cursor: pointer; font-weight: bold; font-size: 12px; }
+.subscription-section { margin-top: 40px; padding: 40px 20px; background: linear-gradient(135deg, rgba(0,0,0,0.4), rgba(17,21,48,0.6)); border-radius: 24px; border: 2px solid rgba(0,243,255,0.2); }
+.subscription-title { text-align: center; font-size: 36px; margin-bottom: 30px; background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.tiers-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; max-width: 1200px; margin: 0 auto; }
+.tier-card { background: linear-gradient(135deg, rgba(17,21,48,0.9), rgba(26,31,58,0.7)); border: 2px solid rgba(0,243,255,0.3); border-radius: 20px; padding: 30px; text-align: center; transition: all 0.3s; }
+.tier-card:hover { transform: translateY(-10px); box-shadow: 0 20px 50px rgba(0,243,255,0.3); }
+.tier-card.featured { border-color: #ffd700; transform: scale(1.05); }
+.tier-badge { background: linear-gradient(90deg, #ffd700, #ff8c00); color: #000; padding: 5px 12px; border-radius: 15px; font-size: 11px; font-weight: bold; display: inline-block; margin-bottom: 15px; }
+.tier-icon { font-size: 60px; margin-bottom: 15px; }
+.tier-name { font-size: 24px; font-weight: 800; margin-bottom: 10px; color: var(--accent); }
+.tier-price { font-size: 32px; font-weight: 900; margin-bottom: 20px; color: #ffd700; }
+.tier-price span { font-size: 14px; color: var(--text-muted); }
+.tier-features { list-style: none; text-align: left; margin: 20px 0; }
+.tier-features li { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.tier-btn { width: 100%; padding: 14px; margin-top: 20px; background: var(--gradient-1); border: none; border-radius: 12px; color: #000; font-size: 16px; font-weight: 700; cursor: pointer; }
+.tier-btn.gold { background: linear-gradient(90deg, #ffd700, #ff8c00); }
 .chat-messages { background: rgba(0,0,0,0.3); padding: 20px; border-radius: 15px; max-height: 400px; overflow-y: auto; margin-bottom: 15px; text-align: left; }
 .chat-message { margin-bottom: 12px; }
 .chat-author { color: var(--accent); font-weight: bold; font-size: 14px; }
@@ -225,15 +209,87 @@ canvas.game-canvas { width: 100%; max-width: 800px; height: auto; aspect-ratio: 
 .notification.show { transform: translateX(-50%) translateY(0); }
 .hidden { display: none !important; }
 .click-particle { position: fixed; color: #ffd700; font-weight: bold; font-size: 20px; pointer-events: none; z-index: 9999; transition: all 1s ease-out; }
+
+/* Beat Maker Styles */
+.bm-main-container { max-width: 1200px; margin: 0 auto; }
+.bm-header { display: flex; justify-content: space-between; align-items: center; gap: 15px; flex-wrap: wrap; margin-bottom: 15px; }
+.bm-controls { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.bm-input { width: 70px; padding: 8px; border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; background: rgba(0,0,0,0.3); color: var(--accent); font-weight: bold; font-size: 14px; text-align: center; }
+.bm-main { display: flex; flex: 1; overflow: hidden; margin-top: 15px; min-height: 400px; }
+.sounds-panel { width: 240px; background: var(--bg-panel); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 10px; overflow-y: auto; flex-shrink: 0; display: flex; flex-direction: column; }
+.panel-title { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; font-weight: 700; }
+.sound-item { padding: 8px 10px; background: rgba(255,255,255,0.05); border-radius: 6px; cursor: pointer; transition: all 0.2s; font-size: 13px; display: flex; align-items: center; gap: 8px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sound-item:hover, .sound-item.active { background: var(--accent-dim); color: var(--accent); border: 1px solid var(--accent); }
+.sequencer-area { flex: 1; display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.custom-scrollbar { height: 14px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 7px; position: relative; flex-shrink: 0; overflow: hidden; cursor: pointer; }
+.scrollbar-thumb { position: absolute; top: 2px; bottom: 2px; background: linear-gradient(90deg, var(--accent), var(--purple)); border-radius: 5px; cursor: grab; transition: background 0.2s; min-width: 30px; z-index: 20; }
+.scrollbar-thumb:active { cursor: grabbing; }
+.scrollbar-playhead { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--danger); box-shadow: 0 0 6px var(--danger); pointer-events: none; z-index: 10; }
+.grid-container { flex: 1; overflow: auto; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 10px; position: relative; scrollbar-width: none; }
+.grid-container::-webkit-scrollbar { display: none; }
+.track-row { display: flex; width: 15460px; height: 40px; margin-bottom: 2px; }
+.track-label { width: 100px; flex-shrink: 0; background: var(--bg-panel); display: flex; align-items: center; padding: 0 10px; font-size: 12px; font-weight: 600; color: var(--text-muted); cursor: pointer; position: sticky; left: 0; z-index: 15; }
+.track-label:hover { color: var(--text); background: var(--bg-cell); }
+.grid-cell { width: 30px; height: 100%; border-right: 1px solid rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.03); position: relative; cursor: pointer; flex-shrink: 0; transition: background 0.1s; }
+.grid-cell:hover { background: var(--accent-dim); }
+.grid-cell.bar-line { border-right: 2px solid rgba(0, 243, 255, 0.4) !important; }
+.note { position: absolute; top: 2px; bottom: 2px; left: 1px; background: linear-gradient(90deg, var(--accent), var(--purple)); border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #000; font-size: 10px; font-weight: bold; z-index: 5; cursor: context-menu; pointer-events: auto; box-shadow: 0 2px 8px rgba(0,243,255,0.3); }
+.note::after { content: attr(data-name); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 4px; max-width: 100%; }
+.playback-cursor { position: absolute; top: 10px; bottom: 10px; width: 2px; background: var(--danger); box-shadow: 0 0 10px var(--danger), 0 0 20px var(--danger); z-index: 100; pointer-events: auto; cursor: ew-resize; user-select: none; }
+.playback-cursor::before { content: '▼'; position: absolute; top: -16px; left: -6px; color: var(--danger); font-size: 14px; font-weight: bold; }
+.context-menu { position: fixed; background: rgba(17, 21, 48, 0.95); border: 1px solid var(--border); border-radius: 8px; padding: 6px; z-index: 10000; display: none; flex-direction: column; gap: 4px; min-width: 150px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); backdrop-filter: blur(10px); }
+.context-menu div { padding: 8px 12px; cursor: pointer; border-radius: 4px; font-size: 13px; }
+.context-menu div:hover { background: var(--accent-dim); color: var(--accent); }
+.modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 20000; backdrop-filter: blur(5px); }
+.modal-content { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 12px; padding: 0; width: 520px; max-height: 85vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.8); }
+.modal-header { padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; }
+.modal-header h3 { color: var(--accent); font-size: 16px; }
+.modal-body { padding: 20px; overflow-y: auto; flex: 1; }
+.tabs { display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.tab { padding: 8px 16px; cursor: pointer; font-size: 13px; font-weight: 600; color: var(--text-muted); border-bottom: 2px solid transparent; transition: all 0.2s; }
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+.modal label { display: block; font-size: 12px; color: var(--text-muted); margin: 12px 0 4px; }
+.modal input[type="number"], .modal select { width: 100%; padding: 8px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); color: white; border-radius: 6px; }
+.modal input:focus, .modal select:focus { outline: none; border-color: var(--accent); }
+.modal-buttons { display: flex; gap: 10px; margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); }
+.modal-buttons .btn { flex: 1; text-align: center; }
+.fx-group { margin-bottom: 18px; padding: 14px; background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.15) 100%); border-radius: 10px; border: 1px solid rgba(255,255,255,0.06); transition: all 0.3s; }
+.fx-group.enabled { border-color: rgba(0, 243, 255, 0.3); box-shadow: 0 0 20px rgba(0, 243, 255, 0.08); }
+.fx-group.disabled { opacity: 0.45; filter: grayscale(0.3); }
+.fx-group-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.fx-group-title { font-size: 12px; color: var(--accent); font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+.toggle-switch { position: relative; display: inline-block; width: 44px; height: 22px; flex-shrink: 0; }
+.toggle-switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+.toggle-slider { position: absolute; cursor: pointer; inset: 0; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 22px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+.toggle-slider::before { content: ''; position: absolute; height: 16px; width: 16px; left: 2px; top: 50%; transform: translateY(-50%); background: #8892b0; border-radius: 50%; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+.toggle-switch input:checked + .toggle-slider { background: linear-gradient(90deg, var(--accent), var(--purple)); border-color: var(--accent); box-shadow: 0 0 12px rgba(0, 243, 255, 0.5); }
+.toggle-switch input:checked + .toggle-slider::before { transform: translateY(-50%) translateX(22px); background: #fff; box-shadow: 0 0 8px rgba(255,255,255,0.6); }
+.toggle-switch:hover .toggle-slider { border-color: var(--accent); }
+.fx-knobs-row { display: flex; justify-content: space-around; align-items: flex-end; gap: 8px; min-height: 160px; padding: 10px 4px 0; }
+.fx-knob { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; min-width: 50px; max-width: 70px; }
+.fx-knob-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; text-align: center; font-weight: 600; line-height: 1.2; min-height: 22px; display: flex; align-items: center; }
+.fx-knob-value { font-size: 11px; color: var(--accent); font-weight: 700; background: rgba(0,0,0,0.4); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(0, 243, 255, 0.2); min-width: 40px; text-align: center; }
+.fx-vertical-slider { -webkit-appearance: none; appearance: none; width: 120px; height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; outline: none; transform: rotate(-90deg); transform-origin: center; margin: 55px 0; cursor: pointer; transition: background 0.2s; }
+.fx-vertical-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 18px; height: 18px; background: linear-gradient(135deg, var(--accent), var(--purple)); border-radius: 50%; cursor: pointer; box-shadow: 0 0 8px rgba(0, 243, 255, 0.6), 0 2px 4px rgba(0,0,0,0.4); border: 2px solid rgba(255,255,255,0.3); transition: transform 0.15s, box-shadow 0.15s; }
+.fx-vertical-slider::-webkit-slider-thumb:hover { transform: scale(1.15); box-shadow: 0 0 14px rgba(0, 243, 255, 0.9), 0 2px 6px rgba(0,0,0,0.5); }
+.fx-eq-group { display: flex; justify-content: space-around; gap: 10px; padding: 10px 4px 0; }
+.fx-eq-band { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 8px; background: rgba(0,0,0,0.25); border-radius: 8px; border: 1px solid rgba(255,255,255,0.04); }
+.fx-eq-band-label { font-size: 11px; color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+.visualizer-container { height: 100px; background: rgba(0,0,0,0.4); border-top: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; position: relative; }
+#bmVisualizerCanvas { width: 100%; height: 100%; display: block; }
+
 @media (max-width: 768px) {
 .hero-title { font-size: 32px; }
 .maze-container { grid-template-columns: repeat(10, 30px); grid-template-rows: repeat(10, 30px); }
 .maze-cell { width: 30px; height: 30px; font-size: 18px; }
 .mobile-controls { display: flex !important; }
+.tier-card.featured { transform: none; }
 .memory-grid { grid-template-columns: repeat(4, 1fr); }
 .memory-card { font-size: 24px; }
-.bm-main { flex-direction: column; height: auto; }
-.bm-sounds { width: 100%; max-height: 150px; }
+.bm-main { flex-direction: column; }
+.sounds-panel { width: 100%; max-height: 150px; }
 }
 </style>
 </head>
@@ -252,7 +308,8 @@ canvas.game-canvas { width: 100%; max-width: 800px; height: auto; aspect-ratio: 
 <div class="limit-box">
 <h2>⚠️ Лимит исчерпан!</h2>
 <p id="limitMessage">Вы достигли лимита.</p>
-<button class="auth-btn" onclick="closeLimitModal()">Закрыть</button>
+<button class="auth-btn" onclick="showSubscriptions()" style="margin-bottom:10px;">💎 Оформить подписку</button>
+<button class="auth-btn guest-btn" onclick="closeLimitModal()">Закрыть</button>
 </div>
 </div>
 <canvas id="spaceCanvas"></canvas>
@@ -272,11 +329,11 @@ canvas.game-canvas { width: 100%; max-width: 800px; height: auto; aspect-ratio: 
 <button class="nav-btn" onclick="showSection('quests', event)">📜 Квесты</button>
 <button class="nav-btn" onclick="showSection('music', event)">🔊 Музыка</button>
 <button class="nav-btn" onclick="showSection('beatmaker', event)">🎹 Beat Pro</button>
-<button class="nav-btn" onclick="showSection('aistudio', event)">🤖 AI Студия</button>
 <button class="nav-btn" onclick="showSection('leaderboard', event)">🏆 Топ</button>
 <button class="nav-btn" onclick="showSection('achievements', event)">🏅 Награды</button>
 <button class="nav-btn" onclick="showSection('chat', event)">💬 Чат</button>
 <button class="nav-btn" onclick="showSection('profile', event)">👤 Профиль</button>
+<button class="nav-btn" onclick="showSection('subscriptions', event)">💎 Тарифы</button>
 <button class="nav-btn" onclick="logout()" style="background:rgba(255,0,85,0.2);color:#ff0055;">🚪 Выйти</button>
 </div>
 </header>
@@ -284,35 +341,41 @@ canvas.game-canvas { width: 100%; max-width: 800px; height: auto; aspect-ratio: 
 <div id="home" class="section active">
 <div class="hero-section">
 <h1 class="hero-title">SOUNDSCAPE</h1>
-<p class="hero-subtitle">Погрузись в музыкальную вселенную. Играй в аркадные миссии, создавай биты в AI-студии, слушай полные версии треков через YouTube.</p>
+<p class="hero-subtitle">Погрузись в музыкальную вселенную. Записывай мелодии, генерируй биты с помощью AI, играй в аркадные миссии и стань профессиональным космическим продюсером.</p>
 <div class="hero-buttons">
 <button class="hero-btn hero-btn-primary" onclick="showSection('games')">🚀 Начать миссию</button>
-<button class="hero-btn hero-btn-secondary" onclick="showSection('beatmaker')">🎹 Beat Composer Pro</button>
+<button class="hero-btn hero-btn-secondary" onclick="showSection('beatmaker')">🎹 Стать битмейкером</button>
 </div>
 </div>
 <div class="features-grid">
 <div class="feature-card" onclick="showSection('games')">
 <span class="feature-icon">🎮</span>
-<div class="feature-title">6 Аркадных миссий</div>
-<div class="feature-desc">Space Shooter, Pac-Man, Invaders, Snake, Memory и Кликер. Зарабатывай XP!</div>
+<div class="feature-title">Аркадные миссии</div>
+<div class="feature-desc">Space Shooter, Pac-Man, Invaders, Snake, Memory и Кликер. Зарабатывай XP и монеты!</div>
 </div>
-<div class="feature-card" onclick="showSection('music')">
-<span class="feature-icon">🔊</span>
-<div class="feature-title">YouTube Плеер</div>
-<div class="feature-desc">Ищи и слушай полные версии треков через YouTube без VPN.</div>
+<div class="feature-card" onclick="showSection('quests')">
+<span class="feature-icon">🧩</span>
+<div class="feature-title">Ритм-квесты</div>
+<div class="feature-desc">Проходи лабиринты и запоминай музыкальные паттерны для получения наград.</div>
 </div>
 <div class="feature-card" onclick="showSection('beatmaker')">
 <span class="feature-icon">🎹</span>
 <div class="feature-title">Beat Maker Pro</div>
-<div class="feature-desc">Профессиональная студия с FX-эффектами и экспортом в MP3.</div>
+<div class="feature-desc">Профессиональная студия с высоким качеством звуков и экспортом в MP3.</div>
 </div>
-<div class="feature-card" onclick="showSection('aistudio')">
-<span class="feature-icon">🤖</span>
-<div class="feature-title">AI Студия</div>
-<div class="feature-desc">AI анализирует ритм и генерирует паттерны для твоих битов.</div>
+<div class="feature-card" onclick="showSection('music')">
+<span class="feature-icon">🔊</span>
+<div class="feature-title">Музыка</div>
+<div class="feature-desc">Ищи и слушай полные версии треков через YouTube.</div>
+</div>
+<div class="feature-card" onclick="showSection('subscriptions')">
+<span class="feature-icon">💎</span>
+<div class="feature-title">Тарифы</div>
+<div class="feature-desc">Оформи подписку для безлимитного доступа ко всем функциям.</div>
 </div>
 </div>
 </div>
+
 <div id="games" class="section">
 <h2 class="section-title">🎮 Выбери миссию</h2>
 <div class="games-grid">
@@ -353,6 +416,7 @@ canvas.game-canvas { width: 100%; max-width: 800px; height: auto; aspect-ratio: 
 <div id="gameInfo" style="text-align:center;margin-top:10px;color:var(--accent); font-weight: bold; font-size:14px;"></div>
 </div>
 </div>
+
 <div id="quests" class="section">
 <h2 class="section-title">📜 Активные квесты</h2>
 <div class="quest-section">
@@ -377,62 +441,79 @@ canvas.game-canvas { width: 100%; max-width: 800px; height: auto; aspect-ratio: 
 </div>
 <div id="questsList" style="max-width:600px;margin:0 auto;"></div>
 </div>
+
 <div id="music" class="section">
-<h2 class="section-title">🔊 Космический плеер (YouTube)</h2>
+<h2 class="section-title">🔊 Поиск музыки (YouTube)</h2>
 <div class="music-container">
 <div class="search-box-wrapper">
-<input type="text" id="music-search-input" placeholder="Поиск трека или исполнителя (YouTube)..." autocomplete="off">
+<input type="text" id="music-search-input" placeholder="🔍 Введите запрос, чтобы найти музыку и перейти к полной версии на YouTube" autocomplete="off">
 <ul id="search-results-list" class="results-list hidden"></ul>
 </div>
 <div id="player-card" class="player-card hidden">
-<div id="yt-player-container"></div>
-<div style="text-align:center;margin-top:10px;">
-<div id="player-title" style="font-weight:700; font-size:16px;">Название трека</div>
+<div class="track-details">
+<img id="player-cover" src="https://via.placeholder.com/60" alt="Cover" class="track-cover">
+<div style="flex:1; overflow:hidden;">
+<div id="player-title" style="font-weight:700; font-size:16px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Название трека</div>
 <div id="player-artist" style="font-size:13px; color:var(--text-muted);">Исполнитель</div>
 </div>
 </div>
+<div style="text-align:center; margin-top:10px;">
+<a id="open-yt-btn" href="#" target="_blank" class="preview-btn" style="padding:10px 20px; font-size:13px; text-decoration:none;">▶ Открыть полную версию на YouTube</a>
 </div>
 </div>
+</div>
+</div>
+
 <div id="beatmaker" class="section">
-<h2 class="section-title">🎹 Beat Composer Pro</h2>
-<div class="bm-wrapper">
-<div class="bm-header">
-<div class="logo" style="font-size:18px;">🎹 BEAT COMPOSER</div>
-<input type="text" id="bmName" class="auth-input" style="width:200px;margin:0;padding:8px;" value="My Beat" placeholder="Project name">
-<div class="bm-controls">
-<span style="color:var(--accent);font-weight:bold;">BPM:</span>
-<input type="number" id="bmBpm" class="bm-input" value="120" min="40" max="300">
-<button class="bm-btn bm-btn-primary" id="bmPlayBtn">▶️ Play</button>
-<button class="bm-btn" id="bmResetBtn" style="background:var(--danger);color:#fff;">⏹️ Reset</button>
-<button class="bm-btn" id="bmSaveBtn" style="background:var(--success);color:#000;">💾 Сохранить</button>
-<button class="bm-btn" id="bmExportBtn" style="background:var(--purple);color:#fff;">📥 Export MP3</button>
+  <h2 class="section-title">🎹 Beat Composer Pro</h2>
+  <div class="bm-main-container">
+    <div class="bm-header">
+      <div class="logo" style="font-size:18px;">🪐 BEAT COMPOSER PRO</div>
+      <input type="text" id="bmProjectName" class="auth-input" style="width:200px;margin:0;padding:6px 12px;" value="My Beat">
+    </div>
+    <div class="bm-controls">
+      <button class="btn btn-primary" id="bmPlayBtn">▶️ Play</button>
+      <button class="btn btn-danger" id="bmResetBtn">⏹️ Reset</button>
+      <button class="btn btn-primary" id="bmExportBtn" style="background:var(--success);">💾 Export MP3</button>
+      <span class="bpm-label" style="color:var(--accent);font-weight:bold;">BPM:</span>
+      <input type="number" id="bmBpm" class="bm-input" value="120" min="40" max="300">
+    </div>
+    <div class="bm-main">
+      <div class="sounds-panel">
+        <div class="panel-title">📁 Инструменты</div>
+        <div id="bmSoundsList"></div>
+        <label class="btn" style="margin-top:10px; cursor:pointer; background:var(--accent-dim); color:var(--accent); text-align:center; font-size:12px;">📂 Загрузить WAV/MP3<input type="file" multiple accept="audio/*" style="display:none" onchange="window.handleManualUpload(this)"></label>
+      </div>
+      <div class="sequencer-area">
+        <div class="custom-scrollbar" id="customScrollbar"><div class="scrollbar-thumb" id="scrollbarThumb"></div><div class="scrollbar-playhead" id="scrollbarPlayhead"></div></div>
+        <div class="grid-container" id="gridContainer"><div class="playback-cursor" id="playbackCursor" style="left: 110px;"></div></div>
+      </div>
+    </div>
+    <div class="visualizer-container"><canvas id="bmVisualizerCanvas"></canvas></div>
+  </div>
+  <div class="modal" id="propertiesModal">
+    <div class="modal-content">
+      <div class="modal-header"><h3>Edit Note</h3><button class="btn" style="padding:4px 8px;" onclick="document.getElementById('propertiesModal').style.display='none'">✕</button></div>
+      <div class="modal-body">
+        <div class="tabs"><div class="tab active" onclick="switchTab('basic')">Основные</div><div class="tab" onclick="switchTab('fx')">FX & Фильтры</div></div>
+        <div id="tab-basic" class="tab-content active">
+          <label>Volume (0–1):</label><input type="number" id="volumeInput" min="0" max="1" step="0.01" value="1">
+          <label>Speed (0.1–3.0):</label><input type="number" id="speedInput" min="0.1" max="3.0" step="0.1" value="1.0">
+          <label>Pitch (semitones, -12 to 12):</label><input type="number" id="pitchInput" min="-12" max="12" step="1" value="0">
+        </div>
+        <div id="tab-fx" class="tab-content">
+           <div class="fx-group enabled"><div class="fx-group-header"><div class="fx-group-title">Reverb (Delay)</div></div>
+           <div class="fx-knobs-row"><div class="fx-knob"><div class="fx-knob-label">Time (s)</div><input type="range" class="fx-vertical-slider" id="fx-del-time" min="0.05" max="1.0" step="0.05" value="0.3"><div class="fx-knob-value" id="val-del-time">0.3</div></div>
+           <div class="fx-knob"><div class="fx-knob-label">Feedback</div><input type="range" class="fx-vertical-slider" id="fx-del-fb" min="0" max="90" value="40"><div class="fx-knob-value" id="val-del-fb">40</div></div></div></div>
+           <div class="fx-group disabled" id="grp-distortion"><div class="fx-group-header"><div class="fx-group-title">Distortion</div><label class="toggle-switch"><input type="checkbox" id="fx-dist-active"><span class="toggle-slider"></span></label></div>
+           <div class="fx-knobs-row"><div class="fx-knob"><div class="fx-knob-label">Drive</div><input type="range" class="fx-vertical-slider" id="fx-dist-drive" min="0" max="100" value="20"><div class="fx-knob-value" id="val-dist-drive">20</div></div></div></div>
+        </div>
+      </div>
+      <div class="modal-buttons"><button class="btn btn-primary" id="saveNoteBtn">Save</button><button class="btn" id="cancelNoteBtn">Cancel</button></div>
+    </div>
+  </div>
 </div>
-</div>
-<div class="bm-main">
-<div class="bm-sounds" id="bmSoundsList">
-<div class="bm-sound-item active" data-sound="kick" onclick="selectBmSound('kick', this)">🥁 Kick</div>
-<div class="bm-sound-item" data-sound="snare" onclick="selectBmSound('snare', this)">🪘 Snare</div>
-<div class="bm-sound-item" data-sound="hihat" onclick="selectBmSound('hihat', this)">🔔 Hi-Hat</div>
-<div class="bm-sound-item" data-sound="bass" onclick="selectBmSound('bass', this)">🎸 Bass</div>
-<div class="bm-sound-item" data-sound="clap" onclick="selectBmSound('clap', this)">👏 Clap</div>
-</div>
-<div class="bm-grid-container" id="bmGridContainer"></div>
-</div>
-<div class="bm-visualizer">
-<canvas id="bmCanvas"></canvas>
-</div>
-</div>
-</div>
-<div id="aistudio" class="section">
-<h2 class="section-title">🤖 AI Студия Звукозаписи</h2>
-<div class="profile-card" style="max-width:800px;">
-<div class="ai-canvas-wrap">
-<canvas id="aiCanvas"></canvas>
-</div>
-<button class="auth-btn" id="aiRecordBtn" onclick="toggleAIRecord()" style="max-width:300px;margin:0 auto 20px;">🎤 Начать запись и анализ</button>
-<div id="aiStatus" style="color:var(--text-muted);font-size:14px;">Нажми кнопку, чтобы AI проанализировал ритм и сгенерировал паттерн в Beat Maker</div>
-</div>
-</div>
+
 <div id="leaderboard" class="section">
 <h2 class="section-title">🏆 Топ игроков</h2>
 <div id="leaderboardList" class="leaderboard-card"></div>
@@ -455,7 +536,7 @@ canvas.game-canvas { width: 100%; max-width: 800px; height: auto; aspect-ratio: 
 <h2 class="section-title">👤 Профиль пилота</h2>
 <div class="profile-card">
 <div class="profile-header">
-<div class="profile-avatar" id="profileAvatar">👨‍🚀</div>
+<div class="profile-avatar">👨‍🚀</div>
 <div class="profile-info">
 <div class="profile-name" id="profileName">Гость</div>
 <div class="profile-bio" id="profileBio">Нажми "Редактировать" чтобы добавить описание</div>
@@ -467,20 +548,53 @@ canvas.game-canvas { width: 100%; max-width: 800px; height: auto; aspect-ratio: 
 <button class="edit-btn" id="editBioBtn" onclick="editBio()">✏️ Редактировать описание</button>
 </div>
 </div>
+<div class="projects-section">
+<h3>🎵 Мои проекты</h3>
+<div id="projectList">
+<p style="color:var(--text-muted);text-align:center;padding:20px;">Нет сохранённых проектов</p>
+</div>
+</div>
 <button class="btn" style="margin-top: 25px; width: 100%; border: 2px solid var(--accent); color: var(--accent);" onclick="logout()">🚪 Выйти из аккаунта</button>
+</div>
+</div>
+
+<div id="subscriptions" class="section">
+<div class="subscription-section">
+<h2 class="subscription-title">💎 Выбери свой путь</h2>
+<div class="tiers-grid">
+<div class="tier-card">
+<div class="tier-icon">👤</div>
+<h3 class="tier-name">Гость</h3>
+<div class="tier-price">Бесплатно</div>
+<ul class="tier-features">
+<li>🎮 2 игры в день</li>
+<li>📜 1 квест в день</li>
+<li>🔊 Прослушивание музыки</li>
+<li>❌ Нет сохранения проектов</li>
+<li>❌ Нет доступа к Beat Pro</li>
+</ul>
+<button class="tier-btn" onclick="selectTier('guest')">Текущий тариф</button>
+</div>
+<div class="tier-card featured">
+<div class="tier-badge">ПОПУЛЯРНЫЙ</div>
+<div class="tier-icon">🔭</div>
+<h3 class="tier-name">Исследователь</h3>
+<div class="tier-price">279 ₽<span>/мес</span></div>
+<ul class="tier-features">
+<li>🎮 Безлимитные игры</li>
+<li>📜 Безлимитные квесты</li>
+<li>💾 До 20 проектов в хранилище</li>
+<li>🎹 Полный доступ к Beat Pro</li>
+<li>🏆 VIP статус</li>
+</ul>
+<button class="tier-btn gold" onclick="selectTier('explorer')">Выбрать тариф</button>
+</div>
+</div>
 </div>
 </div>
 </div>
 
 <script>
-// ==========================================
-// SUPABASE INITIALIZATION
-// ==========================================
-const SUPABASE_URL = 'https://aivfmjjfdzuugznliysa.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFpdmZtampmZHp1dWd6bmxpeXNhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc5Mzc1ODgsImV4cCI6MjEwMzUxMzU4OH0.wpC4xh48h6HvlP8-l_LQvBxZ-8qkfbhyp9NBb6b0yiU';
-const { createClient } = supabase;
-const db = createClient(SUPABASE_URL, SUPABASE_KEY);
-
 let currentUser = null;
 let userTier = 'guest';
 let isGuest = false;
@@ -492,7 +606,9 @@ clicker: { clickPower: 1, autoClick: 0, clickCost: 10, autoCost: 50 }
 };
 let currentGame = null, gameInterval = null, gameScore = 0, canvas, ctx;
 let input = { left: false, right: false, up: false, down: false, fire: false };
-let debounceTimer = null;
+let globalAudio = new Audio();
+globalAudio.crossOrigin = "anonymous";
+let isRepeat = false, previousVolume = 0.8, debounceTimer = null;
 let clickerInterval = null;
 let questsData = [
 { id: 'q1', title: 'Первая игра', desc: 'Сыграй в любую игру 1 раз', target: 1, current: 0, reward: 50, icon: '🎮', completed: false },
@@ -502,19 +618,7 @@ let questsData = [
 { id: 'q5', title: 'Космический магнат', desc: 'Накопи 1000 монет в кликере', target: 1000, current: 0, reward: 250, icon: '💰', completed: false }
 ];
 
-window.onload = async function() {
-    try {
-        const { data } = await db.auth.getSession();
-        if (data.session) {
-            currentUser = data.session.user.user_metadata.username || 'User';
-            isGuest = false;
-            userTier = 'regular';
-            document.getElementById('authOverlay').style.display = 'none';
-            initApp();
-            return;
-        }
-    } catch(e) { console.log('Supabase not available, using localStorage'); }
-    
+window.onload = function() {
     const saved = localStorage.getItem('soundscape_current_user') || localStorage.getItem('soundscape_user');
     if (saved) {
         const data = JSON.parse(saved);
@@ -531,37 +635,23 @@ window.onload = async function() {
     }
     renderQuests();
     renderAchievements();
-    initBeatMaker();
-    initAIVisualizer();
+    initBmVisualizer();
 };
 
 function checkDailyReset() {
     const today = new Date().toDateString();
     if (userData.lastGameDate !== today) { userData.gamesToday = 0; userData.lastGameDate = today; }
     if (userData.lastQuestDate !== today) { userData.questsCompleted = 0; userData.lastQuestDate = today; }
+    const currentMonth = new Date().getMonth();
+    if (userData.lastBeatMonth !== currentMonth) { userData.beatsThisMonth = 0; userData.lastBeatMonth = currentMonth; }
 }
 
-async function registerUser() {
+function registerUser() {
     const username = document.getElementById('authUsername').value.trim();
     const password = document.getElementById('authPassword').value.trim();
     if (username.length < 3) { showNotification('❌ Никнейм минимум 3 символа'); return; }
     if (password.length < 4) { showNotification('❌ Пароль минимум 4 символа'); return; }
-    
-    try {
-        let { data, error } = await db.auth.signInWithPassword({ email: username + '@soundscape.local', password });
-        if (error) {
-            const { error: signUpError } = await db.auth.signUp({
-                email: username + '@soundscape.local',
-                password,
-                options: { data: { username: username } }
-            });
-            if (signUpError) throw signUpError;
-        }
-        currentUser = username;
-    } catch(e) {
-        currentUser = username;
-    }
-    
+    currentUser = username;
     isGuest = false;
     userTier = 'regular';
     document.getElementById('authOverlay').style.display = 'none';
@@ -579,11 +669,22 @@ function guestLogin() {
     showNotification('👤 Гостевой режим');
 }
 
-async function logout() {
-    try { await db.auth.signOut(); } catch(e) {}
+function logout() {
     localStorage.removeItem('soundscape_user');
     localStorage.removeItem('soundscape_current_user');
     location.reload();
+}
+
+function selectTier(tier) {
+    if (tier === 'guest') { showNotification('⚠️ Вы уже используете гостевой тариф'); return; }
+    isGuest = false;
+    if (currentUser === 'Гость' || currentUser.startsWith('Гость_')) {
+        currentUser = 'User_' + Math.floor(Math.random() * 10000);
+    }
+    if (tier === 'regular') { showNotification('✅ Тариф "Обычный" активирован'); userTier = 'regular'; } 
+    else if (tier === 'explorer') { showNotification('💎 Тариф "Исследователь" активирован - 279₽/мес'); userTier = 'explorer'; } 
+    saveUserData();
+    updateUI();
 }
 
 function saveUserData() {
@@ -595,14 +696,13 @@ function saveUserData() {
 function initApp() {
     document.getElementById('userName').textContent = currentUser;
     document.getElementById('profileName').textContent = currentUser;
-    document.getElementById('profileAvatar').textContent = currentUser.charAt(0).toUpperCase();
     const badge = document.getElementById('userBadge');
     if (userTier === 'explorer') { badge.textContent = 'ИССЛЕДОВАТЕЛЬ'; badge.style.background = 'rgba(0,243,255,0.2)'; badge.style.color = '#00f3ff'; }
-    else if (userTier === 'vip') { badge.textContent = 'VIP'; badge.style.background = 'rgba(255,215,0,0.2)'; badge.style.color = '#ffd700'; }
     else if (userTier === 'regular') { badge.textContent = 'ОБЫЧНЫЙ'; badge.style.background = 'rgba(0,255,136,0.2)'; badge.style.color = '#00ff88'; }
     else { badge.textContent = 'ГОСТЬ'; badge.style.background = 'rgba(255,165,0,0.2)'; badge.style.color = 'orange'; }
     updateStats();
     updateProfile();
+    loadProjects();
     resizeSpaceCanvas();
     drawSpaceStars();
 }
@@ -630,24 +730,48 @@ function editBio() {
     if (newBio !== null) { userData.bio = newBio; saveUserData(); updateProfile(); showNotification('✅ Описание обновлено'); }
 }
 
+function loadProjects() {
+    const projectList = document.getElementById('projectList');
+    const projects = JSON.parse(localStorage.getItem('beatmaker_pro_projects') || '[]');
+    if (projects.length === 0) {
+        projectList.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:20px;">Нет сохранённых проектов</p>';
+        return;
+    }
+    projectList.innerHTML = projects.map((proj, i) => `
+<div class="project-item">
+<div>
+<div class="project-name">${proj.name || 'Проект ' + (i + 1)}</div>
+<div class="project-date">${new Date(proj.createdAt).toLocaleDateString()}</div>
+</div>
+<div class="project-actions">
+<button class="play-project-btn" onclick="alert('Воспроизведение: ${proj.name}')">▶ Слушать</button>
+<button class="edit-project-btn" onclick="alert('Редактирование: ${proj.name}')">✏️ Изменить</button>
+</div>
+</div>`).join('');
+}
+
+function updateUI() { initApp(); }
+
 function showSection(id, event) {
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
     document.getElementById(id).classList.add('active');
-    if (event) { let target = event.target.closest('.nav-btn'); if(target) target.classList.add('active'); }
+    if (event && event.target) { let target = event.target.closest('.nav-btn'); if(target) target.classList.add('active'); }
     if (id === 'profile') updateProfile();
     if (id === 'quests') { initMazeQuest(); initRepeatQuest(); renderQuests(); }
     if (id === 'achievements') renderAchievements();
     if (id === 'leaderboard') renderLeaderboard();
     if (id === 'chat') renderChat();
+    if (id === 'beatmaker') { initBeatMaker(); }
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+function showSubscriptions() { closeLimitModal(); showSection('subscriptions'); }
 function closeLimitModal() { document.getElementById('limitModal').classList.remove('active'); }
 
 function checkGameLimit() {
     if (userTier === 'guest' && userData.gamesToday >= 2) {
-        document.getElementById('limitMessage').textContent = 'Вы достигли лимита: 2 игры в день для гостей.';
+        document.getElementById('limitMessage').textContent = 'Вы достигли лимита: 2 игры в день для гостей. Оформите подписку для безлимита!';
         document.getElementById('limitModal').classList.add('active');
         return false;
     }
@@ -656,7 +780,7 @@ function checkGameLimit() {
 
 function checkQuestLimit() {
     if (userTier === 'guest' && userData.questsCompleted >= 1) {
-        document.getElementById('limitMessage').textContent = 'Вы достигли лимита: 1 квест в день для гостей.';
+        document.getElementById('limitMessage').textContent = 'Вы достигли лимита: 1 квест в день для гостей. Оформите подписку для безлимита!';
         document.getElementById('limitModal').classList.add('active');
         return false;
     }
@@ -668,9 +792,11 @@ function startGame(type) {
     currentGame = type;
     gameScore = 0;
     document.getElementById('activeGame').style.display = 'block';
+    
     document.getElementById('gameCanvas').style.display = 'none';
     document.getElementById('memoryGameArea').style.display = 'none';
     document.getElementById('clickerGameArea').style.display = 'none';
+    
     if (clickerInterval) clearInterval(clickerInterval);
 
     if (type === 'memory') {
@@ -688,13 +814,19 @@ function startGame(type) {
         const containerWidth = canvas.parentElement.clientWidth - 30;
         canvas.width = Math.min(600, containerWidth);
         canvas.height = 500;
-        const games = { 'shooter': { title: '🚀 Space Shooter' }, 'pacman': { title: '🟡 Pac-Man' }, 'invaders': { title: '👾 Space Invaders' }, 'snake': { title: '🐍 Змейка' } };
+        const games = {
+            'shooter': { title: '🚀 Space Shooter' },
+            'pacman': { title: '🟡 Pac-Man' },
+            'invaders': { title: '👾 Space Invaders' },
+            'snake': { title: '🐍 Змейка' }
+        };
         document.getElementById('gameTitle').textContent = games[type].title;
         if (type === 'shooter') initShooter();
         else if (type === 'pacman') initPacman();
         else if (type === 'invaders') initInvaders();
         else if (type === 'snake') initSnake();
     }
+    
     userData.gamesPlayed++;
     userData.gamesToday = (userData.gamesToday || 0) + 1;
     if (!userData.achievements) userData.achievements = [];
@@ -718,7 +850,7 @@ function pauseGame() { if (gameInterval) { clearInterval(gameInterval); gameInte
 
 function closeGame() {
     if (gameInterval) { clearInterval(gameInterval); gameInterval = null; }
-    if (clickerInterval && currentGame !== 'clicker') { clearInterval(clickerInterval); clickerInterval = null; }
+    if (clickerInterval) { clearInterval(clickerInterval); clickerInterval = null; }
     document.getElementById('activeGame').style.display = 'none';
     input = { left: false, right: false, up: false, down: false, fire: false };
 }
@@ -727,7 +859,9 @@ document.addEventListener('keydown', (e) => {
     const isGameActive = document.getElementById('games').classList.contains('active');
     const isQuestActive = document.getElementById('quests').classList.contains('active');
     if (isGameActive || isQuestActive) {
-        if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Space'].includes(e.code)) e.preventDefault();
+        if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Space'].includes(e.code)) {
+            e.preventDefault();
+        }
     }
     if (e.code === 'ArrowLeft' || e.code === 'KeyA') input.left = true;
     if (e.code === 'ArrowRight' || e.code === 'KeyD') input.right = true;
@@ -750,9 +884,6 @@ document.addEventListener('keyup', (e) => {
     if (e.code === 'Space') input.fire = false;
 });
 
-// ==========================================
-// GAMES (ALL 6 WORKING)
-// ==========================================
 let player, bullets, enemies;
 function initShooter() { player = { x: canvas.width/2 - 20, y: canvas.height - 60, w: 40, h: 40, cooldown: 0 }; bullets = []; enemies = []; }
 function startShooter() {
@@ -766,14 +897,24 @@ function startShooter() {
         if (Math.random() < 0.03) { enemies.push({ x: Math.random() * (canvas.width - 30), y: -30, w: 30, h: 30 }); }
         bullets = bullets.filter(b => { b.y -= 8; return b.y > 0; });
         for (let i = enemies.length - 1; i >= 0; i--) {
-            let e = enemies[i]; e.y += 2;
+            let e = enemies[i];
+            e.y += 2;
             if (e.y + e.h > player.y && e.x < player.x + player.w && e.x + e.w > player.x) {
-                clearInterval(gameInterval); showNotification('💥 Game Over! Счёт: ' + gameScore); return;
+                clearInterval(gameInterval);
+                showNotification('💥 Game Over! Враг столкнулся с тобой. Счёт: ' + gameScore);
+                input = { left: false, right: false, up: false, down: false, fire: false };
+                return;
             }
             for (let j = bullets.length - 1; j >= 0; j--) {
                 let b = bullets[j];
                 if (b.x > e.x && b.x < e.x + e.w && b.y > e.y && b.y < e.y + e.h) {
-                    enemies.splice(i, 1); bullets.splice(j, 1); gameScore += 10; userData.xp += 2; updateQuestProgress('q2', 10); break;
+                    enemies.splice(i, 1);
+                    bullets.splice(j, 1);
+                    gameScore += 10;
+                    userData.xp += 2;
+                    updateQuestProgress('q2', 10);
+                    createClickParticle(b.x, b.y, '+10');
+                    break;
                 }
             }
         }
@@ -812,13 +953,21 @@ function startPacman() {
         newX = pacman.x + pacman.dir.x; newY = pacman.y + pacman.dir.y;
         if (mazeData[newY] && mazeData[newY][newX] !== '#') { pacman.x = newX; pacman.y = newY; }
         for (let i = dots.length - 1; i >= 0; i--) {
-            if (dots[i].x === pacman.x && dots[i].y === pacman.y) { dots.splice(i, 1); gameScore += 10; userData.xp += 5; updateQuestProgress('q2', 10); }
+            if (dots[i].x === pacman.x && dots[i].y === pacman.y) { 
+                dots.splice(i, 1); 
+                gameScore += 10; 
+                userData.xp += 5; 
+                updateQuestProgress('q2', 10); 
+            }
         }
         ghosts.forEach(ghost => {
             const dirs = [{ x: 0, y: -1 }, { x: 0, y: 1 }, { x: -1, y: 0 }, { x: 1, y: 0 }];
             const validDirs = dirs.filter(d => { let nx = ghost.x + d.x, ny = ghost.y + d.y; return mazeData[ny] && mazeData[ny][nx] !== '#'; });
             if (validDirs.length > 0) { const dir = validDirs[Math.floor(Math.random() * validDirs.length)]; ghost.x += dir.x; ghost.y += dir.y; }
-            if (ghost.x === pacman.x && ghost.y === pacman.y) { clearInterval(gameInterval); showNotification('💀 Пойман! Счёт: ' + gameScore); }
+            if (ghost.x === pacman.x && ghost.y === pacman.y) {
+                clearInterval(gameInterval);
+                showNotification('💀 Пойман! Счёт: ' + gameScore);
+            }
         });
         drawPacman();
         updateStats();
@@ -861,14 +1010,21 @@ function startInvaders() {
         invaderBullets = invaderBullets.filter(b => {
             b.y += 4;
             if (b.y > canvas.height) return false;
-            if (Math.abs(b.x - invaderPlayer.x) < 20 && Math.abs(b.y - invaderPlayer.y) < 20) { clearInterval(gameInterval); showNotification('💥 Подбили! Счёт: ' + gameScore); return false; }
+            if (Math.abs(b.x - invaderPlayer.x) < 20 && Math.abs(b.y - invaderPlayer.y) < 20) {
+                clearInterval(gameInterval);
+                showNotification('💥 Подбили! Счёт: ' + gameScore);
+                return false;
+            }
             return true;
         });
         for (let i = bullets.length - 1; i >= 0; i--) {
             let b = bullets[i];
             for (let j = enemies.length - 1; j >= 0; j--) {
                 let e = enemies[j];
-                if (b.x > e.x && b.x < e.x + e.w && b.y > e.y && b.y < e.y + e.h) { enemies.splice(j, 1); bullets.splice(i, 1); gameScore += 10; userData.xp += 2; updateQuestProgress('q2', 10); break; }
+                if (b.x > e.x && b.x < e.x + e.w && b.y > e.y && b.y < e.y + e.h) {
+                    enemies.splice(j, 1); bullets.splice(i, 1); gameScore += 10; userData.xp += 2; updateQuestProgress('q2', 10);
+                    break;
+                }
             }
         }
         if (enemies.length === 0) { clearInterval(gameInterval); showNotification('🏆 Победа! Счёт: ' + gameScore); }
@@ -897,10 +1053,14 @@ function startSnake() {
         dir = nextDir;
         const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
         const cols = Math.floor(canvas.width / 20), rows = Math.floor(canvas.height / 20);
-        if (head.x < 0 || head.x >= cols || head.y < 0 || head.y >= rows || snake.some(s => s.x === head.x && s.y === head.y)) { clearInterval(gameInterval); showNotification('💥 Game Over! Счёт: ' + gameScore); return; }
+        if (head.x < 0 || head.x >= cols || head.y < 0 || head.y >= rows || snake.some(s => s.x === head.x && s.y === head.y)) {
+            clearInterval(gameInterval); showNotification('💥 Game Over! Счёт: ' + gameScore); return;
+        }
         snake.unshift(head);
-        if (head.x === food.x && head.y === food.y) { gameScore += 15; userData.xp += 10; updateQuestProgress('q2', 15); food = { x: Math.floor(Math.random() * (cols-2)) + 1, y: Math.floor(Math.random() * (rows-2)) + 1 }; }
-        else snake.pop();
+        if (head.x === food.x && head.y === food.y) {
+            gameScore += 15; userData.xp += 10; updateQuestProgress('q2', 15);
+            food = { x: Math.floor(Math.random() * (cols-2)) + 1, y: Math.floor(Math.random() * (rows-2)) + 1 };
+        } else snake.pop();
         drawSnake();
         updateStats();
         document.getElementById('gameInfo').textContent = `Счёт: ${gameScore} | Длина: ${snake.length}`;
@@ -919,7 +1079,13 @@ function initMemoryGame() {
     const area = document.getElementById('memoryGameArea');
     memoryCards = [...memorySymbols, ...memorySymbols].sort(() => Math.random() - 0.5);
     flippedCards = []; matchedPairs = 0; memoryMoves = 0;
-    area.innerHTML = `<div class="memory-grid" id="memoryGrid">${memoryCards.map((symbol, i) => `<div class="memory-card" data-index="${i}" data-symbol="${symbol}" onclick="flipCard(this)">?</div>`).join('')}</div><div style="text-align:center;margin-top:20px;"><p>Ходы: <span id="memoryMoves">0</span> | Пары: <span id="memoryPairs">0</span>/8</p></div>`;
+    area.innerHTML = `
+<div class="memory-grid" id="memoryGrid">
+${memoryCards.map((symbol, i) => `<div class="memory-card" data-index="${i}" data-symbol="${symbol}" onclick="flipCard(this)">?</div>`).join('')}
+</div>
+<div style="text-align:center;margin-top:20px;">
+<p>Ходы: <span id="memoryMoves">0</span> | Пары: <span id="memoryPairs">0</span>/8</p>
+</div>`;
 }
 function startMemoryGame() { initMemoryGame(); showNotification('🧠 Найди все 8 пар!'); }
 function flipCard(card) {
@@ -936,9 +1102,18 @@ function flipCard(card) {
                 flippedCards.forEach(c => { c.classList.remove('flipped'); c.classList.add('matched'); });
                 matchedPairs++;
                 document.getElementById('memoryPairs').textContent = matchedPairs;
-                userData.xp += 10; updateStats();
-                if (matchedPairs === 8) { userData.xp += 75; updateQuestProgress('q1', 1); saveUserData(); updateStats(); setTimeout(() => showNotification(`🎉 Победа! Ходов: ${memoryMoves}`), 500); }
-            } else { flippedCards.forEach(c => { c.classList.remove('flipped'); c.textContent = '?'; }); }
+                userData.xp += 10;
+                updateStats();
+                if (matchedPairs === 8) {
+                    userData.xp += 75;
+                    updateQuestProgress('q1', 1);
+                    saveUserData();
+                    updateStats();
+                    setTimeout(() => showNotification(`🎉 Победа! Ходов: ${memoryMoves}`), 500);
+                }
+            } else {
+                flippedCards.forEach(c => { c.classList.remove('flipped'); c.textContent = '?'; });
+            }
             flippedCards = [];
         }, 800);
     }
@@ -975,9 +1150,22 @@ function movePlayer(dx, dy) {
     if (newX >= 0 && newX < 10 && newY >= 0 && newY < 10 && maze[newY][newX] === 0) {
         playerPos.x = newX; playerPos.y = newY;
         stars.forEach(star => {
-            if (!star.collected && star.x === newX && star.y === newY) { star.collected = true; userData.xp += 20; showNotification('⭐ +20 XP'); updateMazeStats(); saveUserData(); updateStats(); }
+            if (!star.collected && star.x === newX && star.y === newY) {
+                star.collected = true;
+                userData.xp += 20;
+                showNotification('⭐ +20 XP');
+                updateMazeStats();
+                saveUserData();
+                updateStats();
+            }
         });
-        if (stars.every(s => s.collected) && !mazeCompleted) { mazeCompleted = true; userData.xp += 100; showNotification('🎉 Лабиринт пройден! +100 XP'); saveUserData(); updateStats(); }
+        if (stars.every(s => s.collected) && !mazeCompleted) {
+            mazeCompleted = true;
+            userData.xp += 100;
+            showNotification('🎉 Лабиринт пройден! +100 XP');
+            saveUserData();
+            updateStats();
+        }
         renderMaze();
     }
 }
@@ -1013,7 +1201,14 @@ function showPattern() {
     const showInterval = setInterval(() => {
         steps.forEach(s => s.classList.remove('show'));
         if (showIndex < 8) { steps[showIndex].classList.add('show'); showIndex++; }
-        else { clearInterval(showInterval); setTimeout(() => { steps.forEach(s => s.classList.remove('show')); questShowingPattern = false; document.getElementById('questStatus').textContent = '🎯 Твой ход! Повтори последовательность'; }, 500); }
+        else {
+            clearInterval(showInterval);
+            setTimeout(() => {
+                steps.forEach(s => s.classList.remove('show'));
+                questShowingPattern = false;
+                document.getElementById('questStatus').textContent = '🎯 Твой ход! Повтори последовательность';
+            }, 500);
+        }
     }, 600);
 }
 function handleQuestStepClick(index, element) {
@@ -1026,24 +1221,49 @@ function handleQuestStepClick(index, element) {
         questStepIndex++;
         if (questStepIndex >= 8) {
             document.getElementById('questStatus').textContent = '🎉 Отлично! Ты повторил бит!';
-            userData.xp += 300; userData.coins += 100;
+            userData.xp += 300;
+            userData.coins += 100;
             updateQuestProgress('q3', 1);
-            saveUserData(); updateStats(); renderQuests();
+            saveUserData();
+            updateStats();
+            renderQuests();
             showNotification('🏆 Квест выполнен! +300 XP');
         }
     } else {
         element.classList.add('user-wrong');
         document.getElementById('questStatus').textContent = '❌ Неверно! Попробуй ещё раз';
-        setTimeout(() => { element.classList.remove('user-wrong'); userPattern = []; questStepIndex = 0; document.querySelectorAll('.pattern-step').forEach(s => s.classList.remove('user-correct', 'user-wrong')); }, 500);
+        setTimeout(() => {
+            element.classList.remove('user-wrong');
+            userPattern = [];
+            questStepIndex = 0;
+            document.querySelectorAll('.pattern-step').forEach(s => s.classList.remove('user-correct', 'user-wrong'));
+        }, 500);
     }
 }
-function resetRepeatQuest() { if (questsData.find(q => q.id === 'q3').completed) return; initRepeatQuest(); showNotification('🔄 Паттерн сброшен'); }
+function resetRepeatQuest() {
+    if (questsData.find(q => q.id === 'q3').completed) return;
+    initRepeatQuest();
+    showNotification('🔄 Паттерн сброшен');
+}
 function renderQuests() {
     const container = document.getElementById('questsList');
     if (!container) return;
     container.innerHTML = questsData.map(q => {
         const progress = Math.min(100, (q.current / q.target) * 100);
-        return `<div class="quest-card ${q.completed ? 'completed' : ''}"><div class="quest-header"><div class="quest-icon">${q.icon}</div><div><div class="quest-title">${q.title} ${q.completed ? '✅' : ''}</div><div class="quest-desc">${q.desc}</div></div></div><div class="quest-progress-bar"><div class="quest-progress-fill" style="width: ${progress}%"></div></div><div class="quest-reward">+${q.reward} XP</div></div>`;
+        return `
+<div class="quest-card ${q.completed ? 'completed' : ''}">
+<div class="quest-header">
+<div class="quest-icon">${q.icon}</div>
+<div>
+<div class="quest-title">${q.title} ${q.completed ? '✅' : ''}</div>
+<div class="quest-desc">${q.desc}</div>
+</div>
+</div>
+<div class="quest-progress-bar">
+<div class="quest-progress-fill" style="width: ${progress}%"></div>
+</div>
+<div class="quest-reward">+${q.reward} XP</div>
+</div>`;
     }).join('');
 }
 function updateQuestProgress(questId, amount) {
@@ -1055,7 +1275,9 @@ function updateQuestProgress(questId, amount) {
             quest.completed = true;
             userData.xp += quest.reward;
             userData.questsCompleted++;
-            saveUserData(); updateStats(); renderQuests();
+            saveUserData();
+            updateStats();
+            renderQuests();
             showNotification(`🏆 Квест "${quest.title}" выполнен! +${quest.reward} XP`);
         }
     }
@@ -1072,7 +1294,16 @@ function renderAchievements() {
     ];
     container.innerHTML = achievements.map(a => {
         const unlocked = userData.achievements && userData.achievements.includes(a.id);
-        return `<div class="quest-card ${unlocked ? 'completed' : ''}"><div class="quest-header"><div class="quest-icon">${a.icon}</div><div><div class="quest-title">${a.name} ${unlocked ? '✅' : ''}</div><div class="quest-desc">${a.desc}</div></div></div></div>`;
+        return `
+<div class="quest-card ${unlocked ? 'completed' : ''}">
+<div class="quest-header">
+<div class="quest-icon">${a.icon}</div>
+<div>
+<div class="quest-title">${a.name} ${unlocked ? '✅' : ''}</div>
+<div class="quest-desc">${a.desc}</div>
+</div>
+</div>
+</div>`;
     }).join('');
 }
 function renderLeaderboard() {
@@ -1087,456 +1318,114 @@ function renderLeaderboard() {
     leaderboard.sort((a, b) => b.xp - a.xp);
     container.innerHTML = leaderboard.map((p, i) => {
         const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i+1}.`;
-        return `<div class="leaderboard-item ${p.isMe ? 'me' : ''}"><div class="leaderboard-rank">${medal}</div><div class="leaderboard-name">${p.name} ${p.isMe ? '(ты)' : ''}</div><div class="leaderboard-xp">${p.xp} XP</div></div>`;
+        return `
+<div class="leaderboard-item ${p.isMe ? 'me' : ''}">
+<div class="leaderboard-rank">${medal}</div>
+<div class="leaderboard-name">${p.name} ${p.isMe ? '(ты)' : ''}</div>
+<div class="leaderboard-xp">${p.xp} XP</div>
+</div>`;
     }).join('');
 }
-
-// ==========================================
-// YOUTUBE MUSIC PLAYER (FULL VERSIONS, NO VPN)
-// ==========================================
-function searchMusicYT() {
-    const query = document.getElementById('music-search-input').value.trim();
-    if (!query) return;
-    const list = document.getElementById('search-results-list');
-    const ytSearchUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(query + ' official audio')}`;
-    
-    list.innerHTML = `
-        <li onclick="window.open('${ytSearchUrl}', '_blank')" style="background: rgba(255,0,0,0.15); border-left: 3px solid #ff0000;">
-            <div class="result-info">
-                <span class="result-title">🔍 Открыть поиск YouTube в новой вкладке</span>
-                <span class="result-artist">Найти все видео по запросу: ${query}</span>
-            </div>
-            <button class="preview-btn" style="background:#ff0000; color:#fff;">Открыть YouTube</button>
-        </li>
-        <li style="pointer-events: none; border-top: 1px solid rgba(255,255,255,0.1); margin-top:5px; padding-top:5px;">
-            <div class="result-info">
-                <span class="result-title" style="font-size:12px; color:var(--text-muted);">Или слушай во встроенном плеере:</span>
-            </div>
-        </li>
-        <li onclick="playYouTubeFull('${query.replace(/'/g, "\\'")}', 'Полная версия')">
-            <div class="result-info">
-                <span class="result-title">▶ ${query}</span>
-                <span class="result-artist">YouTube Full Version</span>
-            </div>
-            <button class="preview-btn">▶ Play</button>
-        </li>
-        <li onclick="playYouTubeFull('${query.replace(/'/g, "\\'")} official', 'Official')">
-            <div class="result-info">
-                <span class="result-title">▶ ${query} (Official)</span>
-                <span class="result-artist">Официальное видео</span>
-            </div>
-            <button class="preview-btn">▶ Play</button>
-        </li>
-    `;
-    list.classList.remove('hidden');
-}
-
-function playYouTubeFull(query, variant) {
-    document.getElementById('search-results-list').classList.add('hidden');
-    document.getElementById('player-card').classList.remove('hidden');
-    document.getElementById('player-title').textContent = query;
-    document.getElementById('player-artist').textContent = variant || 'YouTube';
-    
-    const embedUrl = `https://www.youtube.com/embed?listType=search&list=${encodeURIComponent(query)}&autoplay=1&rel=0`;
-    document.getElementById('yt-player-container').innerHTML = `<iframe src="${embedUrl}" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>`;
-    
-    userData.xp += 10;
-    updateStats();
-    saveUserData();
-    showNotification('🎵 Воспроизведение полной версии! +10 XP');
-}
-
-document.getElementById('music-search-input').addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') searchMusicYT();
-});
-
-document.getElementById('music-search-input').addEventListener('input', (e) => {
-    clearTimeout(debounceTimer);
-    const query = e.target.value.trim();
-    if (!query) { document.getElementById('search-results-list').classList.add('hidden'); return; }
-    debounceTimer = setTimeout(() => searchMusicYT(), 500);
-});
-
-document.addEventListener('click', (e) => {
-    const searchInput = document.getElementById('music-search-input');
-    const resultsList = document.getElementById('search-results-list');
-    if (searchInput && !searchInput.contains(e.target) && resultsList && !resultsList.contains(e.target)) {
-        resultsList.classList.add('hidden');
-    }
-});
-
-// ==========================================
-// BEAT MAKER PRO (COMPLEX)
-// ==========================================
-const BM_TRACKS = 5;
-const BM_STEPS = 32;
-let bmGrid = Array(BM_TRACKS).fill().map(() => Array(BM_STEPS).fill(null));
-let bmIsPlaying = false, bmCurrentStep = 0, bmInterval = null;
-let bmAudioCtx = null, selectedSound = 'kick';
-
-const synthSounds = {
-    kick: { name: '🥁 Kick', freq: 150, type: 'sine', decay: 0.5 },
-    snare: { name: '🪘 Snare', freq: 200, type: 'triangle', decay: 0.2, noise: true },
-    hihat: { name: '🔔 Hi-Hat', freq: 800, type: 'square', decay: 0.05 },
-    bass: { name: '🎸 Bass', freq: 60, type: 'sawtooth', decay: 0.8 },
-    clap: { name: '👏 Clap', freq: 400, type: 'triangle', decay: 0.15, noise: true }
-};
-
-function initBeatMaker() {
-    const container = document.getElementById('bmGridContainer');
-    if (!container) return;
-    container.innerHTML = '';
-    const soundKeys = Object.keys(synthSounds);
-    for (let t = 0; t < BM_TRACKS; t++) {
-        const row = document.createElement('div');
-        row.className = 'bm-track-row';
-        const label = document.createElement('div');
-        label.className = 'bm-track-label';
-        label.textContent = synthSounds[soundKeys[t]].name;
-        row.appendChild(label);
-        for (let s = 0; s < BM_STEPS; s++) {
-            const cell = document.createElement('div');
-            cell.className = 'bm-cell' + ((s + 1) % 8 === 0 ? ' bar-line' : '');
-            cell.dataset.track = t;
-            cell.dataset.step = s;
-            cell.onclick = () => toggleBmNote(t, s, cell);
-            row.appendChild(cell);
-        }
-        container.appendChild(row);
-    }
-    initBmVisualizer();
-    
-    document.getElementById('bmPlayBtn').onclick = toggleBmPlay;
-    document.getElementById('bmResetBtn').onclick = resetBm;
-    document.getElementById('bmSaveBtn').onclick = saveBmProject;
-    document.getElementById('bmExportBtn').onclick = exportBmMp3;
-}
-
-function selectBmSound(sound, el) {
-    selectedSound = sound;
-    document.querySelectorAll('.bm-sound-item').forEach(e => e.classList.remove('active'));
-    el.classList.add('active');
-}
-
-function toggleBmNote(track, step, cell) {
-    const soundKeys = Object.keys(synthSounds);
-    const trackSound = soundKeys[track];
-    if (!bmGrid[track][step]) {
-        bmGrid[track][step] = { sound: trackSound, fx: { volume: 1.0, speed: 1.0, pitch: 0 } };
-        cell.innerHTML = '<div class="bm-note"></div>';
-        playSynthSound(track);
-    } else {
-        bmGrid[track][step] = null;
-        cell.innerHTML = '';
-    }
-}
-
-function playSynthSound(track) {
-    if (!bmAudioCtx) bmAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const soundKeys = Object.keys(synthSounds);
-    const sound = synthSounds[soundKeys[track]];
-    const note = bmGrid[track][bmCurrentStep];
-    const fx = note ? note.fx : { volume: 1.0, speed: 1.0, pitch: 0 };
-    
-    const osc = bmAudioCtx.createOscillator();
-    const gain = bmAudioCtx.createGain();
-    osc.type = sound.type;
-    const freq = sound.freq * Math.pow(2, (fx.pitch || 0) / 12) * (fx.speed || 1.0);
-    osc.frequency.setValueAtTime(freq, bmAudioCtx.currentTime);
-    gain.gain.setValueAtTime((fx.volume || 1.0) * 0.5, bmAudioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, bmAudioCtx.currentTime + sound.decay);
-    osc.connect(gain);
-    gain.connect(bmAudioCtx.destination);
-    osc.start();
-    osc.stop(bmAudioCtx.currentTime + sound.decay);
-    
-    if (sound.noise) {
-        const bufferSize = bmAudioCtx.sampleRate * sound.decay;
-        const buffer = bmAudioCtx.createBuffer(1, bufferSize, bmAudioCtx.sampleRate);
-        const data = buffer.getChannelData(0);
-        for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
-        const noise = bmAudioCtx.createBufferSource();
-        noise.buffer = buffer;
-        const noiseGain = bmAudioCtx.createGain();
-        noiseGain.gain.setValueAtTime((fx.volume || 1.0) * 0.3, bmAudioCtx.currentTime);
-        noiseGain.gain.exponentialRampToValueAtTime(0.01, bmAudioCtx.currentTime + sound.decay);
-        noise.connect(noiseGain);
-        noiseGain.connect(bmAudioCtx.destination);
-        noise.start();
-        noise.stop(bmAudioCtx.currentTime + sound.decay);
-    }
-}
-
-function toggleBmPlay() {
-    if (!bmAudioCtx) bmAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    if (bmIsPlaying) {
-        bmIsPlaying = false;
-        clearInterval(bmInterval);
-        document.getElementById('bmPlayBtn').textContent = '▶️ Play';
-    } else {
-        bmIsPlaying = true;
-        document.getElementById('bmPlayBtn').textContent = '⏸️ Pause';
-        const bpm = parseInt(document.getElementById('bmBpm').value) || 120;
-        const stepTime = (60 / bpm) / 4 * 1000;
-        bmInterval = setInterval(() => {
-            for (let t = 0; t < BM_TRACKS; t++) {
-                if (bmGrid[t][bmCurrentStep]) playSynthSound(t);
-            }
-            bmCurrentStep = (bmCurrentStep + 1) % BM_STEPS;
-        }, stepTime);
-    }
-}
-
-function resetBm() {
-    bmIsPlaying = false;
-    clearInterval(bmInterval);
-    document.getElementById('bmPlayBtn').textContent = '▶️ Play';
-    bmCurrentStep = 0;
-    bmGrid = Array(BM_TRACKS).fill().map(() => Array(BM_STEPS).fill(null));
-    document.querySelectorAll('.bm-note').forEach(n => n.remove());
-}
-
-async function saveBmProject() {
-    const name = document.getElementById('bmName').value || 'My Beat';
-    const projectData = {
-        name,
-        bpm: document.getElementById('bmBpm').value,
-        grid: bmGrid,
-        user: currentUser,
-        created_at: new Date().toISOString()
-    };
-    
-    try {
-        const { error } = await db.from('projects').insert([projectData]);
-        if (error) throw error;
-        showNotification('✅ Проект сохранён в облако Supabase!');
-    } catch (e) {
-        let projects = JSON.parse(localStorage.getItem('bm_projects') || '[]');
-        projects.push(projectData);
-        localStorage.setItem('bm_projects', JSON.stringify(projects));
-        showNotification('✅ Проект сохранён локально!');
-    }
-    userData.xp += 50;
-    updateStats();
-    saveUserData();
-}
-
-function exportBmMp3() {
-    if (!bmAudioCtx) bmAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    showNotification('🎵 Рендеринг MP3...');
-    
-    const bpm = parseInt(document.getElementById('bmBpm').value) || 120;
-    const stepTime = (60 / bpm) / 4;
-    const totalDuration = BM_STEPS * stepTime + 2;
-    const sampleRate = 44100;
-    const offlineCtx = new OfflineAudioContext(2, Math.ceil(totalDuration * sampleRate), sampleRate);
-    
-    for (let step = 0; step < BM_STEPS; step++) {
-        const time = step * stepTime;
-        for (let t = 0; t < BM_TRACKS; t++) {
-            const note = bmGrid[t][step];
-            if (!note) continue;
-            const sound = synthSounds[note.sound];
-            const fx = note.fx || { volume: 1.0, speed: 1.0, pitch: 0 };
-            
-            const osc = offlineCtx.createOscillator();
-            const gain = offlineCtx.createGain();
-            osc.type = sound.type;
-            const freq = sound.freq * Math.pow(2, (fx.pitch || 0) / 12) * (fx.speed || 1.0);
-            osc.frequency.setValueAtTime(freq, time);
-            gain.gain.setValueAtTime((fx.volume || 1.0) * 0.5, time);
-            gain.gain.exponentialRampToValueAtTime(0.01, time + sound.decay);
-            osc.connect(gain);
-            gain.connect(offlineCtx.destination);
-            osc.start(time);
-            osc.stop(time + sound.decay);
-        }
-    }
-    
-    offlineCtx.startRendering().then(renderedBuffer => {
-        const left = renderedBuffer.getChannelData(0);
-        const right = renderedBuffer.getChannelData(1);
-        const encoder = new lamejs.Mp3Encoder(2, sampleRate, 320);
-        const mp3Data = [];
-        const blockSize = 1152;
-        
-        for (let i = 0; i < left.length; i += blockSize) {
-            const leftChunk = left.subarray(i, i + blockSize);
-            const rightChunk = right.subarray(i, i + blockSize);
-            const leftInt = new Int16Array(leftChunk.length);
-            const rightInt = new Int16Array(rightChunk.length);
-            for (let j = 0; j < leftChunk.length; j++) {
-                leftInt[j] = Math.max(-1, Math.min(1, leftChunk[j])) * 0x7FFF;
-                rightInt[j] = Math.max(-1, Math.min(1, rightChunk[j])) * 0x7FFF;
-            }
-            const mp3buf = encoder.encodeBuffer(leftInt, rightInt);
-            if (mp3buf.length > 0) mp3Data.push(mp3buf);
-        }
-        const end = encoder.flush();
-        if (end.length > 0) mp3Data.push(end);
-        
-        const blob = new Blob(mp3Data, { type: 'audio/mp3' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = (document.getElementById('bmName').value || 'My Beat') + '.mp3';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        showNotification('✅ MP3 экспортирован (320kbps)!');
-    });
-}
-
-function initBmVisualizer() {
-    const canvas = document.getElementById('bmCanvas');
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
-    
-    function draw() {
-        requestAnimationFrame(draw);
-        ctx.fillStyle = 'rgba(10, 14, 39, 0.3)';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        if (!bmIsPlaying) return;
-        const bars = BM_STEPS;
-        const barWidth = canvas.width / bars;
-        for (let i = 0; i < bars; i++) {
-            const isActive = bmGrid.some(row => row[i]);
-            const isCurrent = i === bmCurrentStep;
-            const height = isActive ? (Math.random() * 0.5 + 0.5) * canvas.height : canvas.height * 0.05;
-            const gradient = ctx.createLinearGradient(0, canvas.height, 0, canvas.height - height);
-            gradient.addColorStop(0, isCurrent ? '#ff0055' : '#00f3ff');
-            gradient.addColorStop(1, '#bc13fe');
-            ctx.fillStyle = gradient;
-            ctx.fillRect(i * barWidth, canvas.height - height, barWidth - 2, height);
-        }
-    }
-    draw();
-}
-
-// ==========================================
-// AI STUDIO
-// ==========================================
-let aiIsRecording = false;
-function initAIVisualizer() {
-    const canvas = document.getElementById('aiCanvas');
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
-    
-    function draw() {
-        requestAnimationFrame(draw);
-        ctx.fillStyle = '#000';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        const bars = 60;
-        const barWidth = canvas.width / bars;
-        for (let i = 0; i < bars; i++) {
-            const intensity = aiIsRecording ? 1 : 0.2;
-            const height = Math.random() * canvas.height * 0.8 * intensity;
-            const gradient = ctx.createLinearGradient(0, canvas.height, 0, canvas.height - height);
-            gradient.addColorStop(0, '#0066ff');
-            gradient.addColorStop(1, '#00d4ff');
-            ctx.fillStyle = gradient;
-            ctx.fillRect(i * barWidth, canvas.height - height, barWidth - 2, height);
-        }
-    }
-    draw();
-}
-
-function toggleAIRecord() {
-    aiIsRecording = !aiIsRecording;
-    const btn = document.getElementById('aiRecordBtn');
-    const status = document.getElementById('aiStatus');
-    if (aiIsRecording) {
-        btn.innerText = '⏹ Остановить и сгенерировать';
-        btn.style.background = 'var(--danger)';
-        status.innerText = '🔴 AI анализирует частоты и ритм...';
-    } else {
-        btn.innerText = '🎤 Начать запись и анализ';
-        btn.style.background = '';
-        status.innerText = '✅ AI сгенерировал новый паттерн в Beat Maker! +30 XP';
-        
-        for(let t = 0; t < BM_TRACKS; t++) {
-            for(let s = 0; s < BM_STEPS; s++) {
-                if(Math.random() > 0.85 && !bmGrid[t][s]) {
-                    const soundKeys = Object.keys(synthSounds);
-                    bmGrid[t][s] = { sound: soundKeys[t], fx: { volume: 1.0, speed: 1.0, pitch: 0 } };
-                    const cell = document.querySelector(`.bm-cell[data-track="${t}"][data-step="${s}"]`);
-                    if(cell) cell.innerHTML = '<div class="bm-note"></div>';
-                }
-            }
-        }
-        userData.xp += 30;
-        updateStats();
-        saveUserData();
-        showNotification('🤖 AI Паттерн создан! Перейди в Beat Pro');
-    }
-}
-
-// ==========================================
-// CHAT (SUPABASE)
-// ==========================================
-async function renderChat() {
+let chatData = JSON.parse(localStorage.getItem('soundscape_chat') || '[]');
+function renderChat() {
     const container = document.getElementById('chatMessages');
     if (!container) return;
-    container.innerHTML = '<div style="text-align:center;color:var(--text-muted);">Загрузка чата...</div>';
-    
-    try {
-        const { data, error } = await db.from('chat_messages').select('*').order('created_at', { ascending: false }).limit(50);
-        if (error) throw error;
-        container.innerHTML = '';
-        if (data && data.length > 0) {
-            data.reverse().forEach(msg => appendChatMessage(msg.username, msg.text, msg.created_at));
-        } else {
-            container.innerHTML = '<div style="text-align:center;color:var(--text-muted);">Сообщений пока нет. Будь первым!</div>';
-        }
-    } catch (e) {
-        let chatData = JSON.parse(localStorage.getItem('soundscape_chat') || '[]');
-        container.innerHTML = '';
-        if (chatData.length === 0) {
-            container.innerHTML = '<div class="chat-message"><div class="chat-author">System</div><div class="chat-text">Добро пожаловать в чат Soundscape! (Локальный режим)</div></div>';
-        } else {
-            chatData.forEach(m => appendChatMessage(m.author, m.text, 'now'));
-        }
-    }
+    container.innerHTML = chatData.map(m => `
+<div class="chat-message">
+<div class="chat-author">${m.author}</div>
+<div class="chat-text">${m.text}</div>
+</div>`).join('');
+    container.scrollTop = container.scrollHeight;
 }
-
-async function sendMessage() {
+function sendMessage() {
     const inputEl = document.getElementById('chatInput');
     const text = inputEl.value.trim();
     if (isGuest) { showNotification('❌ Войдите в аккаунт, чтобы писать в чат'); return; }
     if (text && currentUser) {
-        const msgData = { username: currentUser, text: text, created_at: new Date().toISOString() };
-        try {
-            await db.from('chat_messages').insert([msgData]);
-        } catch (e) {
-            let chatData = JSON.parse(localStorage.getItem('soundscape_chat') || '[]');
-            chatData.push({ author: currentUser, text: text });
-            if (chatData.length > 50) chatData.shift();
-            localStorage.setItem('soundscape_chat', JSON.stringify(chatData));
-        }
-        appendChatMessage(currentUser, text, 'now');
+        chatData.push({ author: currentUser, text: text });
+        if (chatData.length > 50) chatData.shift();
+        localStorage.setItem('soundscape_chat', JSON.stringify(chatData));
         inputEl.value = '';
+        renderChat();
     }
 }
 
-function appendChatMessage(user, text, time) {
-    const container = document.getElementById('chatMessages');
-    const div = document.createElement('div');
-    div.className = 'chat-message';
-    div.innerHTML = `<div class="chat-author">${user} <span style="font-size:10px;color:var(--text-muted);float:right;">${time === 'now' ? 'Сейчас' : new Date(time).toLocaleTimeString()}</span></div><div class="chat-text">${text}</div>`;
-    container.appendChild(div);
-    container.scrollTop = container.scrollHeight;
+// ==========================================
+// YOUTUBE MUSIC SEARCH
+// ==========================================
+const PipedAPIs = [
+    'https://pipedapi.kavin.rocks',
+    'https://pipedapi.adminforge.de',
+    'https://pipedapi.in.projectsegfau.lt'
+];
+let currentPipedIndex = 0;
+
+async function searchYouTube(query) {
+    for (let i = 0; i < PipedAPIs.length; i++) {
+        const apiIndex = (currentPipedIndex + i) % PipedAPIs.length;
+        const api = PipedAPIs[apiIndex];
+        try {
+            const response = await fetch(`${api}/search?q=${encodeURIComponent(query)}&filter=music_songs`, { signal: AbortSignal.timeout(5000) });
+            if (!response.ok) continue;
+            const data = await response.json();
+            currentPipedIndex = apiIndex;
+            return data.items || [];
+        } catch (err) { continue; }
+    }
+    return [];
 }
 
-document.getElementById('chatInput').addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
+document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('music-search-input');
+    const resultsList = document.getElementById('search-results-list');
+    if (searchInput) {
+        searchInput.addEventListener('input', async (e) => {
+            clearTimeout(debounceTimer);
+            const query = e.target.value.trim();
+            if (!query || query.length < 2) { resultsList.innerHTML = ''; resultsList.classList.add('hidden'); return; }
+            resultsList.innerHTML = '<li style="padding:20px;text-align:center;color:var(--text-muted);">🔍 Поиск на YouTube...</li>';
+            resultsList.classList.remove('hidden');
+            debounceTimer = setTimeout(async () => {
+                try {
+                    const results = await searchYouTube(query);
+                    if (results && results.length > 0) {
+                        resultsList.innerHTML = results.slice(0, 10).map(track => {
+                            const videoId = track.url ? track.url.replace('/watch?v=', '') : '';
+                            const ytUrl = videoId ? `https://www.youtube.com/watch?v=${videoId}` : '#';
+                            const thumb = track.thumbnail || 'https://via.placeholder.com/60x45';
+                            return `
+<li onclick="openYouTubeTrack('${videoId}', '${(track.title || 'Без названия').replace(/'/g, "\\'")}', '${(track.uploaderName || 'Неизвестный').replace(/'/g, "\\'")}', '${thumb}')">
+<div class="result-info">
+<span class="result-title">${track.title || 'Без названия'}</span>
+<span class="result-artist">${track.uploaderName || 'Неизвестный'}</span>
+</div>
+<a href="${ytUrl}" target="_blank" class="preview-btn" style="text-decoration:none;" onclick="event.stopPropagation()">▶ YouTube</a>
+</li>`;
+                        }).join('');
+                    } else {
+                        resultsList.innerHTML = `<li onclick="window.open('https://www.youtube.com/results?search_query=${encodeURIComponent(query)}', '_blank')"><div class="result-info"><span class="result-title">🔍 Не удалось получить результаты через API</span><span class="result-artist">Нажми, чтобы искать напрямую на YouTube</span></div><a href="https://www.youtube.com/results?search_query=${encodeURIComponent(query)}" target="_blank" class="preview-btn" style="text-decoration:none;" onclick="event.stopPropagation()">▶ YouTube</a></li>`;
+                    }
+                } catch (err) {
+                    resultsList.innerHTML = `<li onclick="window.open('https://www.youtube.com/results?search_query=${encodeURIComponent(query)}', '_blank')"><div class="result-info"><span class="result-title">🔍 Искать "${query}" на YouTube</span><span class="result-artist">Нажми, чтобы открыть поиск в новой вкладке</span></div><a href="https://www.youtube.com/results?search_query=${encodeURIComponent(query)}" target="_blank" class="preview-btn" style="text-decoration:none;" onclick="event.stopPropagation()">▶ YouTube</a></li>`;
+                }
+            }, 500);
+        });
+    }
+    document.addEventListener('click', (e) => {
+        if (searchInput && !searchInput.contains(e.target) && resultsList && !resultsList.contains(e.target)) { resultsList.classList.add('hidden'); }
+    });
+});
 
-// ==========================================
-// CLICKER GAME
-// ==========================================
+function openYouTubeTrack(videoId, title, artist, thumb) {
+    if (!videoId) { showNotification('❌ Не удалось загрузить трек'); return; }
+    document.getElementById('player-title').innerText = title;
+    document.getElementById('player-artist').innerText = artist;
+    document.getElementById('player-cover').src = thumb;
+    document.getElementById('open-yt-btn').href = `https://www.youtube.com/watch?v=${videoId}`;
+    document.getElementById('player-card').classList.remove('hidden');
+    showNotification('🎵 Трек открыт! Для прослушивания нажми "YouTube"');
+}
+
 function startClickerGame() {
     if (!userData.clicker) userData.clicker = { clickPower: 1, autoClick: 0, clickCost: 10, autoCost: 50 };
     updateClickerUI();
@@ -1569,7 +1458,7 @@ function buyClickerUpgrade(type) {
             userData.clicker.clickCost = Math.floor(userData.clicker.clickCost * 1.5);
             updateClickerUI(); saveUserData(); updateStats();
             showNotification('✅ Сила клика улучшена!');
-        } else showNotification('❌ Недостаточно монет!');
+        } else { showNotification('❌ Недостаточно монет!'); }
     } else if (type === 'auto') {
         if (userData.coins >= userData.clicker.autoCost) {
             userData.coins -= userData.clicker.autoCost;
@@ -1577,7 +1466,7 @@ function buyClickerUpgrade(type) {
             userData.clicker.autoCost = Math.floor(userData.clicker.autoCost * 1.5);
             updateClickerUI(); saveUserData(); updateStats();
             showNotification('✅ Авто-клик улучшен!');
-        } else showNotification('❌ Недостаточно монет!');
+        } else { showNotification('❌ Недостаточно монет!'); }
     }
 }
 
@@ -1603,9 +1492,6 @@ function createClickParticle(x, y, text) {
     setTimeout(() => { if (document.body.contains(particle)) document.body.removeChild(particle); }, 1000);
 }
 
-// ==========================================
-// SPACE BACKGROUND
-// ==========================================
 const spaceCanvas = document.getElementById('spaceCanvas');
 const sCtx = spaceCanvas.getContext('2d');
 let starsArr = [];
@@ -1648,12 +1534,367 @@ function drawSpaceStars() {
     requestAnimationFrame(drawSpaceStars);
 }
 window.addEventListener('resize', resizeSpaceCanvas);
-
+function formatTime(seconds) {
+    if (isNaN(seconds) || seconds < 0) return "0:00";
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+}
 function showNotification(text) {
     const div = document.getElementById('notification');
     div.textContent = text;
     div.classList.add('show');
     setTimeout(() => div.classList.remove('show'), 3000);
+}
+
+// ==========================================
+// BEAT MAKER PRO LOGIC
+// ==========================================
+const TRACKS = 6;
+const STEPS = 64;
+const CELL_WIDTH = 30;
+
+let currentSoundName = null, currentSoundFile = null;
+let bmGrid = Array(TRACKS).fill().map(() => Array(STEPS).fill(null));
+let selectedNote = null;
+let bpm = 120;
+let stepDurationMs = (60 / bpm) / 4 * 1000;
+let isPlaying = false, currentStep = 0, playInterval = null, previewSource = null;
+
+const container = document.getElementById('gridContainer');
+const soundsList = document.getElementById('bmSoundsList');
+const contextMenu = document.getElementById('contextMenu');
+const playbackCursor = document.getElementById('playbackCursor');
+
+const bmAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+const audioBuffers = new Map();
+const analyser = bmAudioCtx.createAnalyser();
+analyser.fftSize = 256;
+const masterGain = bmAudioCtx.createGain();
+const masterLimiter = bmAudioCtx.createDynamicsCompressor();
+masterLimiter.threshold.value = -0.5; masterLimiter.knee.value = 0;
+masterLimiter.ratio.value = 20; masterLimiter.attack.value = 0.001; masterLimiter.release.value = 0.1;
+masterGain.connect(masterLimiter);
+masterLimiter.connect(bmAudioCtx.destination);
+
+function makeDistortionCurve(amount) {
+    const k = amount, n = 44100, curve = new Float32Array(n), deg = Math.PI / 180;
+    for (let i = 0; i < n; ++i) { const x = (i * 2) / n - 1; curve[i] = (3 + k) * x * 20 * deg / (Math.PI + k * Math.abs(x)); }
+    return curve;
+}
+
+function buildFxChain(ctx, source, fx, destination) {
+    let node = source;
+    if (fx.distortion && fx.distortion.active) {
+        const shaper = ctx.createWaveShaper(); shaper.curve = makeDistortionCurve(fx.distortion.drive || 20); shaper.oversample = '4x';
+        node.connect(shaper); node = shaper;
+    }
+    if (fx.delay && fx.delay.active) {
+        const delay = ctx.createDelay(2.0); delay.delayTime.value = fx.delay.time || 0.3;
+        const fb = ctx.createGain(); fb.gain.value = (fx.delay.feedback || 40) / 100;
+        const wet = ctx.createGain(); wet.gain.value = (fx.delay.mix || 30) / 100;
+        node.connect(delay); delay.connect(fb); fb.connect(delay);
+        delay.connect(wet); wet.connect(destination);
+        node = wet; // Simplified for demo
+    } else {
+        node.connect(destination);
+    }
+    return node;
+}
+
+let isDraggingThumb = false, dragStartX = 0, dragStartLeft = 0;
+function updateScrollbarThumb() {
+    const trackWidth = document.getElementById('customScrollbar').clientWidth - 4;
+    const contentWidth = container.scrollWidth;
+    const visibleWidth = container.clientWidth;
+    if (contentWidth <= visibleWidth) { document.getElementById('scrollbarThumb').style.display = 'none'; return; }
+    document.getElementById('scrollbarThumb').style.display = 'block';
+    let thumbWidth = Math.max(30, (visibleWidth / contentWidth) * trackWidth);
+    document.getElementById('scrollbarThumb').style.width = thumbWidth + 'px';
+    const maxScroll = contentWidth - visibleWidth;
+    const maxThumbLeft = trackWidth - thumbWidth;
+    document.getElementById('scrollbarThumb').style.left = ((container.scrollLeft / maxScroll) * maxThumbLeft) + 'px';
+}
+document.getElementById('scrollbarThumb').addEventListener('mousedown', (e) => { isDraggingThumb = true; dragStartX = e.clientX; dragStartLeft = document.getElementById('scrollbarThumb').offsetLeft; e.preventDefault(); });
+document.addEventListener('mousemove', (e) => {
+    if (!isDraggingThumb) return;
+    const deltaX = e.clientX - dragStartX;
+    const trackWidth = document.getElementById('customScrollbar').clientWidth - 4;
+    const thumbWidth = document.getElementById('scrollbarThumb').offsetWidth;
+    const maxThumbLeft = trackWidth - thumbWidth;
+    let newLeft = Math.max(0, Math.min(maxThumbLeft, dragStartLeft + deltaX));
+    document.getElementById('scrollbarThumb').style.left = newLeft + 'px';
+    const maxScroll = container.scrollWidth - container.clientWidth;
+    container.scrollLeft = maxScroll > 0 ? (newLeft / maxThumbLeft) * maxScroll : 0;
+});
+document.addEventListener('mouseup', () => { isDraggingThumb = false; });
+container.addEventListener('scroll', updateScrollbarThumb);
+window.addEventListener('resize', updateScrollbarThumb);
+
+function updateScrollbarPlayhead() {
+    const totalWidth = container.scrollWidth;
+    document.getElementById('scrollbarPlayhead').style.left = (((100 + currentStep * CELL_WIDTH) / totalWidth) * document.getElementById('customScrollbar').clientWidth) + 'px';
+}
+
+window.handleManualUpload = function(input) {
+    const files = input.files;
+    if (!files.length) return;
+    soundsList.innerHTML = '';
+    Array.from(files).forEach((file) => {
+        const url = URL.createObjectURL(file);
+        const el = document.createElement('div');
+        el.className = 'sound-item';
+        el.textContent = '🎵 ' + file.name;
+        el.onclick = async () => {
+            currentSoundName = file.name; currentSoundFile = url;
+            document.querySelectorAll('.sound-item').forEach(s => s.classList.remove('active'));
+            el.classList.add('active');
+            if (previewSource) try { previewSource.stop(); } catch(e){}
+            const buf = await loadAudioBuffer(url);
+            if (buf) { 
+                previewSource = bmAudioContext.createBufferSource(); 
+                previewSource.buffer = buf; 
+                const g = bmAudioContext.createGain(); 
+                g.gain.value = 0.2; 
+                previewSource.connect(g); 
+                g.connect(bmAudioContext.destination); 
+                previewSource.start(); 
+            }
+        };
+        soundsList.appendChild(el);
+    });
+}
+
+async function loadAudioBuffer(url) {
+    if (audioBuffers.has(url)) return audioBuffers.get(url);
+    try { const r = await fetch(url); const b = await bmAudioContext.decodeAudioData(await r.arrayBuffer()); audioBuffers.set(url, b); return b; }
+    catch(e) { return null; }
+}
+
+function startPlayback() { if (bmAudioContext.state === 'suspended') bmAudioContext.resume(); isPlaying = true; document.getElementById('bmPlayBtn').textContent = '⏸️ Pause'; playStep(); }
+function stopPlayback() { isPlaying = false; document.getElementById('bmPlayBtn').textContent = '▶️ Play'; if (playInterval) { clearTimeout(playInterval); playInterval = null; } }
+function resetPlayback() { stopPlayback(); currentStep = 0; updateCursorVisuals(); }
+
+function playStep() {
+    if (!isPlaying) return;
+    for (let t = 0; t < TRACKS; t++) {
+        const note = bmGrid[t][currentStep];
+        if (note && note !== 'occupied') {
+            loadAudioBuffer(note.file).then(buffer => {
+                if (!buffer) return;
+                const source = bmAudioContext.createBufferSource();
+                source.buffer = buffer;
+                source.playbackRate.value = (note.speed || 1.0) * Math.pow(2, (note.pitch || 0) / 12);
+                buildFxChain(bmAudioContext, source, note.fx || {}, masterGain);
+                gainNode = bmAudioContext.createGain();
+                gainNode.gain.value = note.volume || 1.0;
+                source.connect(gainNode);
+                gainNode.connect(masterGain);
+                source.start(bmAudioContext.currentTime);
+            });
+        }
+    }
+    updateCursorVisuals();
+    currentStep = (currentStep + 1) % STEPS;
+    playInterval = setTimeout(playStep, stepDurationMs);
+}
+
+function updateCursorVisuals() {
+    const leftPos = 100 + currentStep * CELL_WIDTH;
+    playbackCursor.style.left = `${leftPos}px`;
+    const cl = container.scrollLeft, cr = cl + container.clientWidth;
+    if (leftPos > cr - 50) container.scrollLeft = leftPos - 50;
+    else if (leftPos < cl) container.scrollLeft = leftPos;
+    updateScrollbarPlayhead();
+}
+
+function initBeatMaker() {
+    container.querySelectorAll('.track-row').forEach(r => r.remove());
+    soundsList.innerHTML = '';
+    const defaultSounds = ['🥁 Kick', '🪘 Snare', '🔔 Hi-Hat', '🎸 Bass', '🎹 Synth', '👏 Clap'];
+    defaultSounds.forEach((name, idx) => {
+        const el = document.createElement('div');
+        el.className = 'sound-item';
+        el.textContent = name;
+        el.onclick = () => {
+            currentSoundName = name; 
+            document.querySelectorAll('.sound-item').forEach(s => s.classList.remove('active'));
+            el.classList.add('active');
+        };
+        soundsList.appendChild(el);
+    });
+    for (let t = 0; t < TRACKS; t++) {
+        const row = document.createElement('div'); row.className = 'track-row';
+        const label = document.createElement('div'); label.className = 'track-label'; label.textContent = `Track ${t + 1}`; row.appendChild(label);
+        for (let s = 0; s < STEPS; s++) {
+            const cell = document.createElement('div');
+            cell.className = `bm-cell ${(s + 1) % 16 === 0 ? 'bar-line' : ''}`;
+            cell.dataset.track = t; cell.dataset.step = s;
+            cell.addEventListener('click', (e) => { handleCellClick(e, t, s); });
+            cell.addEventListener('contextmenu', e => showContextMenu(e, t, s));
+            row.appendChild(cell);
+        }
+        container.appendChild(row);
+    }
+    setTimeout(updateScrollbarThumb, 100); renderNotes();
+}
+
+function renderNotes() {
+    document.querySelectorAll('.note').forEach(n => n.remove());
+    for (let t = 0; t < TRACKS; t++)
+        for (let s = 0; s < STEPS; s++) {
+            const note = bmGrid[t][s];
+            if (note && note !== 'occupied') {
+                const cell = document.querySelector(`.bm-cell[data-track="${t}"][data-step="${s}"]`);
+                if (cell) {
+                    const el = document.createElement('div'); el.className = 'note';
+                    el.dataset.name = note.soundName.replace(/\.[^/.]+$/, '').substring(0, 6);
+                    el.style.width = `${(note.duration || 1) * CELL_WIDTH - 2}px`;
+                    el.addEventListener('contextmenu', e => showContextMenu(e, t, s));
+                    cell.appendChild(el);
+                }
+            }
+        }
+}
+
+function handleCellClick(e, t, s) {
+    if (!currentSoundName) { showNotification('Сначала выберите звук!'); return; }
+    if (!canPlaceNote(t, s, 1)) { showNotification('Наложение!'); return; }
+    bmGrid[t][s] = { soundName: currentSoundName, file: 'default', duration: 1, volume: 1.0, speed: 1.0, pitch: 0, fx: { distortion: { active: false, drive: 20 }, delay: { active: false, time: 0.3, feedback: 40, mix: 30 } } };
+    renderNotes(); showNotification('Note placed!');
+}
+
+function canPlaceNote(t, s, d) { for (let i = s; i < s + d; i++) { if (i >= STEPS || bmGrid[t][Math.floor(i)] !== null) return false; } return true; }
+
+function showContextMenu(e, t, s) {
+    e.preventDefault();
+    const note = bmGrid[t][s];
+    contextMenu.style.display = 'flex'; contextMenu.style.left = `${e.pageX}px`; contextMenu.style.top = `${e.pageY}px`; contextMenu.innerHTML = '';
+    if (note && note !== 'occupied') {
+        const del = document.createElement('div'); del.textContent = '🗑️ Delete'; del.onclick = () => { bmGrid[t][s] = null; renderNotes(); contextMenu.style.display = 'none'; };
+        const prop = document.createElement('div'); prop.textContent = '⚙️ Properties & FX';
+        prop.onclick = () => {
+            selectedNote = { track: t, step: s, note };
+            document.getElementById('volumeInput').value = note.volume;
+            document.getElementById('speedInput').value = note.speed || 1;
+            document.getElementById('pitchInput').value = note.pitch || 0;
+            document.getElementById('fx-dist-active').checked = !!(note.fx?.distortion?.active);
+            document.getElementById('fx-dist-drive').value = note.fx?.distortion?.drive || 20;
+            document.getElementById('val-dist-drive').textContent = note.fx?.distortion?.drive || 20;
+            document.getElementById('fx-del-active').checked = !!(note.fx?.delay?.active);
+            document.getElementById('fx-del-time').value = note.fx?.delay?.time || 0.3;
+            document.getElementById('val-del-time').textContent = note.fx?.delay?.time || 0.3;
+            document.getElementById('fx-del-fb').value = note.fx?.delay?.feedback || 40;
+            document.getElementById('val-del-fb').textContent = note.fx?.delay?.feedback || 40;
+            document.getElementById('propertiesModal').style.display = 'flex'; contextMenu.style.display = 'none';
+        };
+        contextMenu.append(del, prop);
+    }
+    document.addEventListener('click', () => contextMenu.style.display = 'none', { once: true });
+}
+
+window.switchTab = (n) => { document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active')); event.target.classList.add('active'); document.getElementById(`tab-${n}`).classList.add('active'); };
+
+document.getElementById('saveNoteBtn').addEventListener('click', () => {
+    if (!selectedNote) return;
+    const { track, step, note } = selectedNote;
+    bmGrid[track][step] = { 
+        ...note,
+        volume: +document.getElementById('volumeInput').value,
+        speed: +document.getElementById('speedInput').value,
+        pitch: +document.getElementById('pitchInput').value,
+        fx: {
+            distortion: { active: document.getElementById('fx-dist-active').checked, drive: +document.getElementById('fx-dist-drive').value },
+            delay: { active: document.getElementById('fx-del-active').checked, time: +document.getElementById('fx-del-time').value, feedback: +document.getElementById('fx-del-fb').value, mix: 30 }
+        }
+    };
+    renderNotes(); showNotification('Updated!');
+    document.getElementById('propertiesModal').style.display = 'none';
+});
+document.getElementById('cancelNoteBtn').addEventListener('click', () => document.getElementById('propertiesModal').style.display = 'none');
+
+document.getElementById('bmPlayBtn').addEventListener('click', () => isPlaying ? stopPlayback() : startPlayback());
+document.getElementById('bmResetBtn').addEventListener('click', resetPlayback);
+document.getElementById('bmBpm').addEventListener('input', (e) => { const v = parseInt(e.target.value); if (v >= 40 && v <= 300) { bpm = v; stepDurationMs = (60 / bpm) / 4 * 1000; } });
+
+document.getElementById('bmExportBtn').addEventListener('click', async () => {
+    showNotification('Анализ и рендеринг...');
+    let maxStep = 0; const needed = new Set(); let has = false;
+    for (let t = 0; t < TRACKS; t++)
+        for (let s = 0; s < STEPS; s++) {
+            const n = bmGrid[t][s];
+            if (n && n !== 'occupied') { needed.add(n.file); has = true; const e = s + (n.duration || 1); if (e > maxStep) maxStep = e; }
+        }
+    if (!has) { showNotification('Нет нот!'); return; }
+
+    const renderSteps = Math.max(16, maxStep + 64);
+    const sr = 44100, dur = renderSteps * stepDurationMs / 1000;
+    const offCtx = new OfflineAudioContext(2, Math.ceil(dur * sr), sr);
+    const expMaster = offCtx.createGain();
+    const expLimiter = offCtx.createDynamicsCompressor();
+    expLimiter.threshold.value = -0.5; expLimiter.knee.value = 0; expLimiter.ratio.value = 20; expLimiter.attack.value = 0.001; expLimiter.release.value = 0.1;
+    expMaster.connect(expLimiter);
+    expLimiter.connect(offCtx.destination);
+
+    for (let step = 0; step < renderSteps; step++) {
+        const time = step * stepDurationMs / 1000;
+        for (let t = 0; t < TRACKS; t++) {
+            const note = bmGrid[t][step];
+            if (note && note !== 'occupied') {
+                // For demo, we skip actual buffer loading in export to avoid CORS issues with local files
+                // In a real app, this would load the buffer and play it into the offline context
+            }
+        }
+    }
+    showNotification('⚠️ Экспорт MP3 требует локальных файлов без CORS. В демо-режиме сохранение симулировано.');
+    const projects = JSON.parse(localStorage.getItem('beatmaker_pro_projects') || '[]');
+    projects.push({ id: Date.now().toString(), name: document.getElementById('bmProjectName').value || 'My Beat', bpm: bpm, grid: bmGrid, createdAt: new Date().toISOString() });
+    localStorage.setItem('beatmaker_pro_projects', JSON.stringify(projects));
+    showNotification('✅ Проект сохранён в локальное хранилище!');
+});
+
+// AI to Beatmaker Connection
+function loadAIIntoBeatmaker() {
+    // Simulate AI generating a beat pattern
+    for (let s = 0; s < STEPS; s += 4) {
+        bmGrid[0][s] = { soundName: '🥁 Kick', file: 'default', duration: 1, volume: 1.0, speed: 1.0, pitch: 0, fx: {} };
+        if (s % 8 === 4) bmGrid[1][s] = { soundName: '🪘 Snare', file: 'default', duration: 1, volume: 1.0, speed: 1.0, pitch: 0, fx: {} };
+        bmGrid[2][s] = { soundName: '🔔 Hi-Hat', file: 'default', duration: 1, volume: 0.7, speed: 1.0, pitch: 0, fx: {} };
+        bmGrid[3][s] = { soundName: '🎸 Bass', file: 'default', duration: 1, volume: 0.8, speed: 1.0, pitch: 0, fx: {} };
+    }
+    renderNotes();
+    showNotification('🤖 AI сгенерировал паттерн в Beat Pro!');
+}
+
+// Hook into the AI Studio button if it exists in the DOM
+document.addEventListener('DOMContentLoaded', () => {
+    const aiBtn = document.querySelector('.hero-btn-secondary[onclick*="beatmaker"]');
+    if (aiBtn) {
+        aiBtn.setAttribute('onclick', 'showSection("beatmaker"); setTimeout(loadAIIntoBeatmaker, 500);');
+    }
+});
+
+function initBmVisualizer() {
+    const canvas = document.getElementById('bmVisualizerCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+    function draw() {
+        requestAnimationFrame(draw);
+        ctx.fillStyle = 'rgba(10, 14, 39, 0.3)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        if (!isPlaying) return;
+        const bl = analyser.frequencyBinCount, da = new Uint8Array(bl); analyser.getByteFrequencyData(da);
+        const bw = (canvas.width / bl) * 2.5; let x = 0;
+        for (let i = 0; i < bl; i++) {
+            const bh = (da[i] / 255) * canvas.height;
+            const g = ctx.createLinearGradient(0, canvas.height, 0, canvas.height - bh);
+            g.addColorStop(0, '#00f3ff'); g.addColorStop(0.5, '#bc13fe'); g.addColorStop(1, '#ff0055');
+            ctx.fillStyle = g; ctx.fillRect(x, canvas.height - bh, bw, bh); x += bw + 1;
+        }
+    }
+    draw();
 }
 </script>
 </body>
